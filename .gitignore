@@ -1,0 +1,10 @@
+INPUTS*
+OUTPUTS*
+*~
+localdocker.sh
+*.simg
+*.gz
+.DS_Store
+error.log
+sandbox
+spinalcordtoolbox

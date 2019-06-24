@@ -38,9 +38,9 @@ From: ubuntu:18.04
   REPO=baxpr
   SCTVER=4.0.0-beta.5-condafix
   SCTDIR=/opt/sct
-  echo $SCTVER > /opt/sct/version-installed.txt
   git clone --branch ${SCTVER} --depth 1 https://github.com/${REPO}/spinalcordtoolbox.git ${SCTDIR}
   cd ${SCTDIR}
+  echo $SCTVER > version-installed.txt
   ASK_REPORT_QUESTION=false change_default_path=Yes add_to_path=No ./install_sct
     
   

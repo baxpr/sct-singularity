@@ -37,10 +37,22 @@ sct_register_multimodal \
 -param step=1,type=seg,algo=centermass,metric=MeanSquares,smooth=2:\
 step=2,type=im,algo=slicereg,metric=MI
 
-# Warp subject GM, WM, level to fMRI space (NN interp adequate?)
+# Next:
+#
+# gwreg.sh to get mffe aligned to template
+# resample template CSF to mffe, then moco space
+#
+# Slicewise on fMRI in moco space:
+#   Use retroicor to get slicewise regressors
+#   Use PCA to get CSF regressors
+#   Use ?? and PCA to get ex-spine regressors
 
-# Warp template CSF to fMRI space via mFFE space (NN adequate?)
+# We could handle the GM/WM/CSF volume fractions better if we resample
+# the fmri to mffe space. However, then we lose the slicewise information
+# that we need for slicewise correction. Any tricks to get accurate fractional
+# volumes or otherwise handle partial volume effects? Main concerns are
+# (1) Don't contaminate extracted CSF signals with GM/WM
+# (2) Get most accurate GM ROIs for ROI analysis
 
-# We want an fMRI QA
 
-# We will also want fMRI results in template space
+

@@ -54,5 +54,9 @@ step=2,type=im,algo=slicereg,metric=MI
 # (1) Don't contaminate extracted CSF signals with GM/WM
 # (2) Get most accurate GM ROIs for ROI analysis
 
+# To compute approximate volume fraction: resample fMRI to mffe space,
+# nearest neighbor, with the voxel values being a voxel index. In
+# mffe space, count the GM/WM/CSF voxels at each voxel index and generate
+# corresponding maps in the original fmri space.
 
 

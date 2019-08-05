@@ -42,10 +42,22 @@ From: ubuntu:18.04
   cd ${SCTDIR}
   echo $SCTVER > version-installed.txt
   ASK_REPORT_QUESTION=false change_default_path=Yes add_to_path=No ./install_sct
-    
+  
+  # Add pydicom to the SCT python
+  ${SCTDIR}/python/envs/venv_sct/bin/pip install pydicom
+  
+  # Get dcm2niix
+  #DCM2NIIXVER=v1.0.20190720
+  #cd /opt
+  #git clone --branch ${DCM2NIIXVER} --depth 1 https://github.com/rordenlab/dcm2niix.git
+  #cd dcm2niix
+  #mkdir build && cd build
+  #cmake ..
+  #make
+  
   
 %environment
-  PATH="/opt/sct/bin:/opt/afni:${PATH}"
+  PATH="/opt/sct/bin:/opt/afni:/opt/dcm2niix/build/bin:${PATH}"
 
 
 %runscript

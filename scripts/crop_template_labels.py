@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/opt/sct/python/envs/venv_sct/bin/python
 
 import nibabel
 import sys

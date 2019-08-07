@@ -49,7 +49,7 @@ sct_label_vertebrae -i ${MFFE}.nii.gz -s ${MFFE}_seg.nii.gz -c t2 -initcenter ${
 # Crop template to relevant levels. sct_register_multimodal is not smart enough to 
 # handle non-identical label sets:
 cp ${TDIR}/PAM50_label_disc.nii.gz .
-python ../scripts/crop_template_labels.py ${MFFE}_seg_labeled_discs.nii.gz ${TDIR}/PAM50_label_disc.nii.gz
+crop_template_labels.py ${MFFE}_seg_labeled_discs.nii.gz ${TDIR}/PAM50_label_disc.nii.gz
 
 # Create synthetic T2 from template
 sct_maths -i ${TDIR}/PAM50_gm.nii.gz -add ${TDIR}/PAM50_cord.nii.gz -o PAM50_gw.nii.gz
@@ -95,7 +95,9 @@ exit 0
 
 
 # Warp template CSF to fmri space
-sct_apply_transfo -i ${TDIR}/PAM50_csf.nii.gz -x nn -w template_to_mffe mffe_to_fmri
+sct_apply_transfo -i ${TDIR}/PAM50_csf.nii.gz -x nn \
+-w warp_PAM50_gw2${MFFE}_gw.nii.gz warp_${MFFE}2${FMRI}_moco_mean.nii.gz \
+-d ${FMRI}_moco_mean.nii.gz -o ${FMRI}_moco_CSF.nii.gz
 
 # RETROICOR
 # First split physlog into card and resp, and trim to match length of scan.

@@ -36,9 +36,9 @@ From: ubuntu:18.04
   # SCT installation
   apt-get install -y curl wget gcc git
   REPO=baxpr
-  #SCTVER=v4.0.0-beta.5-condafix
-  #SCTVER=v4.0.0-beta.5-condafix2
-  SCTVER=condafix3
+  #SCTVER=4.0.0-beta.5-condafix  # has miniconda install bug
+  SCTVER=v4.0.0-beta.5-condafix2
+  #SCTVER=condafix3  # has sct_image.py int bug
   SCTDIR=/opt/sct
   git clone --branch ${SCTVER} --depth 1 https://github.com/${REPO}/spinalcordtoolbox.git ${SCTDIR}
   cd ${SCTDIR}

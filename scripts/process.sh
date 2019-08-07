@@ -91,13 +91,13 @@ sct_register_multimodal \
 -param step=1,type=seg,algo=centermass,metric=MeanSquares,smooth=2:\
 step=2,type=im,algo=slicereg,metric=MI
 
-exit 0
-
-
 # Warp template CSF to fmri space
 sct_apply_transfo -i ${TDIR}/PAM50_csf.nii.gz -x nn \
 -w warp_PAM50_gw2${MFFE}_gw.nii.gz warp_${MFFE}2${FMRI}_moco_mean.nii.gz \
 -d ${FMRI}_moco_mean.nii.gz -o ${FMRI}_moco_CSF.nii.gz
+
+
+exit 0
 
 # RETROICOR
 # First split physlog into card and resp, and trim to match length of scan.

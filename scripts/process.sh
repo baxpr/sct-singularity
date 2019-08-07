@@ -96,20 +96,48 @@ sct_apply_transfo -i ${TDIR}/PAM50_csf.nii.gz -x nn \
 -w warp_PAM50_gw2${MFFE}_gw.nii.gz warp_${MFFE}2${FMRI}_moco_mean.nii.gz \
 -d ${FMRI}_moco_mean.nii.gz -o ${FMRI}_moco_CSF.nii.gz
 
+# Get mffe GM/WM/label in fmri space
+sct_apply_transfo -i ${MFFE}_gmseg.nii.gz -x nn \
+-w warp_${MFFE}2${FMRI}_moco_mean.nii.gz \
+-d ${FMRI}_moco_mean.nii.gz -o ${FMRI}_moco_GM.nii.gz
 
-exit 0
+sct_apply_transfo -i ${MFFE}_wmseg.nii.gz -x nn \
+-w warp_${MFFE}2${FMRI}_moco_mean.nii.gz \
+-d ${FMRI}_moco_mean.nii.gz -o ${FMRI}_moco_WM.nii.gz
+
+sct_apply_transfo -i ${MFFE}_seg_labeled.nii.gz -x nn \
+-w warp_${MFFE}2${FMRI}_moco_mean.nii.gz \
+-d ${FMRI}_moco_mean.nii.gz -o ${FMRI}_moco_LABEL.nii.gz
+
+# Make "not-spine" ROI in fmri space. Add CSF and seg, dilate, invert
+sct_maths -i ${FMRI}_moco_mean_seg.nii.gz -add ${FMRI}_moco_CSF.nii.gz -o tmp.nii.gz
+sct_maths -i tmp.nii.gz -bin 0.1 -o tmp.nii.gz
+sct_maths -i tmp.nii.gz -dilate 5,5,1 -o ${FMRI}_moco_SPINE.nii.gz
+sct_maths -i ${FMRI}_moco_SPINE.nii.gz -mul -1 -o tmp.nii.gz
+sct_maths -i tmp.nii.gz -add 1 -o tmp.nii.gz
+sct_maths -i tmp.nii.gz -bin 0.1 -o  ${FMRI}_moco_NOTSPINE.nii.gz
+rm tmp.nii.gz
+
 
 # RETROICOR
 # First split physlog into card and resp, and trim to match length of scan.
+# Cardiac peak detection is questionable on unprocessed time series and default settings
+# (lots of erroneous peaks detected). Resp phase detection is iffy also
 unzip ${PHYS}.dcm
 parse_physlog.py SCANPHYSLOG*.log 496 fmri.dcm
 3dretroicor -prefix ${FMRI}_moco_ricor.nii.gz -card cardiac.1D -resp respiratory.1D \
     -order 2 -cardphase cardphase.1D -respphase respphase.1D ${FMRI}_moco.nii.gz
 
+
+# Split GM into horns:
+#    sct_image -getorient or nibabel aff2axcodes to verify RPI orientation
+#       or reorder with nibabel as_closest_canonical to get always RAS
+#    in each slice find COM of GM, remove central 3 pix in two inplane dims
+#    Assuming orientation, assign each quadrant to L/R and dorsal/ventral
+#    Combine with label image to get ROIs for each level (instead of slice)
+
+
 # Next:
-#
-# gwreg.sh to get mffe aligned to template
-# resample template CSF to mffe, then moco space
 #
 # Slicewise on fMRI in moco space:
 #   Use retroicor to get slicewise regressors

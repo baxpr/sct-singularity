@@ -8,6 +8,7 @@ From: ubuntu:18.04
 %post
 
   apt-get update
+  apt-get install -y zip unzip
     
   # Workaround for filename case collision in linux-libc-dev
   # https://superuser.com/questions/1238903/cant-install-linux-libc-dev-in-ubuntu-on-windows

@@ -30,6 +30,7 @@ if not ort == ('L', 'A', 'S'):
 
 # Split GM into horns, slice by slice at center of mass
 gm_data = gm.get_data()
+gm_data[gm_data>0] = 1
 dims = gm.header.get_data_shape()
 if not (dims[2]<dims[0] and dims[2]<dims[1]):
     raise Exception('Third dimension is not slice dimension?')

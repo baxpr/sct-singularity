@@ -119,6 +119,9 @@ sct_maths -i tmp.nii.gz -add 1 -o tmp.nii.gz
 sct_maths -i tmp.nii.gz -bin 0.1 -o  ${FMRI}_moco_NOTSPINE.nii.gz
 rm tmp.nii.gz
 
+# Make horn- and level-specific gray matter ROI images
+make_gm_rois.py
+
 
 # RETROICOR
 # First split physlog into card and resp, and trim to match length of scan.
@@ -130,40 +133,6 @@ parse_physlog.py SCANPHYSLOG*.log 496 fmri.dcm
     -order 2 -cardphase cardphase.1D -respphase respphase.1D ${FMRI}_moco.nii.gz
 
 
-# Split GM into horns:
-#    sct_image -getorient or nibabel aff2axcodes to verify RPI orientation
-#       or reorder with nibabel as_closest_canonical to get always RAS
-#    in each slice find COM of GM, remove central 3 pix in two inplane dims
-#    Assuming orientation, assign each quadrant to L/R and dorsal/ventral
-#    Combine with label image to get ROIs for each level (instead of slice)
-
-
-# Next:
-#
-# Slicewise on fMRI in moco space:
-#   Use retroicor to get slicewise regressors
-#   Use PCA to get CSF regressors
-#   Use ?? and PCA to get ex-spine regressors
-
-# We could handle the GM/WM/CSF volume fractions better if we resample
-# the fmri to mffe space. However, then we lose the slicewise information
-# that we need for slicewise correction. Any tricks to get accurate fractional
-# volumes or otherwise handle partial volume effects? Main concerns are
-# (1) Don't contaminate extracted CSF signals with GM/WM
-# (2) Get most accurate GM ROIs for ROI analysis
-
-# To compute approximate volume fraction: resample fMRI to mffe space,
-# nearest neighbor, with the voxel values being a voxel index. In
-# mffe space, count the GM/WM/CSF voxels at each voxel index and generate
-# corresponding maps in the original fmri space.
-
-# Rather than fancy stuff, let's sample all masks into fmri space and erode
-# to avoid partial volume issues.
-#          CSF:  template -> mffe -> fmri and erode
-#           GM:  mffe -> fmri, split into 4, erode
-#         cord:  mffe -> fmri
-#    not-spine:  inverse of cord and erode
-
 # Another procedure using FSL / PNM https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5315056/
 #     popp, pnm_evs
 
@@ -174,3 +143,10 @@ parse_physlog.py SCANPHYSLOG*.log 496 fmri.dcm
 # Motion correction first: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2833099/
 #
 # Barry 2014 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4120419/
+
+
+# Next:
+#
+# Slicewise on fMRI in moco space:
+#   Use PCA to get CSF and not-spine regressors
+

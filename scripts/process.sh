@@ -96,7 +96,7 @@ sct_apply_transfo -i ${TDIR}/PAM50_csf.nii.gz -x nn \
 -w warp_PAM50_gw2${MFFE}_gw.nii.gz warp_${MFFE}2${FMRI}_moco_mean.nii.gz \
 -d ${FMRI}_moco_mean.nii.gz -o ${FMRI}_moco_CSF.nii.gz
 
-# Get mffe GM/WM/label in fmri space
+# Get mffe GM/WM/label/centerline in fmri space
 sct_apply_transfo -i ${MFFE}_gmseg.nii.gz -x nn \
 -w warp_${MFFE}2${FMRI}_moco_mean.nii.gz \
 -d ${FMRI}_moco_mean.nii.gz -o ${FMRI}_moco_GM.nii.gz
@@ -109,7 +109,8 @@ sct_apply_transfo -i ${MFFE}_seg_labeled.nii.gz -x nn \
 -w warp_${MFFE}2${FMRI}_moco_mean.nii.gz \
 -d ${FMRI}_moco_mean.nii.gz -o ${FMRI}_moco_LABEL.nii.gz
 
-# Make "not-spine" ROI in fmri space. Add CSF and seg, dilate, invert
+
+# Make "not-spine" ROI in fmri space (combine CSF and seg, dilate, invert)
 sct_maths -i ${FMRI}_moco_mean_seg.nii.gz -add ${FMRI}_moco_CSF.nii.gz -o tmp.nii.gz
 sct_maths -i tmp.nii.gz -bin 0.1 -o tmp.nii.gz
 sct_maths -i tmp.nii.gz -dilate 5,5,1 -o ${FMRI}_moco_SPINE.nii.gz

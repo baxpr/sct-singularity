@@ -3,6 +3,8 @@
 # Load fmri space masks and create dorsal and ventral ROIs
 
 import nibabel
+import numpy
+import scipy.ndimage
 
 gm_file = 'fmri_moco_GM.nii.gz'
 label_file = 'fmri_moco_LABEL.nii.gz'
@@ -29,4 +31,19 @@ gm_data[gm_inds] = label_data[gm_inds]
 gmmasked = nibabel.Nifti1Image(gm_data,gm.affine,gm.header)
 nibabel.save(gmmasked,'fmri_moco_GMmasked.nii.gz')
 
+# Compute GM center of mass slice by slice, assuming 3rd dim is slice
+dims = gmmasked.header.get_data_shape()
+if not (dims[2]<dims[0] and dims[2]<dims[1]):
+    raise Exception('Third dimension is not slice dimension?')
+nslices = dims[2]
+gmmasked_data = gmmasked.get_data()
+comdata = numpy.zeros(dims)
+for s in range(nslices):
+    slicedata = gmmasked_data[:,:,s]
+    com = [int(round(x)) for x in scipy.ndimage.center_of_mass(slicedata)]
+    slicedata[com[0]-1:com[0]+1,:] = 0
+    slicedata[:,com[1]-1:com[1]+1] = 0
+    comdata[:,:,s] = slicedata
 
+comimg = nibabel.Nifti1Image(comdata,gm.affine,gm.header)
+nibabel.save(comimg,'fmri_moco_GMcut.nii.gz')

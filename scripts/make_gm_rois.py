@@ -23,27 +23,26 @@ if not (label.affine == gm.affine).all():
 if not label.header.get_data_shape() == gm.header.get_data_shape():
     raise Exception('GM/LABEL mismatch in data shape')    
 
-# Mask labels by gray matter and write to file
+# Split GM into horns, slice by slice at center of mass
 gm_data = gm.get_data()
+dims = gm.header.get_data_shape()
+if not (dims[2]<dims[0] and dims[2]<dims[1]):
+    raise Exception('Third dimension is not slice dimension?')
+nslices = dims[2]
+horn_data = numpy.zeros(dims)
+for s in range(nslices):
+    slicedata = numpy.copy(gm_data[:,:,s])
+    com = [int(round(x)) for x in scipy.ndimage.center_of_mass(slicedata)]
+    slicedata[com[0]:com[0]+1,:] = 0
+    slicedata[:,com[1]:com[1]+1] = 0
+    horn_data[:,:,s] = slicedata
+
+horn = nibabel.Nifti1Image(horn_data,gm.affine,gm.header)
+nibabel.save(horn,'fmri_moco_GMcut.nii.gz')
+
+# Mask labels by gray matter and write to file
 label_data = label.get_data()
 gm_inds = gm_data>0
 gm_data[gm_inds] = label_data[gm_inds]
 gmmasked = nibabel.Nifti1Image(gm_data,gm.affine,gm.header)
-nibabel.save(gmmasked,'fmri_moco_GMmasked.nii.gz')
-
-# Compute GM center of mass slice by slice, assuming 3rd dim is slice
-dims = gmmasked.header.get_data_shape()
-if not (dims[2]<dims[0] and dims[2]<dims[1]):
-    raise Exception('Third dimension is not slice dimension?')
-nslices = dims[2]
-gmmasked_data = gmmasked.get_data()
-comdata = numpy.zeros(dims)
-for s in range(nslices):
-    slicedata = gmmasked_data[:,:,s]
-    com = [int(round(x)) for x in scipy.ndimage.center_of_mass(slicedata)]
-    slicedata[com[0]-1:com[0]+1,:] = 0
-    slicedata[:,com[1]-1:com[1]+1] = 0
-    comdata[:,:,s] = slicedata
-
-comimg = nibabel.Nifti1Image(comdata,gm.affine,gm.header)
-nibabel.save(comimg,'fmri_moco_GMcut.nii.gz')
+nibabel.save(gmmasked,'fmri_moco_GMlabeled.nii.gz')

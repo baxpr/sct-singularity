@@ -35,12 +35,26 @@ if not (dims[2]<dims[0] and dims[2]<dims[1]):
     raise Exception('Third dimension is not slice dimension?')
 nslices = dims[2]
 horn_data = numpy.zeros(dims)
+
 for s in range(nslices):
+    
     slicedata = numpy.copy(gm_data[:,:,s])
+    quadrants = numpy.zeros(dims[0:2])
+    
     com = [int(round(x)) for x in scipy.ndimage.center_of_mass(slicedata)]
+
+    # Label quadrants
+    quadrants[com[0]+1:,com[1]+1:] = 1
+    quadrants[:com[0],com[1]+1:] = 2
+    quadrants[com[0]+1:,:com[1]] = 3
+    quadrants[:com[0],:com[1]] = 4
+
+    # Set centerline values to zero
     slicedata[com[0]:com[0]+1,:] = 0
     slicedata[:,com[1]:com[1]+1] = 0
-    horn_data[:,:,s] = slicedata
+
+    # Label the four horns
+    horn_data[:,:,s] = numpy.multiply(slicedata,quadrants)
 
 horn = nibabel.Nifti1Image(horn_data,gm.affine,gm.header)
 nibabel.save(horn,'fmri_moco_GMcut.nii.gz')

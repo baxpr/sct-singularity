@@ -23,6 +23,11 @@ if not (label.affine == gm.affine).all():
 if not label.header.get_data_shape() == gm.header.get_data_shape():
     raise Exception('GM/LABEL mismatch in data shape')    
 
+# Verify that orientation is RPI (as SCT calls it) or LAS (as nibabel calls it)
+ort = nibabel.aff2axcodes(gm.affine)
+if not ort == ('L', 'A', 'S'):
+    raise Exception('GM image orientation is not nibabel LAS')
+
 # Split GM into horns, slice by slice at center of mass
 gm_data = gm.get_data()
 dims = gm.header.get_data_shape()

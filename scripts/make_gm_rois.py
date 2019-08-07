@@ -44,7 +44,11 @@ for s in range(nslices):
     
     com = [int(round(x)) for x in scipy.ndimage.center_of_mass(slicedata)]
 
-    # Label quadrants
+    # Label quadrants. For correct data orientation, these are
+    #    1 - left ventral
+    #    2 - right ventral
+    #    3 - left dorsal
+    #    4 - right dorsal
     quadrants[com[0]+1:,com[1]+1:] = 1
     quadrants[:com[0],com[1]+1:] = 2
     quadrants[com[0]+1:,:com[1]] = 3
@@ -66,3 +70,14 @@ gm_inds = gm_data>0
 gm_data[gm_inds] = label_data[gm_inds]
 gmmasked = nibabel.Nifti1Image(gm_data,gm.affine,gm.header)
 nibabel.save(gmmasked,'fmri_moco_GMlabeled.nii.gz')
+
+# Label by level and horn:
+#    301 - C3, left ventral
+#    302 - C3, right ventral
+#    etc
+label_data = numpy.multiply(label_data,horn_data>0)
+horn_data = numpy.multiply(horn_data,label_data>0)
+hornlevel_data = 100*label_data + horn_data
+hornlevel = nibabel.Nifti1Image(hornlevel_data,gm.affine,gm.header)
+nibabel.save(hornlevel,'fmri_moco_GMcutlabel.nii.gz')
+

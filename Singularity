@@ -45,7 +45,7 @@ From: ubuntu:18.04
   cd /opt
   wget https://afni.nimh.nih.gov/pub/dist/tgz/linux_ubuntu_16_64.tgz
   tar -zxf linux_ubuntu_16_64.tgz linux_ubuntu_16_64/RetroTS.py
-  tar -zxf linux_ubuntu_16_64.tgz linux_ubuntu_16_64/lib_RetroTS/*
+  tar  --wildcards -zxf linux_ubuntu_16_64.tgz linux_ubuntu_16_64/lib_RetroTS/*
   mv linux_ubuntu_16_64 afni
   rm linux_ubuntu_16_64.tgz
  

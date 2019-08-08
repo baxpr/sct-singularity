@@ -27,12 +27,16 @@ From: ubuntu:18.04
   # AFNI, but we only need the 3dretroicor binary
   apt-get install -y wget libxt6
   cd /opt
-  mkdir afni
   wget https://afni.nimh.nih.gov/pub/dist/tgz/linux_ubuntu_16_64.tgz
-  tar -zxf linux_ubuntu_16_64.tgz linux_ubuntu_16_64/3dretroicor
-  mv linux_ubuntu_16_64/3dretroicor afni
+  tar -zxf linux_ubuntu_16_64.tgz
+  mv linux_ubuntu_16_64 afni
+  
+  #mkdir afni
+  #tar -zxf linux_ubuntu_16_64.tgz linux_ubuntu_16_64/3dretroicor
+  #mv linux_ubuntu_16_64/3dretroicor afni
+  #rmdir linux_ubuntu_16_64
+
   rm linux_ubuntu_16_64.tgz
-  rmdir linux_ubuntu_16_64
 
   # SCT installation
   apt-get install -y curl wget gcc git

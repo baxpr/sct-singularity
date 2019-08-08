@@ -127,6 +127,8 @@ make_gm_rois.py
 # First split physlog into card and resp, and trim to match length of scan.
 # Cardiac peak detection is questionable on unprocessed time series and default settings
 # (lots of erroneous peaks detected). Resp phase detection is iffy also
+#
+# Alternative: afni's RetroTS.py
 unzip ${PHYS}.dcm
 parse_physlog.py SCANPHYSLOG*.log 496 fmri.dcm
 3dretroicor -prefix ${FMRI}_moco_ricor.nii.gz -card cardiac.1D -resp respiratory.1D \
@@ -149,4 +151,7 @@ parse_physlog.py SCANPHYSLOG*.log 496 fmri.dcm
 #
 # Slicewise on fMRI in moco space:
 #   Use PCA to get CSF and not-spine regressors
+#   Remove them
+#   bandpass filter
 
+# Resample preprocessed fMRI to template space

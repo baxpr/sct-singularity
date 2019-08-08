@@ -24,20 +24,6 @@ From: ubuntu:18.04
   cd ..
   rm -fr pkgtemp
 
-  # AFNI, but we only need the 3dretroicor binary
-  apt-get install -y wget libxt6
-  cd /opt
-  wget https://afni.nimh.nih.gov/pub/dist/tgz/linux_ubuntu_16_64.tgz
-  tar -zxf linux_ubuntu_16_64.tgz
-  mv linux_ubuntu_16_64 afni
-  
-  #mkdir afni
-  #tar -zxf linux_ubuntu_16_64.tgz linux_ubuntu_16_64/3dretroicor
-  #mv linux_ubuntu_16_64/3dretroicor afni
-  #rmdir linux_ubuntu_16_64
-
-  rm linux_ubuntu_16_64.tgz
-
   # SCT installation
   apt-get install -y curl wget gcc git
   REPO=baxpr
@@ -50,8 +36,23 @@ From: ubuntu:18.04
   echo $SCTVER > version-installed.txt
   ASK_REPORT_QUESTION=false change_default_path=Yes add_to_path=No ./install_sct
   
-  # Add pydicom to the SCT python
+  # Add some things to the SCT python
   ${SCTDIR}/python/envs/venv_sct/bin/pip install pydicom
+  ${SCTDIR}/python/envs/venv_sct/bin/pip install 2to3
+  
+  # AFNI, but we only need the RetroTS bits
+  apt-get install -y wget
+  cd /opt
+  wget https://afni.nimh.nih.gov/pub/dist/tgz/linux_ubuntu_16_64.tgz
+  tar -zxf linux_ubuntu_16_64.tgz linux_ubuntu_16_64/RetroTS.py
+  tar -zxf linux_ubuntu_16_64.tgz linux_ubuntu_16_64/lib_RetroTS/*
+  mv linux_ubuntu_16_64 afni
+  rm linux_ubuntu_16_64.tgz
+ 
+  # Fix up the bit of afni we need for python 3
+  # https://docs.python.org/3/library/2to3.html
+  ${SCTDIR}/python/envs/venv_sct/bin/2to3 -w /opt/afni/RetroTS.py
+  ${SCTDIR}/python/envs/venv_sct/bin/2to3 -w /opt/afni/lib_RetroTS/*
   
   # Get dcm2niix
   #DCM2NIIXVER=v1.0.20190720

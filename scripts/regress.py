@@ -2,7 +2,6 @@
 #
 # Generate confound regressors and remove, slice by slice
 
-import pandas
 import nibabel
 import numpy
 

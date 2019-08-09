@@ -14,15 +14,18 @@ notspine_file = 'fmri_moco_NOTSPINE.nii.gz'
 # Cardiac/respiratory. We apply the same ones to all slices, assuming
 # 3D fmri acquisition sequence. ricor_file is the appropriate output
 # from RetroTS.py
-ricor_reg = pandas.read_csv(ricor_file,delim_whitespace=True,skiprows=5,skipfooter=1,header=None)
-
-# CSF and NOTSPINE masks in fmri space
-csf_img = nibabel.load(csf_file)
-notspine_img = nibabel.load(notspine_file)
+#ricor_reg = pandas.read_csv(ricor_file,delim_whitespace=True,skiprows=5,skipfooter=1,header=None)
+ricor_data = numpy.genfromtxt(ricor_file,skip_header=5,skip_footer=0)
+ricor_data -= numpy.mean(ricor_data,0)
+ricor_data /= numpy.std(ricor_data,0)
 
 # fmri time series data
 fmri_img = nibabel.load(fmri_file)
 nvols = fmri_img.header.get_data_shape()[3]
+
+# CSF and NOTSPINE mask images in fmri space
+csf_img = nibabel.load(csf_file)
+notspine_img = nibabel.load(notspine_file)
 
 # Verify that all images have the same geometry
 # Using allclose for now because CSF is just a tiny bit off:
@@ -43,32 +46,35 @@ if not (dims[2]<dims[0] and dims[2]<dims[1]):
     raise Exception('Third dimension is not slice dimension?')
 nslices = dims[2]
 
-# Combine CSF and NOTSPINE masks
-noise_mask = numpy.greater(csf_img.get_data(),0) | numpy.greater(notspine_img.get_data(),0)
-rnoise_mask = numpy.reshape(noise_mask,(dims[0]*dims[1],nslices),order='F')
-
 # Get fmri data and reshape to inslice x thruslice x time
 fmri_data = fmri_img.get_data();
 rfmri_data = numpy.reshape(fmri_data,(dims[0]*dims[1],nslices,nvols),order='F')
 
+# Binarize and reshape CSF and NOTSPINE masks
+csf_mask = numpy.greater(csf_img.get_data(),0)
+rcsf_mask = numpy.reshape(csf_mask,(dims[0]*dims[1],nslices),order='F')
+ns_mask = numpy.greater(notspine_img.get_data(),0)
+rns_mask = numpy.reshape(ns_mask,(dims[0]*dims[1],nslices),order='F')
+
+
 s = 0
 
 # Noise data, time x voxel
-noisedata = numpy.copy(rfmri_data[rnoise_mask[:,s],s,:]).T
+csf_data = numpy.copy(rfmri_data[rcsf_mask[:,s],s,:]).T
+ns_data = numpy.copy(rfmri_data[rns_mask[:,s],s,:]).T
 
-# Normalize - subtract time mean, time sd = 1
-noisedata -= numpy.mean(noisedata,0)
-noisedata /= numpy.std(noisedata,0)
+# Normalize - subtract time mean, time sd = 1. Drop constant-valued voxels
+csf_data -= numpy.mean(csf_data,0)
+csf_data /= numpy.std(csf_data,0)
+csf_data = csf_data[:,numpy.logical_not(numpy.isnan(numpy.std(csf_data,0)))]
+ns_data -= numpy.mean(ns_data,0)
+ns_data /= numpy.std(ns_data,0)
+ns_data = ns_data[:,numpy.logical_not(numpy.isnan(numpy.std(ns_data,0)))]
 
-# Need to drop all constant-valued columns (voxels) ahead of PCA to avoid nan in
-# covariance matrix. Equiv to sd = nan
-idx = numpy.logical_not(numpy.isnan(numpy.std(noisedata,0)))
-noisedata = noisedata[:,idx]
+# Get largest eigenvalue components
+csf_PCs,S,V = numpy.linalg.svd(csf_data, full_matrices=False)
+ns_PCs,S,V = numpy.linalg.svd(ns_data, full_matrices=False)
 
-
-
-U, S, V = numpy.linalg.svd(noisedata, full_matrices=False)
-
-inport matplotlib.pyplot
-matplotlib.pyplot.plot(U[:,0:5])
+import matplotlib.pyplot
+matplotlib.pyplot.plot(csf_PCs[:,0:5])
 matplotlib.pyplot.show()

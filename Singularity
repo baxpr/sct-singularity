@@ -38,21 +38,21 @@ From: ubuntu:18.04
   
   # Add some things to the SCT python
   ${SCTDIR}/python/envs/venv_sct/bin/pip install pydicom
-  ${SCTDIR}/python/envs/venv_sct/bin/pip install 2to3
+  #${SCTDIR}/python/envs/venv_sct/bin/pip install 2to3
   
   # AFNI, but we only need the RetroTS bits
-  apt-get install -y wget
-  cd /opt
-  wget https://afni.nimh.nih.gov/pub/dist/tgz/linux_ubuntu_16_64.tgz
-  tar -zxf linux_ubuntu_16_64.tgz linux_ubuntu_16_64/RetroTS.py
-  tar  --wildcards -zxf linux_ubuntu_16_64.tgz linux_ubuntu_16_64/lib_RetroTS/*
-  mv linux_ubuntu_16_64 afni
-  rm linux_ubuntu_16_64.tgz
+  #apt-get install -y wget
+  #cd /opt
+  #wget https://afni.nimh.nih.gov/pub/dist/tgz/linux_ubuntu_16_64.tgz
+  #tar -zxf linux_ubuntu_16_64.tgz linux_ubuntu_16_64/RetroTS.py
+  #tar  --wildcards -zxf linux_ubuntu_16_64.tgz linux_ubuntu_16_64/lib_RetroTS/*
+  #mv linux_ubuntu_16_64 afni
+  #rm linux_ubuntu_16_64.tgz
  
   # Fix up the bit of afni we need for python 3
   # https://docs.python.org/3/library/2to3.html
-  ${SCTDIR}/python/envs/venv_sct/bin/2to3 -w /opt/afni/RetroTS.py
-  ${SCTDIR}/python/envs/venv_sct/bin/2to3 -w /opt/afni/lib_RetroTS/*
+  #${SCTDIR}/python/envs/venv_sct/bin/2to3 -w /opt/afni/RetroTS.py
+  #${SCTDIR}/python/envs/venv_sct/bin/2to3 -w /opt/afni/lib_RetroTS/*
   
   # Get dcm2niix
   #DCM2NIIXVER=v1.0.20190720
@@ -65,8 +65,7 @@ From: ubuntu:18.04
   
   
 %environment
-  #PATH="/opt/scripts:/opt/sct/bin:/opt/afni:/opt/dcm2niix/build/bin:${PATH}"
-  PATH="/opt/scripts:/opt/sct/bin:/opt/afni:${PATH}"
+  PATH="/opt/scripts:/opt/scripts/external/afni:/opt/sct/bin:${PATH}"
 
 
 %runscript

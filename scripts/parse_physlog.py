@@ -33,10 +33,15 @@ acqdur = ds[0x0018,0x9073].value
 
 # NumberOfTemporalPositions from first frame (Philips private field)
 # PerFrameFunctionalGroupsSequence[0].Private_2005_140f[0].NumberOfTemporalPositions
-#nvols = int( ds[0x5200,0x9230][0][0x2005,0x140f][0][0x0020,0x0105].value )
+nvols = int( ds[0x5200,0x9230][0][0x2005,0x140f][0][0x0020,0x0105].value )
 
 # Estimate of volume time (sec)
-#voltime = acqdur / nvols
+voltime = acqdur / nvols
+
+# Save voltime in sec to file
+print('Saving estimated voltime %f in vat.txt' % (voltime))
+with open('vat.txt','w') as f:
+    f.write( '%f' % (voltime) )
 
 
 ###########################################################################################

@@ -131,8 +131,9 @@ make_gm_rois.py
 # Alternative: afni's RetroTS.py
 unzip ${PHYS}.dcm
 parse_physlog.py SCANPHYSLOG*.log 496 fmri.dcm
-3dretroicor -prefix ${FMRI}_moco_ricor.nii.gz -card cardiac.1D -resp respiratory.1D \
-    -order 2 -cardphase cardphase.1D -respphase respphase.1D ${FMRI}_moco.nii.gz
+RetroTS.py -r respiratory.1D -c cardiac.1D -p 496 -n 1 -v `cat vat.txt` -prefix ricor
+
+
 
 
 # Another procedure using FSL / PNM https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5315056/

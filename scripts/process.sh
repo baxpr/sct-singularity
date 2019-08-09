@@ -134,6 +134,21 @@ parse_physlog.py SCANPHYSLOG*.log 496 fmri.dcm
 RetroTS.py -r respiratory.1D -c cardiac.1D -p 496 -n 1 -v `cat vat.txt` -prefix ricor
 
 
+# Next:
+#
+# Slicewise on fMRI in moco space:
+#   Get CSF and not-spine timeseries
+#   Normalize and PC together with ricor (and motion when available)
+#   Regress out of data
+#
+# Apply bandpass filter
+#
+# Resample preprocessed fMRI to template space
+
+
+
+
+
 
 
 # Another procedure using FSL / PNM https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5315056/
@@ -148,11 +163,5 @@ RetroTS.py -r respiratory.1D -c cardiac.1D -p 496 -n 1 -v `cat vat.txt` -prefix 
 # Barry 2014 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4120419/
 
 
-# Next:
-#
-# Slicewise on fMRI in moco space:
-#   Use PCA to get CSF and not-spine regressors
-#   Remove them
-#   bandpass filter
 
-# Resample preprocessed fMRI to template space
+

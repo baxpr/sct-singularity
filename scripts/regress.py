@@ -35,17 +35,18 @@ notspine_img = nibabel.load(notspine_file)
 #if not ( (csf_img.affine==notspine_img.affine).all() and
 #         (csf_img.affine==fmri_img.affine).all() ):
 #    raise Exception('affine mismatch in image files')
-if not ( numpy.allclose(csf_img.affine,notspine_img.affine,1e-3) and
-         numpy.allclose(csf_img.affine,fmri_img.affine,1e-3) )
-    raise Exception('affine mismatch in image files')
+#if not ( numpy.allclose(csf_img.affine,notspine_img.affine,1e-3) and
+#         numpy.allclose(csf_img.affine,fmri_img.affine,1e-3) )
+#    raise Exception('affine mismatch in image files')
 
 # Check that slice axis is third and get number of slices
 dims = csf_img.header.get_data_shape()
-if not (dims[2]<dims[0] and dims[2]<dims[1]):
-    raise Exception('Third dimension is not slice dimension?')
+#if not (dims[2]<dims[0] and dims[2]<dims[1]):
+#    raise Exception('Third dimension is not slice dimension?')
 nslices = dims[2]
 
-# Get fmri data and reshape to inslice x thruslice x time
+# Get fmri data and reshape to inslice x thruslice x time. Reslice
+# appears to copy
 fmri_data = fmri_img.get_data();
 rfmri_data = numpy.reshape(fmri_data,(dims[0]*dims[1],nslices,nvols),order='F')
 
@@ -70,9 +71,18 @@ ns_data -= numpy.mean(ns_data,0)
 ns_data /= numpy.std(ns_data,0)
 ns_data = ns_data[:,numpy.logical_not(numpy.isnan(numpy.std(ns_data,0)))]
 
-# Get largest eigenvalue components
-csf_PCs,S,V = numpy.linalg.svd(csf_data, full_matrices=False)
-ns_PCs,S,V = numpy.linalg.svd(ns_data, full_matrices=False)
+# Get largest eigenvalue components and pct variance explained
+csf_PCs,csf_S,V = numpy.linalg.svd(csf_data, full_matrices=False)
+csf_var = numpy.square(csf_S)
+csf_var = csf_var / sum(csf_var)
+ns_PCs,ns_S,V = numpy.linalg.svd(ns_data, full_matrices=False)
+ns_var = numpy.square(ns_S)
+ns_var = ns_var / sum(ns_var)
+
+numPCs = 5
+numpy.savetxt('ricor.txt',ricor_data)
+numpy.savetxt('csf.txt',csf_PCs[:,0:numPCs])
+numpy.savetxt('ns.txt',ns_PCs[:,0:numPCs])
 
 import matplotlib.pyplot
 matplotlib.pyplot.plot(csf_PCs[:,0:5])

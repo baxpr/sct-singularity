@@ -14,7 +14,7 @@ notspine_file = 'fmri_moco_NOTSPINE.nii.gz'
 # Cardiac/respiratory. We apply the same ones to all slices, assuming
 # 3D fmri acquisition sequence. ricor_file is the appropriate output
 # from RetroTS.py
-ricor_reg = pandas.read_csv(ricor_file,delim_whitespace=True,skiprows=5,header=None)
+ricor_reg = pandas.read_csv(ricor_file,delim_whitespace=True,skiprows=5,skipfooter=1,header=None)
 
 # CSF and NOTSPINE masks in fmri space
 csf_img = nibabel.load(csf_file)
@@ -52,5 +52,23 @@ fmri_data = fmri_img.get_data();
 rfmri_data = numpy.reshape(fmri_data,(dims[0]*dims[1],nslices,nvols),order='F')
 
 s = 0
-noisedata = numpy.copy(rfmri_data[rnoise_mask[:,s],s,:])
 
+# Noise data, time x voxel
+noisedata = numpy.copy(rfmri_data[rnoise_mask[:,s],s,:]).T
+
+# Normalize - subtract time mean, time sd = 1
+noisedata -= numpy.mean(noisedata,0)
+noisedata /= numpy.std(noisedata,0)
+
+# Need to drop all constant-valued columns (voxels) ahead of PCA to avoid nan in
+# covariance matrix. Equiv to sd = nan
+idx = numpy.logical_not(numpy.isnan(numpy.std(noisedata,0)))
+noisedata = noisedata[:,idx]
+
+
+
+U, S, V = numpy.linalg.svd(noisedata, full_matrices=False)
+
+inport matplotlib.pyplot
+matplotlib.pyplot.plot(U[:,0:5])
+matplotlib.pyplot.show()

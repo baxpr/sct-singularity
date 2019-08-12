@@ -10,9 +10,10 @@ From: ubuntu:18.04
   apt-get update
   apt-get install -y zip unzip
     
+  #apt-get install -y binutils xz-utils linux-libc-dev
   # Workaround for filename case collision in linux-libc-dev
   # https://superuser.com/questions/1238903/cant-install-linux-libc-dev-in-ubuntu-on-windows
-  apt-get install -y binutils xz-utils
+  apt-get install -y binutils xz-utils 
   mkdir pkgtemp
   cd pkgtemp
   apt-get download linux-libc-dev
@@ -27,9 +28,7 @@ From: ubuntu:18.04
   # SCT installation
   apt-get install -y curl wget gcc git
   REPO=baxpr
-  #SCTVER=4.0.0-beta.5-condafix  # has miniconda install bug
-  SCTVER=v4.0.0-beta.5-condafix2
-  #SCTVER=condafix3  # has sct_image.py int bug
+  SCTVER=baxpr/condafix
   SCTDIR=/opt/sct
   git clone --branch ${SCTVER} --depth 1 https://github.com/${REPO}/spinalcordtoolbox.git ${SCTDIR}
   cd ${SCTDIR}

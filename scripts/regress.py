@@ -84,6 +84,10 @@ numpy.savetxt('ricor.txt',ricor_data)
 numpy.savetxt('csf.txt',csf_PCs[:,0:numPCs])
 numpy.savetxt('ns.txt',ns_PCs[:,0:numPCs])
 
+
+beta,residual = numpy.linalg.lstsq(y,x)
+
+
 import matplotlib.pyplot
 matplotlib.pyplot.plot(csf_PCs[:,0:5])
 matplotlib.pyplot.show()

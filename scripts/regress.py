@@ -27,16 +27,8 @@ csf_img = nibabel.load(csf_file)
 notspine_img = nibabel.load(notspine_file)
 
 # Verify that all images have the same geometry
-# Using allclose for now because CSF is just a tiny bit off:
-#     CSF/WM/GM/LABEL all match
-#     moco, moco_mean, moco_mean_seg, NOT_SPINE all match
-#     That means sct_apply_transfo behaves slightly different from sct_maths
-#     https://github.com/neuropoly/spinalcordtoolbox/issues/2398
 #if not ( (csf_img.affine==notspine_img.affine).all() and
 #         (csf_img.affine==fmri_img.affine).all() ):
-#    raise Exception('affine mismatch in image files')
-#if not ( numpy.allclose(csf_img.affine,notspine_img.affine,1e-3) and
-#         numpy.allclose(csf_img.affine,fmri_img.affine,1e-3) )
 #    raise Exception('affine mismatch in image files')
 
 # Check that slice axis is third and get number of slices
@@ -58,6 +50,9 @@ rns_mask = numpy.reshape(ns_mask,(dims[0]*dims[1],nslices),order='F')
 
 
 s = 0
+
+# This slice fmri data
+sfmri_data = rfmri_data[:,s,:].T
 
 # Noise data, time x voxel
 csf_data = numpy.copy(rfmri_data[rcsf_mask[:,s],s,:]).T
@@ -84,8 +79,18 @@ numpy.savetxt('ricor.txt',ricor_data)
 numpy.savetxt('csf.txt',csf_PCs[:,0:numPCs])
 numpy.savetxt('ns.txt',ns_PCs[:,0:numPCs])
 
+# Combine and rescale the desired confound regressors
+confounds = numpy.hstack((ricor_data,csf_PCs[:,0:numPCs],ns_PCs[:,0:numPCs]))
+confounds -= numpy.mean(confounds,0)
+confounds /= numpy.std(confounds,0)
+confounds = numpy.hstack((confounds,numpy.ones((nvols,1))))
+numpy.savetxt('confounds.csv',confounds,delimiter=',')
 
-beta,residual = numpy.linalg.lstsq(y,x)
+# Remove confounds from this slice
+print(confounds.shape)
+print(sfmri_data.shape)
+beta,resid,rank,svals = numpy.linalg.lstsq(confounds,sfmri_data)
+
 
 
 import matplotlib.pyplot

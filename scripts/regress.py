@@ -3,6 +3,7 @@
 # Generate confound regressors and remove, slice by slice
 
 import nibabel
+import nitime
 import numpy
 
 ricor_file = 'ricor.slibase.1D'
@@ -53,6 +54,10 @@ csf_mask = numpy.greater(csf_img.get_data(),0)
 rcsf_mask = numpy.reshape(csf_mask,(dims[0]*dims[1],nslices),order='F')
 ns_mask = numpy.greater(notspine_img.get_data(),0)
 rns_mask = numpy.reshape(ns_mask,(dims[0]*dims[1],nslices),order='F')
+
+# Get motion params
+#  fmri_moco_params_X.nii.gz
+#  fmri_moco_params_Y.nii.gz
 
 #
 print('Slicewise correction')

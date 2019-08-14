@@ -132,6 +132,7 @@ make_gm_rois.py
 unzip ${PHYS}.dcm
 parse_physlog.py SCANPHYSLOG*.log 496 fmri.dcm
 RetroTS.py -r respiratory.1D -c cardiac.1D -p 496 -n 1 -v `cat vat.txt` -prefix ricor
+cleanup_physlog.py
 
 
 # Next:

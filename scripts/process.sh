@@ -125,26 +125,16 @@ make_gm_rois.py
 
 # RETROICOR
 # First split physlog into card and resp, and trim to match length of scan.
-# Cardiac peak detection is questionable on unprocessed time series and default settings
-# (lots of erroneous peaks detected). Resp phase detection is iffy also
-#
-# Alternative: afni's RetroTS.py
 unzip ${PHYS}.dcm
 parse_physlog.py SCANPHYSLOG*.log 496 fmri.dcm
 RetroTS.py -r respiratory.1D -c cardiac.1D -p 496 -n 1 -v `cat vat.txt` -prefix ricor
 cleanup_physlog.py
 
+# Regression-based cleanup of confounds
+regress.py
 
-# Next:
-#
-# Slicewise on fMRI in moco space:
-#   Get CSF and not-spine timeseries
-#   Normalize and PC together with ricor (and motion when available)
-#   Regress out of data
-#
-# Apply bandpass filter
-#
-# Resample preprocessed fMRI to template space
+# Compute connectivity images
+compute_connectivity.py
 
 
 
@@ -152,16 +142,15 @@ cleanup_physlog.py
 
 
 
-# Another procedure using FSL / PNM https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5315056/
-#     popp, pnm_evs
 
-# Retroicor and moco do not provide regressors (though retroicor provides phase 
-# terms that could be used to compute regressors). Without those, what order
-# of operations?
+# Retroicor:
 # 
 # Motion correction first: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2833099/
 #
 # Barry 2014 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4120419/
+#
+# Another procedure using FSL / PNM https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5315056/
+#     popp, pnm_evs
 
 
 

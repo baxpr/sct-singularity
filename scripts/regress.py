@@ -6,20 +6,30 @@ import nibabel
 import nitime
 import numpy
 
-ricor_file = 'ricor.slibase.1D'
+ricor_file = 'ricor.csv'
 fmri_file = 'fmri_moco.nii.gz'
 csf_file = 'fmri_moco_CSF.nii.gz'
 notspine_file = 'fmri_moco_NOTSPINE.nii.gz'
+mocoX_file = 'fmri_moco_params_X.nii.gz'
+mocoY_file = 'fmri_moco_params_Y.nii.gz'
 
 numPCs = 5
+
+# Get moco params + derivs and reshape/combine to time x param x slice
+mocoX_data = nibabel.load(mocoX_file).get_data()
+mocoY_data = nibabel.load(mocoY_file).get_data()
+mocoX_data = numpy.transpose(mocoX_data,(3,0,2,1))
+mocoY_data = numpy.transpose(mocoY_data,(3,0,2,1))
+moco_data = numpy.squeeze( numpy.concatenate((mocoX_data,mocoY_data),1) )
+moco_derivs = numpy.diff(moco_data,n=1,axis=0,prepend=0)
+moco_data = numpy.concatenate((moco_data,moco_derivs),1)
+print('moco size %d,%d,%d' % moco_data.shape)
 
 # Cardiac/respiratory. We apply the same ones to all slices, assuming
 # 3D fmri acquisition sequence. ricor_file is the appropriate output
 # from RetroTS.py
-#ricor_reg = pandas.read_csv(ricor_file,delim_whitespace=True,skiprows=5,skipfooter=1,header=None)
-ricor_data = numpy.genfromtxt(ricor_file,skip_header=5,skip_footer=0)
-ricor_data -= numpy.mean(ricor_data,0)
-ricor_data /= numpy.std(ricor_data,0)
+ricor_data = numpy.genfromtxt(ricor_file,delimiter=',')
+print('Found phys data size %d,%d' % ricor_data.shape)
 
 # fmri time series data
 fmri_img = nibabel.load(fmri_file)
@@ -55,11 +65,7 @@ rcsf_mask = numpy.reshape(csf_mask,(dims[0]*dims[1],nslices),order='F')
 ns_mask = numpy.greater(notspine_img.get_data(),0)
 rns_mask = numpy.reshape(ns_mask,(dims[0]*dims[1],nslices),order='F')
 
-# Get motion params
-#  fmri_moco_params_X.nii.gz
-#  fmri_moco_params_Y.nii.gz
 
-#
 print('Slicewise correction')
 for s in range(nslices):
 
@@ -89,20 +95,18 @@ for s in range(nslices):
     ns_var = ns_var / sum(ns_var)
 
     # Combine and rescale the desired confound regressors
-    confounds = numpy.hstack((ricor_data,csf_PCs[:,0:numPCs],ns_PCs[:,0:numPCs]))
+    confounds = numpy.hstack((ricor_data,moco_data[:,:,s],
+                    csf_PCs[:,0:numPCs],ns_PCs[:,0:numPCs]))
     confounds -= numpy.mean(confounds,0)
     confounds /= numpy.std(confounds,0)
     confounds1 = numpy.hstack((confounds,numpy.ones((nvols,1))))
-    #numpy.savetxt('confounds_slice%03d.csv' % s,confounds,delimiter=',')
 
-    # Remove confounds from this slice (except the mean) and store
+    # Remove confounds from this slice (except the constant) and store
     #  doc notation: b = ax,   x = numpy.linalg.lstsq(a,b)
     #   my notation: y = xb,   b = numpy.linalg.lstsq(x,y)
     beta1,sumresid,rank,svals = numpy.linalg.lstsq(confounds1,sfmri_data,rcond=None)
     residual = sfmri_data - numpy.matmul(confounds,beta1[0:-1,:])
     frfmri_data[:,s,:] = residual.T
-
-print(frfmri_data.shape)
 
 # Reshape filtered fmri and save
 ffmri_data = numpy.reshape(frfmri_data,dims,order='F')
@@ -113,10 +117,3 @@ nibabel.save(ffmri_img,'f'+fmri_file)
 #test_data = numpy.reshape(rfmri_data,dims,order='F')
 #test_img = nibabel.Nifti1Image(test_data,fmri_img.affine,fmri_img.header)
 #nibabel.save(test_img,'test.nii.gz')
-
-# Store all confound predictors in a .nii slicewise
-
-
-#import matplotlib.pyplot
-#matplotlib.pyplot.plot(csf_PCs[:,0:5])
-#matplotlib.pyplot.show()

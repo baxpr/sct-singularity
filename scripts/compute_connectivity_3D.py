@@ -1,6 +1,6 @@
 #!/opt/sct/python/envs/venv_sct/bin/python
 #
-# On pre-processed data, compute functional connectivity
+# On pre-processed data, compute functional connectivity. Use through-slice 3D ROIs
 
 import nibabel
 import numpy

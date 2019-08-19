@@ -50,10 +50,16 @@ for s in range(nslices):
     r_slice_data = numpy.dot(slice_data.T, roi_data) / roi_data.shape[0]
     print( 'R %d,%d ranges %f,%f' % (r_slice_data.shape[0],r_slice_data.shape[1],
                                      r_slice_data.min(),r_slice_data.max()) )
+    r_slice_img = slice_masker.inverse_transform(r_slice_data.T)
 
-    # Put back into image space
-    r_slice_img = slice_masker.inverse_transform(r_data.T)
-    r_slice_img.to_filename('connectivity_r_%02d.nii.gz' % s)
+    # Put R back into image space
+    if s==0:
+        r_img = r_slice_img  # Initialize
+    else:
+        r_img = nilearn.image.math_img("a+b",a=r_img,b=r_slice_img)
+
+# Save complete R image to file
+r_img.to_filename('connectivity_r.nii.gz')
 
 
 #z_data = numpy.arctanh(r_data) * numpy.sqrt(roi_data.shape[0]-3)

@@ -134,7 +134,7 @@ cleanup_physlog.py
 regress.py
 
 # Compute connectivity images
-compute_connectivity.py
+compute_connectivity_slice.py
 
 
 

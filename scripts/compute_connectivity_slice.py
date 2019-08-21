@@ -11,7 +11,7 @@ from nilearn.regions import img_to_signals_labels
 
 fmri_file = 'ffmri_moco.nii.gz'
 gm_file = 'fmri_moco_GMcut.nii.gz'
-vat_file = 'vat.txt'
+vat_file = 'volume_acquisition_time.txt'
 
 
 # Get TR (volume acquisition time, NOT actual scan TR for 3D fmris)

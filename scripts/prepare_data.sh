@@ -1,6 +1,8 @@
 #!/bin/bash
 #
-# Prepare inputs for the pipeline
+# Prepare inputs for the pipeline. For later processing we will assume the filenames
+# that are created here.
+
 
 # Parse inputs
 while [[ $# -gt 0 ]]

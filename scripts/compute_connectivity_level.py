@@ -8,8 +8,11 @@ from nilearn.input_data import NiftiMasker,NiftiLabelsMasker
 
 fmri_file = 'ffmri_moco.nii.gz'
 roi_file = 'fmri_moco_GMcutlabel.nii.gz'
-vat_file = 'vat.txt'
-mask_file = 'fmri_mask30.nii.gz'
+vat_file = 'volume_acquisition_time.txt'
+msize_file = 'masksize.txt'
+with open(msize_file,'r') as f:
+    msize = f.read()
+mask_file = 'fmri_mask' + msize + '.nii.gz'
 
 # Get TR (volume acquisition time, NOT actual scan TR for 3D fmris)
 with open(vat_file,'r') as f:
@@ -49,7 +52,7 @@ print( 'Z ranges %f %f' % (z_data.min(),z_data.max()) )
 
 # Save connectivity images
 r_img = spine_masker.inverse_transform(r_data.T)
-r_img.to_filename('connectivity_r.nii.gz')
+r_img.to_filename('connectivity_level_r.nii.gz')
 z_img = spine_masker.inverse_transform(z_data.T)
-z_img.to_filename('connectivity_z.nii.gz')
+z_img.to_filename('connectivity_level_z.nii.gz')
 

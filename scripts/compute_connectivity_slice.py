@@ -48,18 +48,21 @@ for s in range(nslices):
     # Connectivity computation
     # Relies on standardization to mean 0, sd 1 above
     r_slice_data = numpy.dot(slice_data.T, roi_data) / roi_data.shape[0]
+    z_slice_data = numpy.arctanh(r_slice_data) * numpy.sqrt(roi_slice_data.shape[0]-3)
     print( 'R %d,%d ranges %f,%f' % (r_slice_data.shape[0],r_slice_data.shape[1],
                                      r_slice_data.min(),r_slice_data.max()) )
     r_slice_img = slice_masker.inverse_transform(r_slice_data.T)
+    z_slice_img = slice_masker.inverse_transform(z_slice_data.T)
 
     # Put R back into image space
     if s==0:
         r_img = r_slice_img  # Initialize
+        z_img = z_slice_img  # Initialize
     else:
         r_img = nilearn.image.math_img("a+b",a=r_img,b=r_slice_img)
-
-# Save complete R image to file
-r_img.to_filename('connectivity_r.nii.gz')
+        z_img = nilearn.image.math_img("a+b",a=z_img,b=z_slice_img)
 
 
-#z_data = numpy.arctanh(r_data) * numpy.sqrt(roi_data.shape[0]-3)
+# Save complete R,Z image to file
+r_img.to_filename('connectivity_slice_r.nii.gz')
+z_img.to_filename('connectivity_slice_z.nii.gz')

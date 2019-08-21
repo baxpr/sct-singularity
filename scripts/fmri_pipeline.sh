@@ -130,6 +130,7 @@ regress.py
 
 # Compute connectivity images
 compute_connectivity_slice.py
+compute_connectivity_level.py
 
 
 

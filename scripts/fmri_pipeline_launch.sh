@@ -75,9 +75,9 @@ echo MASKSIZE    = "${MASKSIZE}"
 # Copy most files to working dir OUTDIR
 cp "${FMRI_NIIGZ}" "${OUTDIR}"/fmri.nii.gz
 cp "${FMRI_DCM}" "${OUTDIR}"/fmri.dcm
-cp "${PHYSLOG_DCM}" "${OUTDIR}"/physlog.dcm
-cat "${INITCENTER}" > "${OUTDIR}"/initcenter.txt
-cat "${MASKSIZE}" > "${OUTDIR}"/masksize.txt
+echo "${INITCENTER}" > "${OUTDIR}"/initcenter.txt
+echo "${MASKSIZE}" > "${OUTDIR}"/masksize.txt
+unzip "${PHYSLOG_DCM}" -d "${OUTDIR}"
 
 # Find, verify, copy the multiple echoes of the MFFE
 NUM_E1=`ls -d "${MFFE_DIR}"/*_e1.nii.gz | wc -l`

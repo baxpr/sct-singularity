@@ -11,12 +11,12 @@ roi_file = 'fmri_moco_GMcutlabel.nii.gz'
 vat_file = 'volume_acquisition_time.txt'
 msize_file = 'masksize.txt'
 with open(msize_file,'r') as f:
-    msize = f.read()
+    msize = f.read().strip()
 mask_file = 'fmri_mask' + msize + '.nii.gz'
 
 # Get TR (volume acquisition time, NOT actual scan TR for 3D fmris)
 with open(vat_file,'r') as f:
-    t_r = float(f.read())
+    t_r = float(f.read().strip())
     print('Found vol time of %f sec' % t_r)
 
 # Seed ROI image
@@ -52,7 +52,7 @@ print( 'Z ranges %f %f' % (z_data.min(),z_data.max()) )
 
 # Save connectivity images
 r_img = spine_masker.inverse_transform(r_data.T)
-r_img.to_filename('connectivity_level_r.nii.gz')
+r_img.to_filename('connectivity_r_level.nii.gz')
 z_img = spine_masker.inverse_transform(z_data.T)
-z_img.to_filename('connectivity_level_z.nii.gz')
+z_img.to_filename('connectivity_z_level.nii.gz')
 

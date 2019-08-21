@@ -118,7 +118,6 @@ make_gm_rois.py
 
 # RETROICOR
 # First split physlog into card and resp, and trim to match length of scan.
-unzip ${PHYS}.dcm
 parse_physlog.py SCANPHYSLOG*.log 496 fmri.dcm
 RetroTS.py -r physlog_respiratory.csv -c physlog_cardiac.csv -p 496 -n 1 \
     -v `cat volume_acquisition_time.txt` -cardiac_out 0 -prefix ricor
@@ -132,8 +131,23 @@ regress.py
 compute_connectivity_slice.py
 compute_connectivity_level.py
 
+# Resample connectivity images to mffe and template space
+for IMG in \
+  connectivity_r_slice \
+  connectivity_z_slice \
+  connectivity_r_level \
+  connectivity_z_level \
+  ; do
 
+     sct_apply_transfo -i ${IMG}.nii.gz \
+	 -w warp_${FMRI}_moco_mean2${MFFE}.nii.gz \
+	 -d ${MFFE}.nii.gz -o ${IMG}_mffespace.nii.gz
 
+     sct_apply_transfo -i ${IMG}.nii.gz \
+	 -w warp_${FMRI}_moco_mean2${MFFE}.nii.gz warp_${MFFE}_gw2PAM50_gw.nii.gz \
+	 -d ${TDIR}/PAM50_t2.nii.gz -o ${IMG}_PAM50space.nii.gz
+
+ done
 
 
 

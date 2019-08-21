@@ -16,7 +16,7 @@ vat_file = 'volume_acquisition_time.txt'
 
 # Get TR (volume acquisition time, NOT actual scan TR for 3D fmris)
 with open(vat_file,'r') as f:
-    t_r = float(f.read())
+    t_r = float(f.read().strip())
     print('Found vol time of %f sec' % t_r)
 
 
@@ -48,7 +48,7 @@ for s in range(nslices):
     # Connectivity computation
     # Relies on standardization to mean 0, sd 1 above
     r_slice_data = numpy.dot(slice_data.T, roi_data) / roi_data.shape[0]
-    z_slice_data = numpy.arctanh(r_slice_data) * numpy.sqrt(roi_slice_data.shape[0]-3)
+    z_slice_data = numpy.arctanh(r_slice_data) * numpy.sqrt(roi_data.shape[0]-3)
     print( 'R %d,%d ranges %f,%f' % (r_slice_data.shape[0],r_slice_data.shape[1],
                                      r_slice_data.min(),r_slice_data.max()) )
     r_slice_img = slice_masker.inverse_transform(r_slice_data.T)
@@ -64,5 +64,5 @@ for s in range(nslices):
 
 
 # Save complete R,Z image to file
-r_img.to_filename('connectivity_slice_r.nii.gz')
-z_img.to_filename('connectivity_slice_z.nii.gz')
+r_img.to_filename('connectivity_r_slice.nii.gz')
+z_img.to_filename('connectivity_z_slice.nii.gz')

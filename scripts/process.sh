@@ -127,8 +127,10 @@ make_gm_rois.py
 # First split physlog into card and resp, and trim to match length of scan.
 unzip ${PHYS}.dcm
 parse_physlog.py SCANPHYSLOG*.log 496 fmri.dcm
-RetroTS.py -r respiratory.1D -c cardiac.1D -p 496 -n 1 -v `cat vat.txt` -prefix ricor
+RetroTS.py -r physlog_respiratory.csv -c physlog_cardiac.csv -p 496 -n 1 \
+    -v `cat volume_acquisition_time.txt` -cardiac_out 0 -prefix ricor
 cleanup_physlog.py
+
 
 # Regression-based cleanup of confounds
 regress.py

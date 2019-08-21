@@ -145,7 +145,7 @@ for IMG in \
 
      sct_apply_transfo -i ${IMG}.nii.gz \
 	 -w warp_${FMRI}_moco_mean2${MFFE}.nii.gz warp_${MFFE}_gw2PAM50_gw.nii.gz \
-	 -d ${TDIR}/PAM50_t2.nii.gz -o ${IMG}_PAM50space.nii.gz
+	 -d ${TDIR}/PAM50_t2s.nii.gz -o ${IMG}_PAM50space.nii.gz
 
  done
 

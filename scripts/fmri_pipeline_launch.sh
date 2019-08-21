@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-# Prepare inputs for the pipeline. For later processing we will assume the filenames
-# that are created here.
+# Prepare inputs for the pipeline and launch it. For later processing we will assume 
+# the filenames that are created here.
 
 
 # Parse inputs
@@ -99,6 +99,10 @@ cp "${MFFE_DIR}"/*_e1.nii.gz "${OUTDIR}"/mffe1.nii.gz
 cp "${MFFE_DIR}"/*_e2.nii.gz "${OUTDIR}"/mffe2.nii.gz
 cp "${MFFE_DIR}"/*_e3.nii.gz "${OUTDIR}"/mffe3.nii.gz
 
+
+# Launch the pipeline
+cd "${OUTDIR}"
+fmri_pipeline.sh
 
 	
 

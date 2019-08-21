@@ -1,7 +1,7 @@
 INPUTS*
 OUTPUTS*
 *~
-localdocker.sh
+local*
 *.simg
 *.gz
 .DS_Store

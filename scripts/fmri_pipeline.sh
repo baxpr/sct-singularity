@@ -6,23 +6,16 @@
 #    Warp to atlas space
 #    ROI time series extraction
 
-cd ../OUTPUTS
-cp ../INPUTS/fmri.dcm .
-cp ../INPUTS/fmri.nii.gz .
-cp ../INPUTS/mffe_e1.nii.gz .
-cp ../INPUTS/physlog.dcm .
-export PATH=/wkdir/scripts:${PATH}
-
 # Which images will we work on?
-MFFE=mffe_e1
+MFFE=mffe1
 FMRI=fmri
 PHYS=physlog
 
 # Vertebral label for center slice of mffe
-INITCENTER=3
+INITCENTER=`cat initcenter.txt`
 
 # How big of a mask to use for registrations?
-MSIZE=30
+MSIZE=`cat masksize.txt`
 
 # Location of template
 TDIR=/opt/sct/data/PAM50/template

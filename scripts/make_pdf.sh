@@ -17,7 +17,7 @@ let "JMID = $JDIM / 2"
 KDIM=$(get_ijk.py k mffe1.nii.gz)
 let "KMAX = $KDIM - 1"
 
-# Center slice connectivity maps
+# Connectivity maps for each mffe slice
 for K in $(seq -w 0 $KMAX) ; do
 ${FSLEYES} render \
   --scene ortho \
@@ -35,3 +35,9 @@ mffe1_gmseg.nii.gz \
   --overlayType label \
   --outline --outlineWidth 2
 done
+
+
+# GM/WM/CSF outlines on each mffe slice
+
+# Something, maybe GM/cord, on template space image
+

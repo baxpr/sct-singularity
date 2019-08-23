@@ -150,6 +150,10 @@ for IMG in \
  done
 
 
+ # Output QA PDF
+ xvfb-run --server-num=$(($$ + 99)) \
+ --server-args='-screen 0 1600x1200x24 -ac +extension GLX' \
+ make_pdf.sh
 
 
 

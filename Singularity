@@ -50,7 +50,7 @@ From: ubuntu:18.04
   #   https://wxpython.org/pages/downloads/
   apt-get install -y dpkg-dev build-essential freeglut3-dev libgl1-mesa-dev libglu1-mesa-dev \
       libgstreamer-plugins-base1.0-dev libgtk-3-dev libjpeg-dev libnotify-dev libpng-dev \
-      libsdl2-dev libsm-dev libtiff-dev libwebkit2gtk-4.0-dev libxtst-dev
+      libsdl1.2-dev libsdl2-dev libsm-dev libtiff-dev libwebkit2gtk-4.0-dev libxtst-dev
   ${SCTDIR}/python/envs/venv_sct/bin/pip install -f \
       https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04 wxPython
   ${SCTDIR}/python/envs/venv_sct/bin/pip install pathlib2 fsleyes

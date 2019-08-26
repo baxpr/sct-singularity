@@ -18,14 +18,51 @@ KDIM=$(get_ijk.py k mffe1.nii.gz)
 let "KMAX = $KDIM - 1"
 KSQRT=$(get_ijk.py s mffe1.nii.gz)
 
+# fmri voxel dims
+IDIM_F=$(get_ijk.py i fmri_moco_mean.nii.gz)
+let "IMID_F = $IDIM_F / 2"
+JDIM_F=$(get_ijk.py j fmri_moco_mean.nii.gz)
+let "JMID_F = $JDIM_F / 2"
+KDIM_F=$(get_ijk.py k fmri_moco_mean.nii.gz)
+let "KMAX_F = $KDIM_F - 1"
+KSQRT_F=$(get_ijk.py s fmri_moco_mean.nii.gz)
 
-# Check registration: subject segmentation overlaid on PAM50 T2s template
+# TODO
+# Overall check
+#   Plot cor sections for fmri, mffe, template alignment
+#   In template space, with subject gm for fmri/mffe and template gm for template
+#
+# Plot fmri mean movement from tsv with fixed axis limits
+
+
+# Check fmri registration: subject segmentation overlaid on fmri
+for K in $(seq -w 0 $KMAX_F) ; do
+  ${FSLEYES} render \
+    --scene ortho \
+    --hideCursor --hidex --hidey \
+    --zzoom 2300 \
+    --outfile fmriregistration_slice${K}.png --size 600 600 \
+    --voxelLoc $IMID_F $JMID_F $K \
+  fmri_moco_mean.nii.gz \
+    --interpolation linear \
+  fmri_moco_WM.nii.gz \
+    --lut melodic-classes \
+    --overlayType label \
+    --outline --outlineWidth 3 \
+  fmri_moco_CSF.nii.gz \
+    --lut harvard-oxford-subcortical \
+    --overlayType label \
+    --outline --outlineWidth 3
+done
+
+
+# Check template registration: subject segmentation overlaid on PAM50 T2s template
 # GM/cord on template space image in mffe space
 for K in $(seq -w 0 $KMAX) ; do
   ${FSLEYES} render \
     --scene ortho \
     --hideCursor --hidex --hidey \
-    --zzoom 2100 \
+    --zzoom 2300 \
     --outfile templateregistration_slice${K}.png --size 600 600 \
     --voxelLoc $IMID $JMID $K \
   PAM50_t2s_mffespace.nii.gz \
@@ -47,7 +84,7 @@ for K in $(seq -w 0 $KMAX) ; do
   ${FSLEYES} render \
     --scene ortho \
     --hideCursor --hidex --hidey \
-    --zzoom 2500 \
+    --zzoom 2300 \
     --outfile segmentation_slice${K}.png --size 600 600 \
     --voxelLoc $IMID $JMID $K \
   mffe1.nii.gz \
@@ -70,7 +107,7 @@ for v in 0 1 2 3; do
     ${FSLEYES} render \
       --scene ortho \
       --hideCursor --hidex --hidey \
-      --zzoom 2500 \
+      --zzoom 2300 \
       --outfile connectivity_r_roi${v}_slice${K}.png --size 600 600 \
       --voxelLoc $IMID $JMID $K \
     mffe1.nii.gz \

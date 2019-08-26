@@ -18,6 +18,29 @@ KDIM=$(get_ijk.py k mffe1.nii.gz)
 let "KMAX = $KDIM - 1"
 
 
+# Check registration: subject segmentation overlaid on PAM50 T2s template
+# GM/cord on template space image in mffe space
+for K in $(seq -w 0 $KMAX) ; do
+  ${FSLEYES} render \
+    --scene ortho \
+    --hideCursor --hidex --hidey \
+    --zzoom 2100 \
+    --outfile templateregistration_slice${K}.png --size 600 600 \
+    --voxelLoc $IMID $JMID $K \
+  PAM50_t2s_mffespace.nii.gz \
+    --interpolation linear \
+  mffe1_gw.nii.gz \
+    --lut melodic-classes \
+    --overlayType label \
+    --outline --outlineWidth 3 \
+  mffe1_CSF.nii.gz \
+    --lut harvard-oxford-subcortical \
+    --overlayType label \
+    --outline --outlineWidth 3
+done
+
+
+# Check segmentation: Subject segmentation overlaid on subject MFFE
 # GM/WM/CSF outlines on each mffe slice
 for K in $(seq -w 0 $KMAX) ; do
   ${FSLEYES} render \
@@ -39,6 +62,7 @@ for K in $(seq -w 0 $KMAX) ; do
 done
 
 
+# Check connectivity: Seed connectivity maps overlaid on subject MFFE
 # Connectivity maps for each mffe slice
 for v in 0 1 2 3; do
   for K in $(seq -w 0 $KMAX) ; do
@@ -60,8 +84,5 @@ for v in 0 1 2 3; do
   done
 done
 
-
-
-# GM/cord on template space image in mffe space
 
 

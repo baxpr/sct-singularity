@@ -84,10 +84,14 @@ sct_register_multimodal \
 -param step=1,type=seg,algo=centermass,metric=MeanSquares,smooth=2:\
 step=2,type=im,algo=slicereg,metric=MI
 
-# Warp template CSF to fmri space
+# Warp template CSF to fmri space and mffe space
 sct_apply_transfo -i ${TDIR}/PAM50_csf.nii.gz -x nn \
 -w warp_PAM50_gw2${MFFE}_gw.nii.gz warp_${MFFE}2${FMRI}_moco_mean.nii.gz \
 -d ${FMRI}_moco_mean.nii.gz -o ${FMRI}_moco_CSF.nii.gz
+
+sct_apply_transfo -i ${TDIR}/PAM50_csf.nii.gz -x nn \
+-w warp_PAM50_gw2${MFFE}_gw.nii.gz \
+-d ${MFFE}_gw.nii.gz -o ${MFFE}_CSF.nii.gz
 
 # Get mffe GM/WM/label/centerline in fmri space
 sct_apply_transfo -i ${MFFE}_gmseg.nii.gz -x nn \

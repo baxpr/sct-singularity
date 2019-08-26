@@ -17,30 +17,50 @@ let "JMID = $JDIM / 2"
 KDIM=$(get_ijk.py k mffe1.nii.gz)
 let "KMAX = $KDIM - 1"
 
-# Connectivity maps for each mffe slice
-for v in 0 1 2 3; do
-for K in $(seq -w 0 $KMAX) ; do
-${FSLEYES} render \
-  --scene ortho \
-  --hideCursor --hidex --hidey \
-  --zzoom 2500 \
-  --outfile test_roi${v}_slice${K}.png --size 600 600 \
-  --voxelLoc $IMID $JMID $K \
-mffe1.nii.gz \
-connectivity_r_slice_mffespace.nii.gz \
-  --volume $v \
-  --useNegativeCmap \
-  --cmap red-yellow --negativeCmap blue-lightblue \
-  --displayRange 0.4 1.0 \
-mffe1_gmseg.nii.gz \
-  --overlayType label \
-  --outline --outlineWidth 2
-done
-done
-
-
 
 # GM/WM/CSF outlines on each mffe slice
+for K in $(seq -w 0 $KMAX) ; do
+  ${FSLEYES} render \
+    --scene ortho \
+    --hideCursor --hidex --hidey \
+    --zzoom 2500 \
+    --outfile segmentation_slice${K}.png --size 600 600 \
+    --voxelLoc $IMID $JMID $K \
+  mffe1.nii.gz \
+    --interpolation linear \
+  mffe1_gw.nii.gz \
+    --lut melodic-classes \
+    --overlayType label \
+    --outline --outlineWidth 3 \
+  mffe1_CSF.nii.gz \
+    --lut harvard-oxford-subcortical \
+    --overlayType label \
+    --outline --outlineWidth 3
+done
+
+
+# Connectivity maps for each mffe slice
+for v in 0 1 2 3; do
+  for K in $(seq -w 0 $KMAX) ; do
+    ${FSLEYES} render \
+      --scene ortho \
+      --hideCursor --hidex --hidey \
+      --zzoom 2500 \
+      --outfile connectivity_r_roi${v}_slice${K}.png --size 600 600 \
+      --voxelLoc $IMID $JMID $K \
+    mffe1.nii.gz \
+    connectivity_r_slice_mffespace.nii.gz \
+      --volume $v \
+      --useNegativeCmap \
+      --cmap red-yellow --negativeCmap blue-lightblue \
+      --displayRange 0.4 1.0 \
+    mffe1_gmseg.nii.gz \
+      --overlayType label \
+      --outline --outlineWidth 2
+  done
+done
+
+
 
 # GM/cord on template space image in mffe space
 

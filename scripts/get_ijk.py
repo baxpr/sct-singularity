@@ -4,6 +4,7 @@
 
 import sys
 import nibabel
+import numpy
 
 axis = sys.argv[1]
 nii_file = sys.argv[2]
@@ -17,4 +18,7 @@ if axis is 'j':
 
 if axis is 'k':
     print('%d' % nii_img.header.get_data_shape()[2])
+
+if axis is 's':
+    print('%d' % numpy.ceil(numpy.sqrt(nii_img.header.get_data_shape()[2])))
 

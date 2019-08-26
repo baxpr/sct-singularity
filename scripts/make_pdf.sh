@@ -16,6 +16,7 @@ JDIM=$(get_ijk.py j mffe1.nii.gz)
 let "JMID = $JDIM / 2"
 KDIM=$(get_ijk.py k mffe1.nii.gz)
 let "KMAX = $KDIM - 1"
+KSQRT=$(get_ijk.py s mffe1.nii.gz)
 
 
 # Check registration: subject segmentation overlaid on PAM50 T2s template

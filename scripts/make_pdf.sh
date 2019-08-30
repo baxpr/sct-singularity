@@ -27,12 +27,48 @@ KDIM_F=$(get_ijk.py k fmri_moco_mean.nii.gz)
 let "KMAX_F = $KDIM_F - 1"
 KSQRT_F=$(get_ijk.py s fmri_moco_mean.nii.gz)
 
+
 # TODO
 # Overall check
-#   Plot cor sections for fmri, mffe, template alignment
-#   In template space, with subject gm for fmri/mffe and template gm for template
 #
 # Plot fmri mean movement from tsv with fixed axis limits
+
+# Plot cor sections for fmri, mffe, template alignment
+# In template space, with subject gm for fmri/mffe and template gm for template
+${FSLEYES} render \
+  --scene ortho \
+  --hideCursor --hidex --hidez \
+  --outfile registration_cor_template.png --size 600 600 \
+  PAM50_t2s_cropped.nii.gz \
+    --interpolation linear \
+  mffe1_gmseg_PAM50space.nii.gz \
+    --lut harvard-oxford-subcortical \
+    --overlayType label \
+    --outline --outlineWidth 1
+
+${FSLEYES} render \
+  --scene ortho \
+  --hideCursor --hidex --hidez \
+  --outfile registration_cor_mffe.png --size 600 600 \
+  mffe1_PAM50space.nii.gz \
+    --interpolation linear \
+  mffe1_gmseg_PAM50space.nii.gz \
+    --lut harvard-oxford-subcortical \
+    --overlayType label \
+    --outline --outlineWidth 1
+		
+${FSLEYES} render \
+  --scene ortho \
+  --hideCursor --hidex --hidez \
+  --outfile registration_cor_fmri.png --size 600 600 \
+  fmri_moco_mean_PAM50space.nii.gz \
+    --interpolation linear \
+  mffe1_gmseg_PAM50space.nii.gz \
+    --lut harvard-oxford-subcortical \
+    --overlayType label \
+    --outline --outlineWidth 1
+
+exit 0  
 
 
 # Check fmri registration: subject segmentation overlaid on fmri

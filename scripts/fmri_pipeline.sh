@@ -89,6 +89,29 @@ sct_apply_transfo -i ${TDIR}/PAM50_t2s.nii.gz \
 -w warp_PAM50_gw2${MFFE}_gw.nii.gz \
 -d ${MFFE}_gw.nii.gz -o PAM50_t2s_mffespace.nii.gz
 
+# Warp mask to template space and trim template space images to actual FOV
+sct_apply_transfo -i ${MFFE}_mask${MSIZE}.nii.gz -x nn \
+-w warp_${MFFE}_gw2PAM50_gw.nii.gz \
+-d ${TDIR}/PAM50_t2s.nii.gz  -o ${MFFE}_mask${MSIZE}_PAM50space.nii.gz
+
+sct_crop_image -i ${TDIR}/PAM50_t2s.nii.gz \
+-m ${MFFE}_mask${MSIZE}_PAM50space.nii.gz \
+-o PAM50_t2s_cropped.nii.gz
+
+# Warp mean fmri, mffe, gm to template space
+sct_apply_transfo -i ${FMRI}_moco_mean.nii.gz \
+-w warp_${FMRI}_moco_mean2mffe1.nii.gz warp_${MFFE}_gw2PAM50_gw.nii.gz \
+-d PAM50_t2s_cropped.nii.gz  -o ${FMRI}_moco_mean_PAM50space.nii.gz
+
+sct_apply_transfo -i ${MFFE}.nii.gz \
+-w warp_${MFFE}_gw2PAM50_gw.nii.gz \
+-d PAM50_t2s_cropped.nii.gz  -o ${MFFE}_PAM50space.nii.gz
+
+sct_apply_transfo -i ${MFFE}_gmseg.nii.gz -x nn \
+-w warp_${MFFE}_gw2PAM50_gw.nii.gz \
+-d PAM50_t2s_cropped.nii.gz -o ${MFFE}_gmseg_PAM50space.nii.gz
+
+
 # Warp template CSF to fmri space and mffe space
 sct_apply_transfo -i ${TDIR}/PAM50_csf.nii.gz -x nn \
 -w warp_PAM50_gw2${MFFE}_gw.nii.gz warp_${MFFE}2${FMRI}_moco_mean.nii.gz \

@@ -34,7 +34,6 @@ KSQRT_F=$(get_ijk.py s fmri_moco_mean.nii.gz)
 # Plot fmri mean movement from tsv with fixed axis limits
 
 # Plot cor sections for fmri, mffe, template alignment
-# In template space, with subject gm for fmri/mffe and template gm for template
 ${FSLEYES} render \
   --scene ortho \
   --hideCursor --hidex --hidez \

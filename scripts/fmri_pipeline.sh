@@ -98,7 +98,7 @@ sct_crop_image -i ${TDIR}/PAM50_t2s.nii.gz \
 -m ${MFFE}_mask${MSIZE}_PAM50space.nii.gz \
 -o PAM50_t2s_cropped.nii.gz
 
-# Warp mean fmri, mffe, gm to template space
+# Warp mean fmri, mffe, gm, ROIs to template space
 sct_apply_transfo -i ${FMRI}_moco_mean.nii.gz \
 -w warp_${FMRI}_moco_mean2mffe1.nii.gz warp_${MFFE}_gw2PAM50_gw.nii.gz \
 -d PAM50_t2s_cropped.nii.gz  -o ${FMRI}_moco_mean_PAM50space.nii.gz
@@ -111,6 +111,16 @@ sct_apply_transfo -i ${MFFE}_gmseg.nii.gz -x nn \
 -w warp_${MFFE}_gw2PAM50_gw.nii.gz \
 -d PAM50_t2s_cropped.nii.gz -o ${MFFE}_gmseg_PAM50space.nii.gz
 
+sct_apply_transfo -i ${FMRI}_moco_GMcutlabel.nii.gz  -x nn \
+-w warp_${FMRI}_moco_mean2mffe1.nii.gz warp_${MFFE}_gw2PAM50_gw.nii.gz \
+-d PAM50_t2s_cropped.nii.gz  -o ${FMRI}_moco_GMcutlabel_PAM50space.nii.gz
+
+
+# ROIs to mffe space
+sct_apply_transfo -i ${FMRI}_moco_GMcutlabel.nii.gz  -x nn \
+-w warp_${FMRI}_moco_mean2mffe1.nii.gz \
+-d ${MFFE}_gw.nii.gz -o ${FMRI}_moco_GMcutlabel_mffespace.nii.gz
+
 
 # Warp template CSF to fmri space and mffe space
 sct_apply_transfo -i ${TDIR}/PAM50_csf.nii.gz -x nn \
@@ -120,6 +130,7 @@ sct_apply_transfo -i ${TDIR}/PAM50_csf.nii.gz -x nn \
 sct_apply_transfo -i ${TDIR}/PAM50_csf.nii.gz -x nn \
 -w warp_PAM50_gw2${MFFE}_gw.nii.gz \
 -d ${MFFE}_gw.nii.gz -o ${MFFE}_CSF.nii.gz
+
 
 # Get mffe GM/WM/label/centerline in fmri space
 sct_apply_transfo -i ${MFFE}_gmseg.nii.gz -x nn \

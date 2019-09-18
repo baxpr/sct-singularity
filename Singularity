@@ -61,6 +61,9 @@ From: ubuntu:18.04
   #tar -zxf FSLeyes-0.30.1-ubuntu1804.tar.gz
   #rm FSLeyes-0.30.1-ubuntu1804.tar.gz
 
+  # ImageMagick
+  apt-get install -y imagemagick
+  
 
 %environment
   PATH="/opt/scripts:/opt/scripts/external/afni:/opt/sct/bin:${PATH}"

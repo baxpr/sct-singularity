@@ -32,6 +32,60 @@ KSQRT_F=$(get_ijk.py s fmri_moco_mean.nii.gz)
 # Overall check
 #
 # Plot fmri mean movement from tsv with fixed axis limits
+#
+# Cor sections but with colored ROIs
+
+
+# Plot cor sections with ROIs for fmri, mffe, template alignment
+# These are hard to see. Rather use slices
+#${FSLEYES} render \
+#  --scene ortho \
+#  --hideCursor --hidex --hidez \
+#  --outfile ROIs_cor_template.png --size 600 600 \
+#  PAM50_t2s_cropped.nii.gz \
+#    --interpolation linear \
+#  fmri_moco_GMcutlabel_PAM50space.nii.gz \
+#    --lut random_big \
+#    --overlayType label
+#
+#${FSLEYES} render \
+#  --scene ortho \
+#  --hideCursor --hidex --hidez \
+#  --outfile ROIs_cor_mffe.png --size 600 600 \
+#  mffe1_PAM50space.nii.gz \
+#    --interpolation linear \
+#  fmri_moco_GMcutlabel_PAM50space.nii.gz \
+#    --lut random_big \
+#    --overlayType label
+#		
+#${FSLEYES} render \
+#  --scene ortho \
+#  --hideCursor --hidex --hidez \
+#  --outfile ROIs_cor_fmri.png --size 600 600 \
+#  fmri_moco_mean_PAM50space.nii.gz \
+#    --interpolation linear \
+#  fmri_moco_GMcutlabel_PAM50space.nii.gz \
+#    --lut random_big \
+#    --overlayType label
+
+
+# Check segmentation: Subject segmentation overlaid on subject MFFE
+# ROIs on each mffe slice
+for K in $(seq -w 0 $KMAX) ; do
+  ${FSLEYES} render \
+    --scene ortho \
+    --hideCursor --hidex --hidey \
+    --zzoom 2300 \
+    --outfile roi_slice${K}.png --size 600 600 \
+    --voxelLoc $IMID $JMID $K \
+  mffe1.nii.gz \
+    --interpolation linear \
+  fmri_moco_GMcutlabel_mffespace.nii.gz \
+    --lut random_big \
+    --overlayType label
+done
+
+exit 0
 
 # Plot cor sections for fmri, mffe, template alignment
 ${FSLEYES} render \
@@ -43,7 +97,7 @@ ${FSLEYES} render \
   mffe1_gmseg_PAM50space.nii.gz \
     --lut harvard-oxford-subcortical \
     --overlayType label \
-    --outline --outlineWidth 1
+    --outline --outlineWidth 2
 
 ${FSLEYES} render \
   --scene ortho \
@@ -54,7 +108,7 @@ ${FSLEYES} render \
   mffe1_gmseg_PAM50space.nii.gz \
     --lut harvard-oxford-subcortical \
     --overlayType label \
-    --outline --outlineWidth 1
+    --outline --outlineWidth 2
 		
 ${FSLEYES} render \
   --scene ortho \
@@ -65,7 +119,7 @@ ${FSLEYES} render \
   mffe1_gmseg_PAM50space.nii.gz \
     --lut harvard-oxford-subcortical \
     --overlayType label \
-    --outline --outlineWidth 1
+    --outline --outlineWidth 2
 
 exit 0  
 

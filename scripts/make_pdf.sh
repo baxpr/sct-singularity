@@ -29,11 +29,7 @@ KSQRT_F=$(get_ijk.py s fmri_moco_mean.nii.gz)
 
 
 # TODO
-# Overall check
-#
 # Plot fmri mean movement from tsv with fixed axis limits
-#
-# Cor sections but with colored ROIs
 
 
 # Plot cor sections with ROIs for fmri, mffe, template alignment
@@ -69,6 +65,31 @@ KSQRT_F=$(get_ijk.py s fmri_moco_mean.nii.gz)
 #    --overlayType label
 
 
+
+# Same but for level-based ROIs
+for v in 0 1 2 3; do
+  for K in $(seq -w 0 $KMAX) ; do
+    ${FSLEYES} render \
+      --scene ortho \
+      --hideCursor --hidex --hidey \
+      --zzoom 2300 \
+      --outfile connectivity_r_roi${v}_level_slice${K}.png --size 600 600 \
+      --voxelLoc $IMID $JMID $K \
+    mffe1.nii.gz \
+    connectivity_r_level_mffespace.nii.gz \
+      --volume $v \
+      --useNegativeCmap \
+      --cmap red-yellow --negativeCmap blue-lightblue \
+      --displayRange 0.4 1.0 \
+    mffe1_gmseg.nii.gz \
+      --overlayType label \
+      --outline --outlineWidth 2
+  done
+done
+
+exit 0
+
+
 # Check segmentation: Subject segmentation overlaid on subject MFFE
 # ROIs on each mffe slice
 for K in $(seq -w 0 $KMAX) ; do
@@ -85,7 +106,6 @@ for K in $(seq -w 0 $KMAX) ; do
     --overlayType label
 done
 
-exit 0
 
 # Plot cor sections for fmri, mffe, template alignment
 ${FSLEYES} render \
@@ -120,8 +140,6 @@ ${FSLEYES} render \
     --lut harvard-oxford-subcortical \
     --overlayType label \
     --outline --outlineWidth 2
-
-exit 0  
 
 
 # Check fmri registration: subject segmentation overlaid on fmri
@@ -211,5 +229,26 @@ for v in 0 1 2 3; do
   done
 done
 
+
+# Same but for level-based ROIs
+for v in 0 1 2 3; do
+  for K in $(seq -w 0 $KMAX) ; do
+    ${FSLEYES} render \
+      --scene ortho \
+      --hideCursor --hidex --hidey \
+      --zzoom 2300 \
+      --outfile connectivity_r_roi${v}_level_slice${K}.png --size 600 600 \
+      --voxelLoc $IMID $JMID $K \
+    mffe1.nii.gz \
+    connectivity_r_level_mffespace.nii.gz \
+      --volume $v \
+      --useNegativeCmap \
+      --cmap red-yellow --negativeCmap blue-lightblue \
+      --displayRange 0.4 1.0 \
+    mffe1_gmseg.nii.gz \
+      --overlayType label \
+      --outline --outlineWidth 2
+  done
+done
 
 

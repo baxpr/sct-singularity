@@ -88,7 +88,7 @@ convert \
 page_template.png
 
 
-# Connectivity maps
+# Connectivity maps, slice
 for r in 0 1 2 3 ; do
 	
 	montage -mode concatenate \
@@ -103,5 +103,24 @@ for r in 0 1 2 3 ; do
 	-gravity SouthEast -pointsize 24 -annotate +15+10 "$(date)" \
 	-gravity NorthWest -pointsize 24 -annotate +15+20 "Connectivity of ROI ${r} within slice\n${INFO}" \
 	page_roi${r}.png
+	
+done
+
+
+# Connectivity maps, level
+for r in 0 1 2 3 ; do
+	
+	montage -mode concatenate \
+	-stroke white -fill white -pointsize 20 \
+	-tile ${KSQRT}x -quality 100 -background white -gravity center \
+	connectivity_r_roi${r}_level_slice*.png \
+	-border 10 -bordercolor white page_roi${r}_level.png
+
+	convert \
+	-size 1224x1584 xc:white \
+	-gravity center \( page_roi${r}_level.png -resize 1194x1354 \) -geometry +0+60 -composite \
+	-gravity SouthEast -pointsize 24 -annotate +15+10 "$(date)" \
+	-gravity NorthWest -pointsize 24 -annotate +15+20 "Connectivity of ROI ${r} within slice\n${INFO}" \
+	page_roi${r}_level.png
 	
 done

@@ -67,6 +67,7 @@ KSQRT_F=$(get_ijk.py s fmri_moco_mean.nii.gz)
 
 
 # Same but for level-based ROIs
+#FIXME our ROIs are not 0..3 but something else
 for v in 0 1 2 3; do
   for K in $(seq -w 0 $KMAX) ; do
     ${FSLEYES} render \

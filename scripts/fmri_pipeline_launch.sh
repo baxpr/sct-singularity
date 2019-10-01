@@ -3,6 +3,8 @@
 # Prepare inputs for the pipeline and launch it. For later processing we will assume 
 # the filenames that are created here.
 
+# Where is sct installed?
+export SCTDIR=/opt/sct
 
 # Parse inputs
 while [[ $# -gt 0 ]]
@@ -10,47 +12,47 @@ do
   key="$1"
   case $key in
     --outdir)
-      OUTDIR="$2"
+      export OUTDIR="$2"
       shift; shift
       ;;
     --mffe_dir)
-      MFFE_DIR="$2"
+      export MFFE_DIR="$2"
       shift; shift
       ;;
     --fmri_niigz)
-      FMRI_NIIGZ="$2"
+      export FMRI_NIIGZ="$2"
       shift; shift
       ;;
     --fmri_dcm)
-      FMRI_DCM="$2"
+      export FMRI_DCM="$2"
       shift; shift
       ;;
     --physlog_dcm)
-      PHYSLOG_DCM="$2"
+      export PHYSLOG_DCM="$2"
       shift; shift
       ;;
     --initcenter)
-      INITCENTER="$2"
+      export INITCENTER="$2"
       shift; shift
       ;;
     --masksize)
-      MASKSIZE="$2"
+      export MASKSIZE="$2"
       shift; shift
       ;;
     --project)
-      PROJECT="$2"
+      export PROJECT="$2"
       shift; shift
       ;;
     --subject)
-      SUBJECT="$2"
+      export SUBJECT="$2"
       shift; shift
       ;;
     --session)
-      SESSION="$2"
+      export SESSION="$2"
       shift; shift
       ;;
     --scan)
-      SCAN="$2"
+      export SCAN="$2"
       shift; shift
       ;;
     *)
@@ -75,8 +77,8 @@ echo MASKSIZE    = "${MASKSIZE}"
 # Copy most files to working dir OUTDIR
 cp "${FMRI_NIIGZ}" "${OUTDIR}"/fmri.nii.gz
 cp "${FMRI_DCM}" "${OUTDIR}"/fmri.dcm
-echo "${INITCENTER}" > "${OUTDIR}"/initcenter.txt
-echo "${MASKSIZE}" > "${OUTDIR}"/masksize.txt
+#echo "${INITCENTER}" > "${OUTDIR}"/initcenter.txt
+#echo "${MASKSIZE}" > "${OUTDIR}"/masksize.txt
 unzip "${PHYSLOG_DCM}" -d "${OUTDIR}"
 
 # Find, verify, copy the multiple echoes of the MFFE

@@ -66,31 +66,6 @@ KSQRT_F=$(get_ijk.py s fmri_moco_mean.nii.gz)
 
 
 
-# Same but for level-based ROIs
-#FIXME our ROIs are not 0..3 but something else
-for v in 0 1 2 3; do
-  for K in $(seq -w 0 $KMAX) ; do
-    ${FSLEYES} render \
-      --scene ortho \
-      --hideCursor --hidex --hidey \
-      --zzoom 2300 \
-      --outfile connectivity_r_roi${v}_level_slice${K}.png --size 600 600 \
-      --voxelLoc $IMID $JMID $K \
-    mffe1.nii.gz \
-    connectivity_r_level_mffespace.nii.gz \
-      --volume $v \
-      --useNegativeCmap \
-      --cmap red-yellow --negativeCmap blue-lightblue \
-      --displayRange 0.4 1.0 \
-    mffe1_gmseg.nii.gz \
-      --overlayType label \
-      --outline --outlineWidth 2
-  done
-done
-
-exit 0
-
-
 # Check segmentation: Subject segmentation overlaid on subject MFFE
 # ROIs on each mffe slice
 for K in $(seq -w 0 $KMAX) ; do
@@ -229,27 +204,4 @@ for v in 0 1 2 3; do
       --outline --outlineWidth 2
   done
 done
-
-
-# Same but for level-based ROIs
-for v in 0 1 2 3; do
-  for K in $(seq -w 0 $KMAX) ; do
-    ${FSLEYES} render \
-      --scene ortho \
-      --hideCursor --hidex --hidey \
-      --zzoom 2300 \
-      --outfile connectivity_r_roi${v}_level_slice${K}.png --size 600 600 \
-      --voxelLoc $IMID $JMID $K \
-    mffe1.nii.gz \
-    connectivity_r_level_mffespace.nii.gz \
-      --volume $v \
-      --useNegativeCmap \
-      --cmap red-yellow --negativeCmap blue-lightblue \
-      --displayRange 0.4 1.0 \
-    mffe1_gmseg.nii.gz \
-      --overlayType label \
-      --outline --outlineWidth 2
-  done
-done
-
 

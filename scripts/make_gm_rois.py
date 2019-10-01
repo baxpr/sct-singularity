@@ -2,12 +2,13 @@
 #
 # Load fmri space masks and create dorsal and ventral ROIs
 
+import sys
 import nibabel
 import numpy
 import scipy.ndimage
 
-gm_file = 'fmri_moco_GM.nii.gz'
-label_file = 'fmri_moco_LABEL.nii.gz'
+gm_file = sys.argv[1]
+label_file = sys.argv[2]
 
 # Load images
 gm = nibabel.load(gm_file)

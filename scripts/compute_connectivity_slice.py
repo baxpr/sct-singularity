@@ -45,7 +45,11 @@ for s in range(nslices):
     slice_data = slice_masker.fit_transform(fmri_file)
     print('Slice data size %d,%d' % slice_data.shape)
 
-    # Connectivity computation
+    # Connectivity matrix computation
+    r_roi_mat = numpy.dot(roi_data.T, roi_data) / roi_data.shape[0]
+    z_roi_mat = numpy.arctanh(r_roi_mat) * numpy.sqrt(roi_data.shape[0]-3)
+
+    # Connectivity map computation
     # Relies on standardization to mean 0, sd 1 above
     r_slice_data = numpy.dot(slice_data.T, roi_data) / roi_data.shape[0]
     z_slice_data = numpy.arctanh(r_slice_data) * numpy.sqrt(roi_data.shape[0]-3)
@@ -66,3 +70,5 @@ for s in range(nslices):
 # Save complete R,Z image to file
 r_img.to_filename('connectivity_r_slice.nii.gz')
 z_img.to_filename('connectivity_z_slice.nii.gz')
+numpy.savetxt('connectivity_r_matrix.csv',r_roi_mat,delimiter=',')
+numpy.savetxt('connectivity_z_matrix.csv',z_roi_mat,delimiter=',')

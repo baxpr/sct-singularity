@@ -9,16 +9,15 @@
 # Which images will we work on?
 MFFE=mffe1
 FMRI=fmri
-PHYS=physlog
 
 # Vertebral label for center slice of mffe
-INITCENTER=`cat initcenter.txt`
+#INITCENTER=`cat initcenter.txt`
 
 # How big of a mask to use for registrations?
-MSIZE=`cat masksize.txt`
+#MSIZE=`cat masksize.txt`
 
 # Location of template
-TDIR=/opt/sct/data/PAM50/template
+TDIR=${SCTDIR}/data/PAM50/template
 
 
 # Segment GM and WM on mffe
@@ -156,7 +155,7 @@ sct_maths -i tmp.nii.gz -bin 0.1 -o  ${FMRI}_moco_NOTSPINE.nii.gz
 rm tmp.nii.gz
 
 # Make horn- and level-specific gray matter ROI images
-make_gm_rois.py
+make_gm_rois.py ${FMRI}_moco_GM.nii.gz ${FMRI}_moco_LABEL.nii.gz 
 
 
 # RETROICOR
@@ -198,6 +197,8 @@ for IMG in \
  --server-args='-screen 0 1600x1200x24 -ac +extension GLX' \
  make_pdf.sh
 
+ convert_pdf.sh
+ 
 
 
 # Retroicor:

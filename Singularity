@@ -3,7 +3,7 @@ From: ubuntu:18.04
 
 
 %files
-  scripts /opt
+  #scripts /opt
 
 
 %post
@@ -26,14 +26,15 @@ From: ubuntu:18.04
   cd ..
   rm -fr pkgtemp
 
-  # SCT installation
+  ## SCT installation
   apt-get install -y curl wget gcc git
-  REPO=baxpr
-  SCTVER=baxpr/condafix
-  SCTDIR=/opt/sct
-  git clone --branch ${SCTVER} --depth 1 https://github.com/${REPO}/spinalcordtoolbox.git ${SCTDIR}
-  cd ${SCTDIR}
-  ASK_REPORT_QUESTION=false change_default_path=Yes add_to_path=No ./install_sct
+  #REPO=baxpr
+  ##SCTVER=baxpr/condafix-4.0.2
+  #SCTVER=baxpr/condafix-2472-shutils-move
+  #SCTDIR=/opt/sct
+  #git clone --branch ${SCTVER} --depth 1 https://github.com/${REPO}/spinalcordtoolbox.git ${SCTDIR}
+  #cd ${SCTDIR}
+  #ASK_REPORT_QUESTION=false change_default_path=Yes add_to_path=No ./install_sct
 
   # Add DICOM and NII to the SCT python
   ${SCTDIR}/python/envs/venv_sct/bin/pip install pydicom nilearn

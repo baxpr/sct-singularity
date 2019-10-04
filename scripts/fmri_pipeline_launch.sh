@@ -19,6 +19,10 @@ do
       export MFFE_DIR="$2"
       shift; shift
       ;;
+    --t2sag_niigz)
+      export T2SAG_NIIGZ="$2"
+      shift; shift
+      ;;
     --fmri_niigz)
       export FMRI_NIIGZ="$2"
       shift; shift
@@ -67,6 +71,7 @@ echo SESSION     = "${SESSION}"
 echo SCAN        = "${SCAN}"
 echo OUTDIR      = "${OUTDIR}"
 echo MFFE_DIR    = "${MFFE_DIR}"
+echo T2SAG_NIIGZ = "${T2SAG_NIIGZ}"
 echo FMRI_NIIGZ  = "${FMRI_NIIGZ}"
 echo FMRI_DCM    = "${FMRI_DCM}"
 echo PHYSLOG_DCM = "${PHYSLOG_DCM}"
@@ -75,6 +80,7 @@ echo MASKSIZE    = "${MASKSIZE}"
 
 
 # Copy most files to working dir OUTDIR
+cp "${T2SAG_NIIGZ}" "${OUTDIR}"/t2sag.nii.gz
 cp "${FMRI_NIIGZ}" "${OUTDIR}"/fmri.nii.gz
 cp "${FMRI_DCM}" "${OUTDIR}"/fmri.dcm
 #echo "${INITCENTER}" > "${OUTDIR}"/initcenter.txt

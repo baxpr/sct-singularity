@@ -7,6 +7,7 @@
 #    ROI time series extraction
 
 # Which images will we work on?
+T2SAG=t2sag
 MFFE=mffe1
 FMRI=fmri
 
@@ -35,8 +36,23 @@ do_seg () {
 }
 do_seg ${MFFE}
 
+
 # Get vertebral labels for mffe
-sct_label_vertebrae -i ${MFFE}.nii.gz -s ${MFFE}_seg.nii.gz -c t2 -initcenter ${INITCENTER} -r 0
+#sct_label_vertebrae -i ${MFFE}.nii.gz -s ${MFFE}_seg.nii.gz -c t2 -initcenter ${INITCENTER}
+
+
+# Also get seg for the T2 sag
+sct_deepseg_sc -i ${T2SAG}.nii.gz -c t2
+
+# Get vertebral labels on the T2Sag and transfer to mffe
+sct_label_vertebrae -i ${T2SAG}.nii.gz -s ${T2SAG}_seg.nii.gz -c t2
+sct_register_multimodal -i ${MFFE}.nii.gz -iseg ${MFFE}_seg.nii.gz \
+    -d ${T2SAG}.nii.gz -dseg ${T2SAG}_seg.nii.gz
+sct_apply_transfo -i ${T2SAG}.nii.gz -d ${MFFE}.nii.gz -w warp_${T2SAG}2${MFFE}.nii.gz -x spline
+sct_apply_transfo -i ${T2SAG}_seg_labeled.nii.gz -d ${MFFE}.nii.gz \
+    -w warp_${T2SAG}2${MFFE}.nii.gz -x nn -o ${MFFE}_seg_labeled.nii.gz
+
+exit 0
 
 # Crop template to relevant levels. sct_register_multimodal is not smart enough to 
 # handle non-identical label sets:

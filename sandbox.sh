@@ -1,6 +1,7 @@
-singularity shell --bind `pwd`:/wkdir sandbox
+singularity shell --writeable --bind `pwd`:/wkdir sandbox
 
 exit 0
+
 
 # Install sct in ubuntu 18.04 singularity container:
 

@@ -29,14 +29,15 @@ From: ubuntu:18.04
   ## SCT installation
   apt-get install -y curl wget gcc git
   #REPO=baxpr
-  ##SCTVER=baxpr/condafix-4.0.2
+  #SCTVER=condafix-91beb0b-shutil
+  #SCTVER=baxpr/condafix-4.0.2
   #SCTVER=baxpr/condafix-2472-shutils-move
   #SCTDIR=/opt/sct
   #git clone --branch ${SCTVER} --depth 1 https://github.com/${REPO}/spinalcordtoolbox.git ${SCTDIR}
   #cd ${SCTDIR}
   #ASK_REPORT_QUESTION=false change_default_path=Yes add_to_path=No ./install_sct
 
-  # Add DICOM and NII to the SCT python
+  ## Add DICOM and NII to the SCT python
   ${SCTDIR}/python/envs/venv_sct/bin/pip install pydicom nilearn
   
   # For X
@@ -52,9 +53,9 @@ From: ubuntu:18.04
   apt-get install -y dpkg-dev build-essential freeglut3-dev libgl1-mesa-dev libglu1-mesa-dev \
       libgstreamer-plugins-base1.0-dev libgtk-3-dev libjpeg-dev libnotify-dev libpng-dev \
       libsdl1.2-dev libsdl2-dev libsm-dev libtiff-dev libwebkit2gtk-4.0-dev libxtst-dev
-  ${SCTDIR}/python/envs/venv_sct/bin/pip install -f \
-      https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04 wxPython
-  ${SCTDIR}/python/envs/venv_sct/bin/pip install pathlib2 fsleyes
+  #${SCTDIR}/python/envs/venv_sct/bin/pip install -f \
+  #    https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04 wxPython
+  #${SCTDIR}/python/envs/venv_sct/bin/pip install pathlib2 fsleyes
 
   # Get fsleyes via direct download instead (still won't run without wxpython)
   #cd /opt

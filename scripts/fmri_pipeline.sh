@@ -62,24 +62,24 @@ step=2,type=im,algo=syn
 # Extract first fmri volume, find centerline, make fmri space mask
 sct_image -keep-vol 0 -i ${FMRI}.nii.gz -o ${FMRI}_0.nii.gz
 sct_get_centerline -c t2s -i ${FMRI}_0.nii.gz
-sct_create_mask -i ${FMRI}_0.nii.gz -p centerline,${FMRI}_0_centerline.nii.gz -size ${MSIZE}mm \
--o ${FMRI}_mask${MSIZE}.nii.gz
+sct_create_mask -i ${FMRI}_0.nii.gz -p centerline,${FMRI}_0_centerline.nii.gz -size ${MASKSIZE}mm \
+-o ${FMRI}_mask${MASKSIZE}.nii.gz
 
 # fMRI motion correction
-sct_fmri_moco -m ${FMRI}_mask${MSIZE}.nii.gz -i ${FMRI}.nii.gz 
+sct_fmri_moco -m ${FMRI}_mask${MASKSIZE}.nii.gz -i ${FMRI}.nii.gz 
 
 # Find cord on mean fMRI to improve registration
 sct_deepseg_sc -i ${FMRI}_moco_mean.nii.gz -c t2s
 
 # Create mffe space mask for registration
-sct_create_mask -i ${MFFE}.nii.gz -p centerline,${MFFE}_seg.nii.gz -size ${MSIZE}mm \
--o ${MFFE}_mask${MSIZE}.nii.gz
+sct_create_mask -i ${MFFE}.nii.gz -p centerline,${MFFE}_seg.nii.gz -size ${MASKSIZE}mm \
+-o ${MFFE}_mask${MASKSIZE}.nii.gz
 
 # Register mean fMRI to mFFE
 sct_register_multimodal \
 -i ${FMRI}_moco_mean.nii.gz -iseg ${FMRI}_moco_mean_seg.nii.gz \
 -d ${MFFE}.nii.gz -dseg ${MFFE}_seg.nii.gz \
--m ${MFFE}_mask${MSIZE}.nii.gz \
+-m ${MFFE}_mask${MASKSIZE}.nii.gz \
 -param step=1,type=seg,algo=centermass,metric=MeanSquares,smooth=2:\
 step=2,type=im,algo=slicereg,metric=MI
 
@@ -89,12 +89,12 @@ sct_apply_transfo -i ${TDIR}/PAM50_t2s.nii.gz \
 -d ${MFFE}_gw.nii.gz -o PAM50_t2s_mffespace.nii.gz
 
 # Warp mask to template space and trim template space images to actual FOV
-sct_apply_transfo -i ${MFFE}_mask${MSIZE}.nii.gz -x nn \
+sct_apply_transfo -i ${MFFE}_mask${MASKSIZE}.nii.gz -x nn \
 -w warp_${MFFE}_gw2PAM50_gw.nii.gz \
--d ${TDIR}/PAM50_t2s.nii.gz  -o ${MFFE}_mask${MSIZE}_PAM50space.nii.gz
+-d ${TDIR}/PAM50_t2s.nii.gz  -o ${MFFE}_mask${MASKSIZE}_PAM50space.nii.gz
 
 sct_crop_image -i ${TDIR}/PAM50_t2s.nii.gz \
--m ${MFFE}_mask${MSIZE}_PAM50space.nii.gz \
+-m ${MFFE}_mask${MASKSIZE}_PAM50space.nii.gz \
 -o PAM50_t2s_cropped.nii.gz
 
 # Warp mean fmri, mffe, gm, ROIs to template space

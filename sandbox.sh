@@ -1,4 +1,4 @@
-singularity shell --writeable --bind `pwd`:/wkdir sandbox
+singularity shell --bind `pwd`:/wkdir sandbox
 
 exit 0
 

@@ -38,7 +38,7 @@ From: ubuntu:18.04
   #ASK_REPORT_QUESTION=false change_default_path=Yes add_to_path=No ./install_sct
 
   ## Add DICOM and NII to the SCT python
-  ${SCTDIR}/python/envs/venv_sct/bin/pip install pydicom nilearn
+  #${SCTDIR}/python/envs/venv_sct/bin/pip install pydicom nilearn
   
   # For X
   apt-get -y install xvfb

@@ -50,7 +50,7 @@ sct_register_multimodal -i ${MFFE}.nii.gz -iseg ${MFFE}_seg.nii.gz \
     -d ${T2SAG}.nii.gz -dseg ${T2SAG}_seg.nii.gz
 sct_apply_transfo -i ${T2SAG}.nii.gz -d ${MFFE}.nii.gz -w warp_${T2SAG}2${MFFE}.nii.gz -x spline
 sct_apply_transfo -i ${T2SAG}_seg_labeled.nii.gz -d ${MFFE}.nii.gz \
-    -w warp_${T2SAG}2${MFFE}.nii.gz -x nn -o ${MFFE}_seg_labeled.nii.gz
+    -w warp_${T2SAG}2${MFFE}.nii.gz -x nn -o ${MFFE}_seg_labeled_from_t2sag.nii.gz
 
 exit 0
 

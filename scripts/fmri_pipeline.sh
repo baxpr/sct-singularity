@@ -21,6 +21,17 @@ FMRI=fmri
 TDIR=${SCTDIR}/data/PAM50/template
 
 
+## PLAN
+# Resample the mffe to 0.3125 iso (mffe in plane size) - or 16x in Z?
+#   ... BUT needs to be extended for t2sag to work? Maybe start w t2 instead
+# Find seg on resampled mffe
+# Register t2sag to mffe and resample
+# Find seg on resampled t2sag
+# Find disc markers on resampled t2sag
+
+
+
+
 # Segment GM and WM on mffe
 #    gmseg   :  gray matter
 #    wmseg   :  white matter
@@ -37,25 +48,50 @@ do_seg () {
 do_seg ${MFFE}
 
 
-# Get vertebral labels for mffe
+# Get vertebral labels for mffe - QUESTIONABLE
 #sct_label_vertebrae -i ${MFFE}.nii.gz -s ${MFFE}_seg.nii.gz -c t2 -initcenter ${INITCENTER}
 
 
-# Also get seg for the T2 sag
+# Get cord seg for the T2 sag
 sct_deepseg_sc -i ${T2SAG}.nii.gz -c t2
 
-# Get vertebral labels on the T2Sag and transfer to mffe
-sct_label_vertebrae -i ${T2SAG}.nii.gz -s ${T2SAG}_seg.nii.gz -c t2
-sct_register_multimodal -i ${MFFE}.nii.gz -iseg ${MFFE}_seg.nii.gz \
-    -d ${T2SAG}.nii.gz -dseg ${T2SAG}_seg.nii.gz
-sct_apply_transfo -i ${T2SAG}.nii.gz -d ${MFFE}.nii.gz -w warp_${T2SAG}2${MFFE}.nii.gz -x spline
+# Invert t2sag contrast so level-finding works better
+invert_t2sag.py ${T2SAG}.nii.gz invt2sag.nii.gz
+
+# Get vert labels on the inverted t2sag and view
+sct_label_vertebrae -i invt2sag.nii.gz -s ${T2SAG}_seg.nii.gz -c t1
+sct_label_utils -i ${T2SAG}_seg_labeled_discs.nii.gz -display 
+
+# Create mask for t2sag/mffe registration
+sct_create_mask -i ${MFFE}.nii.gz -p centerline,${MFFE}_seg.nii.gz -size ${MASKSIZE}mm \
+	-o ${MFFE}_mask${MASKSIZE}.nii.gz
+
+# Register t2sag to mffe
+sct_register_multimodal -i ${T2SAG}.nii.gz -iseg ${T2SAG}_seg.nii.gz \
+	-d ${MFFE}.nii.gz -dseg ${MFFE}_seg.nii.gz \
+	-m ${MFFE}_mask${MASKSIZE}.nii.gz \
+	-o ${T2SAG}_mffespace.nii.gz
+
+# Dilate disc markers and resample
+sct_maths -i ${T2SAG}_seg_labeled_discs.nii.gz -dilate 10,10,3 \
+	-o ${T2SAG}_seg_labeled_discs_dil.nii.gz
+sct_apply_transfo -i ${T2SAG}_seg_labeled_discs_dil.nii.gz -d ${MFFE}.nii.gz \
+    -w warp_${T2SAG}2${MFFE}.nii.gz -x nn \
+	-o ${T2SAG}_seg_labeled_discs_dil_mffespace.nii.gz
+
+
+# Apply transforms to labels
 sct_apply_transfo -i ${T2SAG}_seg_labeled.nii.gz -d ${MFFE}.nii.gz \
     -w warp_${T2SAG}2${MFFE}.nii.gz -x nn -o ${MFFE}_seg_labeled_from_t2sag.nii.gz
+
+
+
 
 exit 0
 
 # Crop template to relevant levels. sct_register_multimodal is not smart enough to 
-# handle non-identical label sets:
+# handle non-identical label sets.
+# Could we do this with sct_label_utils ?
 cp ${TDIR}/PAM50_label_disc.nii.gz .
 crop_template_labels.py ${MFFE}_seg_labeled_discs.nii.gz ${TDIR}/PAM50_label_disc.nii.gz
 
@@ -89,13 +125,13 @@ sct_deepseg_sc -i ${FMRI}_moco_mean.nii.gz -c t2s
 
 # Create mffe space mask for registration
 sct_create_mask -i ${MFFE}.nii.gz -p centerline,${MFFE}_seg.nii.gz -size ${MASKSIZE}mm \
--o ${MFFE}_mask${MASKSIZE}.nii.gz
+	-o ${MFFE}_mask${MASKSIZE}.nii.gz
 
 # Register mean fMRI to mFFE
 sct_register_multimodal \
--i ${FMRI}_moco_mean.nii.gz -iseg ${FMRI}_moco_mean_seg.nii.gz \
--d ${MFFE}.nii.gz -dseg ${MFFE}_seg.nii.gz \
--m ${MFFE}_mask${MASKSIZE}.nii.gz \
+	-i ${FMRI}_moco_mean.nii.gz -iseg ${FMRI}_moco_mean_seg.nii.gz \
+	-d ${MFFE}.nii.gz -dseg ${MFFE}_seg.nii.gz \
+	-m ${MFFE}_mask${MASKSIZE}.nii.gz \
 -param step=1,type=seg,algo=centermass,metric=MeanSquares,smooth=2:\
 step=2,type=im,algo=slicereg,metric=MI
 

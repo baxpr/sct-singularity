@@ -47,6 +47,11 @@ do_seg () {
 }
 do_seg ${MFFE}
 
+# Can we use propseg to get a subject CSF? Not very accurate, invades GM
+#sct_propseg -i ${MFFE}.nii.gz -c t2 -CSF
+
+# Use sct_label_utils to get body mark and register to PAM50_label_body.nii.gz ?
+
 
 # Get vertebral labels for mffe - QUESTIONABLE
 #sct_label_vertebrae -i ${MFFE}.nii.gz -s ${MFFE}_seg.nii.gz -c t2 -initcenter ${INITCENTER}
@@ -72,28 +77,35 @@ sct_register_multimodal -i ${T2SAG}.nii.gz -iseg ${T2SAG}_seg.nii.gz \
 	-m ${MFFE}_mask${MASKSIZE}.nii.gz \
 	-o ${T2SAG}_mffespace.nii.gz
 
-# Dilate disc markers and resample
-sct_maths -i ${T2SAG}_seg_labeled_discs.nii.gz -dilate 10,10,3 \
-	-o ${T2SAG}_seg_labeled_discs_dil.nii.gz
-sct_apply_transfo -i ${T2SAG}_seg_labeled_discs_dil.nii.gz -d ${MFFE}.nii.gz \
+# Resample level ROIs to mffe space
+sct_apply_transfo -i ${T2SAG}_seg_labeled.nii.gz -d ${MFFE}.nii.gz \
     -w warp_${T2SAG}2${MFFE}.nii.gz -x nn \
-	-o ${T2SAG}_seg_labeled_discs_dil_mffespace.nii.gz
+	-o ${T2SAG}_seg_labeled_mffespace.nii.gz
+
+# Create body markers in mffe space
+sct_label_utils -i ${T2SAG}_seg_labeled_mffespace.nii.gz -vert-body 0 \
+	-o ${T2SAG}_seg_labeled_body_mffespace.nii.gz
+
+
+# Dilate disc markers and resample
+#sct_maths -i ${T2SAG}_seg_labeled_discs.nii.gz -dilate 10,10,3 \
+#	-o ${T2SAG}_seg_labeled_discs_dil.nii.gz
+#sct_apply_transfo -i ${T2SAG}_seg_labeled_discs_dil.nii.gz -d ${MFFE}.nii.gz \
+#    -w warp_${T2SAG}2${MFFE}.nii.gz -x nn \
+#	-o ${T2SAG}_seg_labeled_discs_dil_mffespace.nii.gz
 
 
 # Apply transforms to labels
-sct_apply_transfo -i ${T2SAG}_seg_labeled.nii.gz -d ${MFFE}.nii.gz \
-    -w warp_${T2SAG}2${MFFE}.nii.gz -x nn -o ${MFFE}_seg_labeled_from_t2sag.nii.gz
+#sct_apply_transfo -i ${T2SAG}_seg_labeled.nii.gz -d ${MFFE}.nii.gz \
+#    -w warp_${T2SAG}2${MFFE}.nii.gz -x nn -o ${MFFE}_seg_labeled_from_t2sag.nii.gz
 
 
-
-
-exit 0
 
 # Crop template to relevant levels. sct_register_multimodal is not smart enough to 
 # handle non-identical label sets.
 # Could we do this with sct_label_utils ?
-cp ${TDIR}/PAM50_label_disc.nii.gz .
-crop_template_labels.py ${MFFE}_seg_labeled_discs.nii.gz ${TDIR}/PAM50_label_disc.nii.gz
+cp ${TDIR}/PAM50_label_body.nii.gz .
+crop_template_labels.py ${T2SAG}_seg_labeled_body_mffespace.nii.gz PAM50_label_body.nii.gz
 
 # Create synthetic T2 from template
 sct_maths -i ${TDIR}/PAM50_gm.nii.gz -add ${TDIR}/PAM50_cord.nii.gz -o PAM50_gw.nii.gz
@@ -102,10 +114,10 @@ sct_maths -i ${TDIR}/PAM50_gm.nii.gz -add ${TDIR}/PAM50_cord.nii.gz -o PAM50_gw.
 sct_register_multimodal \
 -i ${MFFE}_gw.nii.gz \
 -iseg ${MFFE}_seg.nii.gz \
--ilabel ${MFFE}_seg_labeled_discs.nii.gz \
+-ilabel ${MFFE}_seg_labeled_body_mffespace.nii.gz \
 -d PAM50_gw.nii.gz \
 -dseg ${TDIR}/PAM50_cord.nii.gz \
--dlabel PAM50_label_disc_cropped.nii.gz \
+-dlabel PAM50_label_body_cropped.nii.gz \
 -o ${MFFE}_gw_warped.nii.gz \
 -param step=0,type=label,dof=Tx_Ty_Tz_Sz:\
 step=1,type=seg,algo=slicereg,poly=3:\

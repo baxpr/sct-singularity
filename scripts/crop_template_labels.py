@@ -20,4 +20,4 @@ template_data[numpy.logical_not(inds)] = 0
 print(numpy.unique(template_data))
 
 cropped_template_img = nibabel.Nifti1Image(template_data,template_img.affine,template_img.header)
-nibabel.save(cropped_template_img,'PAM50_label_disc_cropped.nii.gz')
+nibabel.save(cropped_template_img,'PAM50_label_body_cropped.nii.gz')

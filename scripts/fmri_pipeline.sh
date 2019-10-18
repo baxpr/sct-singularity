@@ -50,12 +50,12 @@ do_seg ${MFFE}
 # Can we use propseg to get a subject CSF? Not very accurate, invades GM
 #sct_propseg -i ${MFFE}.nii.gz -c t2 -CSF
 
-# Use sct_label_utils to get body mark and register to PAM50_label_body.nii.gz ?
-
 
 # Get vertebral labels for mffe - QUESTIONABLE
 #sct_label_vertebrae -i ${MFFE}.nii.gz -s ${MFFE}_seg.nii.gz -c t2 -initcenter ${INITCENTER}
 
+# NOTE - body labels resampled to mffe space are pretty coarse, should we resample mffe
+# to iso voxel to improve accuracy?
 
 # Get cord seg for the T2 sag
 sct_deepseg_sc -i ${T2SAG}.nii.gz -c t2

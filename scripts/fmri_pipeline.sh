@@ -52,14 +52,46 @@ do_seg ${MFFE}
 sct_create_mask -i ${MFFE}.nii.gz -p centerline,${MFFE}_seg.nii.gz -size ${MASKSIZE}mm \
 	-o ${MFFE}_mask${MASKSIZE}.nii.gz
 
+# Get cord seg for the T2 sag
+sct_deepseg_sc -i ${T2SAG}.nii.gz -c t2
+
+# Invert t2sag contrast so level-finding works better
+invert_t2sag.py ${T2SAG}.nii.gz invt2sag.nii.gz
+
+# Get vert labels on the inverted t2sag and list them
+sct_label_vertebrae -i invt2sag.nii.gz -s ${T2SAG}_seg.nii.gz -c t1
+sct_label_utils -i ${T2SAG}_seg_labeled_discs.nii.gz -display 
+
+# Register t2sag to Imffe
+sct_register_multimodal -i ${T2SAG}.nii.gz -iseg ${T2SAG}_seg.nii.gz \
+	-d ${MFFE}.nii.gz -dseg ${MFFE}_seg.nii.gz \
+	-m ${MFFE}_mask${MASKSIZE}.nii.gz \
+	-o ${T2SAG}_mffespace.nii.gz \
+	-owarp warp_${T2SAG}2${MFFE}.nii.gz
+
+# Resample level ROIs to Imffe space
+sct_apply_transfo -i ${T2SAG}_seg_labeled.nii.gz -d ${MFFE}.nii.gz \
+    -w warp_${T2SAG}2${MFFE}.nii.gz -x nn \
+	-o ${T2SAG}_seg_labeled_mffespace.nii.gz
+		
 # Resample mffe images to iso voxel for better label placement later
 FAC=$(get_ijk.py f ${MFFE}.nii.gz)
-sct_resample -i ${MFFE}.nii.gz -f 1x1x${FAC} -x nn -o I${MFFE}.nii.gz
-sct_resample -i ${MFFE}_mask${MASKSIZE}.nii.gz -f 1x1x${FAC} -x nn -o I${MFFE}_mask${MASKSIZE}.nii.gz
-sct_resample -i ${MFFE}_seg.nii.gz -f 1x1x${FAC} -x nn -o I${MFFE}_seg.nii.gz
-sct_resample -i ${MFFE}_gmseg.nii.gz -f 1x1x${FAC} -x nn -o I${MFFE}_gmseg.nii.gz
-sct_resample -i ${MFFE}_wmseg.nii.gz -f 1x1x${FAC} -x nn -o I${MFFE}_wmseg.nii.gz
-sct_resample -i ${MFFE}_gw.nii.gz -f 1x1x${FAC} -x nn -o I${MFFE}_gw.nii.gz
+sct_resample -i ${MFFE}.nii.gz -f 1x1x${FAC} -x nn -o i${MFFE}.nii.gz
+sct_resample -i ${MFFE}_mask${MASKSIZE}.nii.gz -f 1x1x${FAC} -x nn -o i${MFFE}_mask${MASKSIZE}.nii.gz
+sct_resample -i ${MFFE}_seg.nii.gz -f 1x1x${FAC} -x nn -o i${MFFE}_seg.nii.gz
+sct_resample -i ${MFFE}_gmseg.nii.gz -f 1x1x${FAC} -x nn -o i${MFFE}_gmseg.nii.gz
+sct_resample -i ${MFFE}_wmseg.nii.gz -f 1x1x${FAC} -x nn -o i${MFFE}_wmseg.nii.gz
+sct_resample -i ${MFFE}_gw.nii.gz -f 1x1x${FAC} -x nn -o i${MFFE}_gw.nii.gz
+sct_resample -i ${T2SAG}_mffespace.nii.gz -f 1x1x${FAC} -x nn -o ${T2SAG}_imffespace.nii.gz
+sct_resample -i ${T2SAG}_seg_labeled_mffespace.nii.gz -f 1x1x${FAC} -x nn \
+	-o ${T2SAG}_seg_labeled_imffespace.nii.gz
+
+
+# Create body markers in Imffe space
+sct_label_utils -i ${T2SAG}_seg_labeled_imffespace.nii.gz -vert-body 0 \
+	-o ${T2SAG}_seg_labeled_body_imffespace.nii.gz
+
+
 
 exit 0
 
@@ -73,31 +105,7 @@ exit 0
 # NOTE - body labels resampled to mffe space are pretty coarse, should we resample mffe
 # to iso voxel to improve accuracy?
 
-# Get cord seg for the T2 sag
-sct_deepseg_sc -i ${T2SAG}.nii.gz -c t2
 
-# Invert t2sag contrast so level-finding works better
-invert_t2sag.py ${T2SAG}.nii.gz invt2sag.nii.gz
-
-# Get vert labels on the inverted t2sag and view
-sct_label_vertebrae -i invt2sag.nii.gz -s ${T2SAG}_seg.nii.gz -c t1
-sct_label_utils -i ${T2SAG}_seg_labeled_discs.nii.gz -display 
-
-
-# Register t2sag to mffe
-sct_register_multimodal -i ${T2SAG}.nii.gz -iseg ${T2SAG}_seg.nii.gz \
-	-d ${MFFE}.nii.gz -dseg ${MFFE}_seg.nii.gz \
-	-m ${MFFE}_mask${MASKSIZE}.nii.gz \
-	-o ${T2SAG}_mffespace.nii.gz
-
-# Resample level ROIs to mffe space
-sct_apply_transfo -i ${T2SAG}_seg_labeled.nii.gz -d ${MFFE}.nii.gz \
-    -w warp_${T2SAG}2${MFFE}.nii.gz -x nn \
-	-o ${T2SAG}_seg_labeled_mffespace.nii.gz
-
-# Create body markers in mffe space
-sct_label_utils -i ${T2SAG}_seg_labeled_mffespace.nii.gz -vert-body 0 \
-	-o ${T2SAG}_seg_labeled_body_mffespace.nii.gz
 
 
 # Dilate disc markers and resample

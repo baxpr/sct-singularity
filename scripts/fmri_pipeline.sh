@@ -70,10 +70,11 @@ sct_register_multimodal -i ${T2SAG}.nii.gz -iseg ${T2SAG}_seg.nii.gz \
 	-owarp warp_${T2SAG}2${MFFE}.nii.gz
 
 # Resample level ROIs to Imffe space
+# Blocky/bad, need to resample FIRST but we don't have the warp
 sct_apply_transfo -i ${T2SAG}_seg_labeled.nii.gz -d ${MFFE}.nii.gz \
     -w warp_${T2SAG}2${MFFE}.nii.gz -x nn \
 	-o ${T2SAG}_seg_labeled_mffespace.nii.gz
-		
+
 # Resample mffe images to iso voxel for better label placement later
 FAC=$(get_ijk.py f ${MFFE}.nii.gz)
 sct_resample -i ${MFFE}.nii.gz -f 1x1x${FAC} -x nn -o i${MFFE}.nii.gz

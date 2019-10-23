@@ -22,6 +22,7 @@ TDIR=${SCTDIR}/data/PAM50/template
 
 
 ## PLAN
+
 # Resample the mffe to 0.3125 iso (mffe in plane size) - or 16x in Z?
 #   ... BUT needs to be extended for t2sag to work? Maybe start w t2 instead
 # Find seg on resampled mffe
@@ -47,6 +48,21 @@ do_seg () {
 }
 do_seg ${MFFE}
 
+# Create mask for t2sag/mffe registration
+sct_create_mask -i ${MFFE}.nii.gz -p centerline,${MFFE}_seg.nii.gz -size ${MASKSIZE}mm \
+	-o ${MFFE}_mask${MASKSIZE}.nii.gz
+
+# Resample mffe images to iso voxel for better label placement later
+FAC=$(get_ijk.py f ${MFFE}.nii.gz)
+sct_resample -i ${MFFE}.nii.gz -f 1x1x${FAC} -x nn -o I${MFFE}.nii.gz
+sct_resample -i ${MFFE}_mask${MASKSIZE}.nii.gz -f 1x1x${FAC} -x nn -o I${MFFE}_mask${MASKSIZE}.nii.gz
+sct_resample -i ${MFFE}_seg.nii.gz -f 1x1x${FAC} -x nn -o I${MFFE}_seg.nii.gz
+sct_resample -i ${MFFE}_gmseg.nii.gz -f 1x1x${FAC} -x nn -o I${MFFE}_gmseg.nii.gz
+sct_resample -i ${MFFE}_wmseg.nii.gz -f 1x1x${FAC} -x nn -o I${MFFE}_wmseg.nii.gz
+sct_resample -i ${MFFE}_gw.nii.gz -f 1x1x${FAC} -x nn -o I${MFFE}_gw.nii.gz
+
+exit 0
+
 # Can we use propseg to get a subject CSF? Not very accurate, invades GM
 #sct_propseg -i ${MFFE}.nii.gz -c t2 -CSF
 
@@ -67,9 +83,6 @@ invert_t2sag.py ${T2SAG}.nii.gz invt2sag.nii.gz
 sct_label_vertebrae -i invt2sag.nii.gz -s ${T2SAG}_seg.nii.gz -c t1
 sct_label_utils -i ${T2SAG}_seg_labeled_discs.nii.gz -display 
 
-# Create mask for t2sag/mffe registration
-sct_create_mask -i ${MFFE}.nii.gz -p centerline,${MFFE}_seg.nii.gz -size ${MASKSIZE}mm \
-	-o ${MFFE}_mask${MASKSIZE}.nii.gz
 
 # Register t2sag to mffe
 sct_register_multimodal -i ${T2SAG}.nii.gz -iseg ${T2SAG}_seg.nii.gz \
@@ -114,7 +127,7 @@ sct_maths -i ${TDIR}/PAM50_gm.nii.gz -add ${TDIR}/PAM50_cord.nii.gz -o PAM50_gw.
 sct_register_multimodal \
 -i ${MFFE}_gw.nii.gz \
 -iseg ${MFFE}_seg.nii.gz \
--ilabel ${MFFE}_seg_labeled_body_mffespace.nii.gz \
+-ilabel ${T2SAG}_seg_labeled_body_mffespace.nii.gz \
 -d PAM50_gw.nii.gz \
 -dseg ${TDIR}/PAM50_cord.nii.gz \
 -dlabel PAM50_label_body_cropped.nii.gz \

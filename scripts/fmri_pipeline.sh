@@ -69,11 +69,6 @@ sct_register_multimodal -i ${T2SAG}.nii.gz -iseg ${T2SAG}_seg.nii.gz \
 	-o ${T2SAG}_mffespace.nii.gz \
 	-owarp warp_${T2SAG}2${MFFE}.nii.gz
 
-# Resample level ROIs to Imffe space
-# Blocky/bad, need to resample FIRST but we don't have the warp
-sct_apply_transfo -i ${T2SAG}_seg_labeled.nii.gz -d ${MFFE}.nii.gz \
-    -w warp_${T2SAG}2${MFFE}.nii.gz -x nn \
-	-o ${T2SAG}_seg_labeled_mffespace.nii.gz
 
 # Resample mffe images to iso voxel for better label placement later
 FAC=$(get_ijk.py f ${MFFE}.nii.gz)
@@ -84,11 +79,14 @@ sct_resample -i ${MFFE}_gmseg.nii.gz -f 1x1x${FAC} -x nn -o i${MFFE}_gmseg.nii.g
 sct_resample -i ${MFFE}_wmseg.nii.gz -f 1x1x${FAC} -x nn -o i${MFFE}_wmseg.nii.gz
 sct_resample -i ${MFFE}_gw.nii.gz -f 1x1x${FAC} -x nn -o i${MFFE}_gw.nii.gz
 sct_resample -i ${T2SAG}_mffespace.nii.gz -f 1x1x${FAC} -x nn -o ${T2SAG}_imffespace.nii.gz
-sct_resample -i ${T2SAG}_seg_labeled_mffespace.nii.gz -f 1x1x${FAC} -x nn \
+
+# Resample level ROIs to Imffe space
+sct_apply_transfo -i ${T2SAG}_seg_labeled.nii.gz -d i${MFFE}.nii.gz \
+    -w warp_${T2SAG}2${MFFE}.nii.gz -x nn \
 	-o ${T2SAG}_seg_labeled_imffespace.nii.gz
 
-
 # Create body markers in Imffe space
+# FIXME - upper and lower are truncated, need to crop or something
 sct_label_utils -i ${T2SAG}_seg_labeled_imffespace.nii.gz -vert-body 0 \
 	-o ${T2SAG}_seg_labeled_body_imffespace.nii.gz
 

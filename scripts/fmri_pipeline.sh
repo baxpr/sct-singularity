@@ -92,9 +92,11 @@ sct_apply_transfo -i ${T2SAG}_seg_labeled.nii.gz -d pi${MFFE}.nii.gz \
 sct_label_utils -i ${T2SAG}_seg_labeled_pimffespace.nii.gz -vert-body 0 \
 	-o ${T2SAG}_seg_labeled_body_pimffespace.nii.gz
 
-# Crop body markers back to imffe space
+# Crop body markers and level image back to imffe space
 sct_crop_image -i ${T2SAG}_seg_labeled_body_pimffespace.nii.gz \
 	-ref i${MFFE}.nii.gz -o ${T2SAG}_seg_labeled_body_imffespace.nii.gz
+sct_crop_image -i ${T2SAG}_seg_labeled_pimffespace.nii.gz \
+	-ref i${MFFE}.nii.gz -o ${T2SAG}_seg_labeled_imffespace.nii.gz
 
 exit 0
 
@@ -127,25 +129,30 @@ exit 0
 
 # Crop template to relevant levels. sct_register_multimodal is not smart enough to 
 # handle non-identical label sets.
-# Could we do this with sct_label_utils ?
-cp ${TDIR}/PAM50_label_body.nii.gz .
-crop_template_labels.py ${T2SAG}_seg_labeled_body_mffespace.nii.gz PAM50_label_body.nii.gz
+sct_label_utils -i ${TDIR}/PAM50_label_body.nii.gz \
+	-remove-reference ${T2SAG}_seg_labeled_body_imffespace.nii.gz \
+	-o PAM50_label_body_cropped.nii.gz
 
 # Create synthetic T2 from template
 sct_maths -i ${TDIR}/PAM50_gm.nii.gz -add ${TDIR}/PAM50_cord.nii.gz -o PAM50_gw.nii.gz
 
 # Register mffe to template via GM/WM seg
 sct_register_multimodal \
--i ${MFFE}_gw.nii.gz \
--iseg ${MFFE}_seg.nii.gz \
--ilabel ${T2SAG}_seg_labeled_body_mffespace.nii.gz \
+-i i${MFFE}_gw.nii.gz \
+-iseg i${MFFE}_seg.nii.gz \
+-ilabel ${T2SAG}_seg_labeled_body_imffespace.nii.gz \
 -d PAM50_gw.nii.gz \
 -dseg ${TDIR}/PAM50_cord.nii.gz \
 -dlabel PAM50_label_body_cropped.nii.gz \
--o ${MFFE}_gw_warped.nii.gz \
+-o ${MFFE}_gw_PAM50space.nii.gz \
 -param step=0,type=label,dof=Tx_Ty_Tz_Sz:\
 step=1,type=seg,algo=slicereg,poly=3:\
 step=2,type=im,algo=syn
+
+# Warp level labels to template
+sct_apply_transfo -i ${T2SAG}_seg_labeled_imffespace.nii.gz -d PAM50_gw.nii.gz \
+    -w warp_i${MFFE}_gw2PAM50_gw.nii.gz \
+	-x nn -o ${T2SAG}_seg_labeled_PAM50space.nii.gz
 
 # Extract first fmri volume, find centerline, make fmri space mask
 sct_image -keep-vol 0 -i ${FMRI}.nii.gz -o ${FMRI}_0.nii.gz

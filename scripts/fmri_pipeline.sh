@@ -72,7 +72,7 @@ sct_register_multimodal -i ${T2SAG}.nii.gz -iseg ${T2SAG}_seg.nii.gz \
 
 # Resample mffe images to iso voxel for better label placement later
 FAC=$(get_ijk.py f ${MFFE}.nii.gz)
-sct_resample -i ${MFFE}.nii.gz -f 1x1x${FAC} -x nn -o i${MFFE}.nii.gz
+sct_resample -i ${MFFE}.nii.gz -f 1x1x${FAC} -x linear -o i${MFFE}.nii.gz
 sct_resample -i ${MFFE}_mask${MASKSIZE}.nii.gz -f 1x1x${FAC} -x nn -o i${MFFE}_mask${MASKSIZE}.nii.gz
 sct_resample -i ${MFFE}_seg.nii.gz -f 1x1x${FAC} -x nn -o i${MFFE}_seg.nii.gz
 sct_resample -i ${MFFE}_gmseg.nii.gz -f 1x1x${FAC} -x nn -o i${MFFE}_gmseg.nii.gz
@@ -80,17 +80,21 @@ sct_resample -i ${MFFE}_wmseg.nii.gz -f 1x1x${FAC} -x nn -o i${MFFE}_wmseg.nii.g
 sct_resample -i ${MFFE}_gw.nii.gz -f 1x1x${FAC} -x nn -o i${MFFE}_gw.nii.gz
 sct_resample -i ${T2SAG}_mffespace.nii.gz -f 1x1x${FAC} -x nn -o ${T2SAG}_imffespace.nii.gz
 
-# Resample level ROIs to Imffe space
-sct_apply_transfo -i ${T2SAG}_seg_labeled.nii.gz -d i${MFFE}.nii.gz \
+# Make a padded imffe to put body markers in
+sct_image -i i${MFFE}.nii.gz -pad 0,0,40 -o pi${MFFE}.nii.gz
+
+# Resample level ROIs to pimffe space
+sct_apply_transfo -i ${T2SAG}_seg_labeled.nii.gz -d pi${MFFE}.nii.gz \
     -w warp_${T2SAG}2${MFFE}.nii.gz -x nn \
-	-o ${T2SAG}_seg_labeled_imffespace.nii.gz
+	-o ${T2SAG}_seg_labeled_pimffespace.nii.gz
 
-# Create body markers in Imffe space
-# FIXME - upper and lower are truncated, need to crop or something
-sct_label_utils -i ${T2SAG}_seg_labeled_imffespace.nii.gz -vert-body 0 \
-	-o ${T2SAG}_seg_labeled_body_imffespace.nii.gz
+# Create body markers in pimffe space
+sct_label_utils -i ${T2SAG}_seg_labeled_pimffespace.nii.gz -vert-body 0 \
+	-o ${T2SAG}_seg_labeled_body_pimffespace.nii.gz
 
-
+# Crop body markers back to imffe space
+sct_crop_image -i ${T2SAG}_seg_labeled_body_pimffespace.nii.gz \
+	-ref i${MFFE}.nii.gz -o ${T2SAG}_seg_labeled_body_imffespace.nii.gz
 
 exit 0
 

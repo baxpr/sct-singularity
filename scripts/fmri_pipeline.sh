@@ -185,7 +185,7 @@ sct_apply_transfo -i ${MFFE}.nii.gz \
 -d PAM50_t2s_cropped.nii.gz  -o ${MFFE}_PAM50space.nii.gz
 
 sct_apply_transfo -i ${MFFE}_gmseg.nii.gz -x nn \
--w warp_$i{MFFE}_gw2PAM50_gw.nii.gz \
+-w warp_i${MFFE}_gw2PAM50_gw.nii.gz \
 -d PAM50_t2s_cropped.nii.gz -o ${MFFE}_gmseg_PAM50space.nii.gz
 
 sct_apply_transfo -i ${FMRI}_moco_GMcutlabel.nii.gz  -x nn \
@@ -218,7 +218,7 @@ sct_apply_transfo -i i${MFFE}_wmseg.nii.gz -x nn \
 -w warp_${MFFE}2${FMRI}_moco_mean.nii.gz \
 -d ${FMRI}_moco_mean.nii.gz -o ${FMRI}_moco_WM.nii.gz
 
-sct_apply_transfo -i i${MFFE}_seg_labeled.nii.gz -x nn \
+sct_apply_transfo -i ${T2SAG}_seg_labeled_imffespace.nii.gz -x nn \
 -w warp_${MFFE}2${FMRI}_moco_mean.nii.gz \
 -d ${FMRI}_moco_mean.nii.gz -o ${FMRI}_moco_LABEL.nii.gz
 

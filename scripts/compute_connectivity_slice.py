@@ -68,6 +68,7 @@ for s in range(nslices):
 
 
 # Save complete R,Z image to file
+# FIXME ROI mat needs to be slicewise and needs to have level label from level image
 r_img.to_filename('connectivity_r_slice.nii.gz')
 z_img.to_filename('connectivity_z_slice.nii.gz')
 numpy.savetxt('connectivity_r_matrix.csv',r_roi_mat,delimiter=',')

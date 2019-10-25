@@ -118,7 +118,7 @@ def analytic_signal(vi, windwidth, percover, win):
 
         else:
             wind[0] = 1
-            wind[list(range(1, (nv + 1) / 2))] = 2
+            wind[list(range(1, int((nv + 1) / 2)))] = 2
         h = ifft(fv * wind)
     for i in range(len(h)):
         h[i] /= numpy.complex(num[i])

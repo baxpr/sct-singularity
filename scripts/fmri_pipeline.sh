@@ -21,18 +21,6 @@ FMRI=fmri
 TDIR=${SCTDIR}/data/PAM50/template
 
 
-## PLAN
-
-# Resample the mffe to 0.3125 iso (mffe in plane size) - or 16x in Z?
-#   ... BUT needs to be extended for t2sag to work? Maybe start w t2 instead
-# Find seg on resampled mffe
-# Register t2sag to mffe and resample
-# Find seg on resampled t2sag
-# Find disc markers on resampled t2sag
-
-
-
-
 # Segment GM and WM on mffe
 #    gmseg   :  gray matter
 #    wmseg   :  white matter
@@ -62,7 +50,7 @@ invert_t2sag.py ${T2SAG}.nii.gz invt2sag.nii.gz
 sct_label_vertebrae -i invt2sag.nii.gz -s ${T2SAG}_seg.nii.gz -c t1
 sct_label_utils -i ${T2SAG}_seg_labeled_discs.nii.gz -display 
 
-# Register t2sag to Imffe
+# Register t2sag to mffe
 sct_register_multimodal -i ${T2SAG}.nii.gz -iseg ${T2SAG}_seg.nii.gz \
 	-d ${MFFE}.nii.gz -dseg ${MFFE}_seg.nii.gz \
 	-m ${MFFE}_mask${MASKSIZE}.nii.gz \
@@ -98,7 +86,6 @@ sct_crop_image -i ${T2SAG}_seg_labeled_body_pimffespace.nii.gz \
 sct_crop_image -i ${T2SAG}_seg_labeled_pimffespace.nii.gz \
 	-ref i${MFFE}.nii.gz -o ${T2SAG}_seg_labeled_imffespace.nii.gz
 
-exit 0
 
 # Can we use propseg to get a subject CSF? Not very accurate, invades GM
 #sct_propseg -i ${MFFE}.nii.gz -c t2 -CSF
@@ -166,26 +153,22 @@ sct_fmri_moco -m ${FMRI}_mask${MASKSIZE}.nii.gz -i ${FMRI}.nii.gz
 # Find cord on mean fMRI to improve registration
 sct_deepseg_sc -i ${FMRI}_moco_mean.nii.gz -c t2s
 
-# Create mffe space mask for registration
-sct_create_mask -i ${MFFE}.nii.gz -p centerline,${MFFE}_seg.nii.gz -size ${MASKSIZE}mm \
-	-o ${MFFE}_mask${MASKSIZE}.nii.gz
-
 # Register mean fMRI to mFFE
 sct_register_multimodal \
-	-i ${FMRI}_moco_mean.nii.gz -iseg ${FMRI}_moco_mean_seg.nii.gz \
-	-d ${MFFE}.nii.gz -dseg ${MFFE}_seg.nii.gz \
-	-m ${MFFE}_mask${MASKSIZE}.nii.gz \
+-i ${FMRI}_moco_mean.nii.gz -iseg ${FMRI}_moco_mean_seg.nii.gz \
+-d ${MFFE}.nii.gz -dseg ${MFFE}_seg.nii.gz \
+-m ${MFFE}_mask${MASKSIZE}.nii.gz \
 -param step=1,type=seg,algo=centermass,metric=MeanSquares,smooth=2:\
 step=2,type=im,algo=slicereg,metric=MI
 
 # Warp template t2s to mffe space
 sct_apply_transfo -i ${TDIR}/PAM50_t2s.nii.gz \
--w warp_PAM50_gw2${MFFE}_gw.nii.gz \
+-w warp_PAM50_gw2i${MFFE}_gw.nii.gz \
 -d ${MFFE}_gw.nii.gz -o PAM50_t2s_mffespace.nii.gz
 
 # Warp mask to template space and trim template space images to actual FOV
 sct_apply_transfo -i ${MFFE}_mask${MASKSIZE}.nii.gz -x nn \
--w warp_${MFFE}_gw2PAM50_gw.nii.gz \
+-w warp_i${MFFE}_gw2PAM50_gw.nii.gz \
 -d ${TDIR}/PAM50_t2s.nii.gz  -o ${MFFE}_mask${MASKSIZE}_PAM50space.nii.gz
 
 sct_crop_image -i ${TDIR}/PAM50_t2s.nii.gz \
@@ -194,48 +177,48 @@ sct_crop_image -i ${TDIR}/PAM50_t2s.nii.gz \
 
 # Warp mean fmri, mffe, gm, ROIs to template space
 sct_apply_transfo -i ${FMRI}_moco_mean.nii.gz \
--w warp_${FMRI}_moco_mean2mffe1.nii.gz warp_${MFFE}_gw2PAM50_gw.nii.gz \
+-w warp_${FMRI}_moco_mean2mffe1.nii.gz warp_i${MFFE}_gw2PAM50_gw.nii.gz \
 -d PAM50_t2s_cropped.nii.gz  -o ${FMRI}_moco_mean_PAM50space.nii.gz
 
 sct_apply_transfo -i ${MFFE}.nii.gz \
--w warp_${MFFE}_gw2PAM50_gw.nii.gz \
+-w warp_i${MFFE}_gw2PAM50_gw.nii.gz \
 -d PAM50_t2s_cropped.nii.gz  -o ${MFFE}_PAM50space.nii.gz
 
 sct_apply_transfo -i ${MFFE}_gmseg.nii.gz -x nn \
--w warp_${MFFE}_gw2PAM50_gw.nii.gz \
+-w warp_$i{MFFE}_gw2PAM50_gw.nii.gz \
 -d PAM50_t2s_cropped.nii.gz -o ${MFFE}_gmseg_PAM50space.nii.gz
 
 sct_apply_transfo -i ${FMRI}_moco_GMcutlabel.nii.gz  -x nn \
--w warp_${FMRI}_moco_mean2mffe1.nii.gz warp_${MFFE}_gw2PAM50_gw.nii.gz \
+-w warp_${FMRI}_moco_mean2mffe1.nii.gz warp_i${MFFE}_gw2PAM50_gw.nii.gz \
 -d PAM50_t2s_cropped.nii.gz  -o ${FMRI}_moco_GMcutlabel_PAM50space.nii.gz
 
 
 # ROIs to mffe space
 sct_apply_transfo -i ${FMRI}_moco_GMcutlabel.nii.gz  -x nn \
 -w warp_${FMRI}_moco_mean2mffe1.nii.gz \
--d ${MFFE}_gw.nii.gz -o ${FMRI}_moco_GMcutlabel_mffespace.nii.gz
+-d i${MFFE}_gw.nii.gz -o ${FMRI}_moco_GMcutlabel_imffespace.nii.gz
 
 
 # Warp template CSF to fmri space and mffe space
 sct_apply_transfo -i ${TDIR}/PAM50_csf.nii.gz -x nn \
--w warp_PAM50_gw2${MFFE}_gw.nii.gz warp_${MFFE}2${FMRI}_moco_mean.nii.gz \
+-w warp_PAM50_gw2i${MFFE}_gw.nii.gz warp_${MFFE}2${FMRI}_moco_mean.nii.gz \
 -d ${FMRI}_moco_mean.nii.gz -o ${FMRI}_moco_CSF.nii.gz
 
 sct_apply_transfo -i ${TDIR}/PAM50_csf.nii.gz -x nn \
--w warp_PAM50_gw2${MFFE}_gw.nii.gz \
--d ${MFFE}_gw.nii.gz -o ${MFFE}_CSF.nii.gz
+-w warp_PAM50_gw2i${MFFE}_gw.nii.gz \
+-d i${MFFE}_gw.nii.gz -o i${MFFE}_CSF.nii.gz
 
 
 # Get mffe GM/WM/label/centerline in fmri space
-sct_apply_transfo -i ${MFFE}_gmseg.nii.gz -x nn \
+sct_apply_transfo -i i${MFFE}_gmseg.nii.gz -x nn \
 -w warp_${MFFE}2${FMRI}_moco_mean.nii.gz \
 -d ${FMRI}_moco_mean.nii.gz -o ${FMRI}_moco_GM.nii.gz
 
-sct_apply_transfo -i ${MFFE}_wmseg.nii.gz -x nn \
+sct_apply_transfo -i i${MFFE}_wmseg.nii.gz -x nn \
 -w warp_${MFFE}2${FMRI}_moco_mean.nii.gz \
 -d ${FMRI}_moco_mean.nii.gz -o ${FMRI}_moco_WM.nii.gz
 
-sct_apply_transfo -i ${MFFE}_seg_labeled.nii.gz -x nn \
+sct_apply_transfo -i i${MFFE}_seg_labeled.nii.gz -x nn \
 -w warp_${MFFE}2${FMRI}_moco_mean.nii.gz \
 -d ${FMRI}_moco_mean.nii.gz -o ${FMRI}_moco_LABEL.nii.gz
 
@@ -278,10 +261,10 @@ for IMG in \
 
      sct_apply_transfo -i ${IMG}.nii.gz \
 	 -w warp_${FMRI}_moco_mean2${MFFE}.nii.gz \
-	 -d ${MFFE}.nii.gz -o ${IMG}_mffespace.nii.gz
+	 -d i${MFFE}.nii.gz -o ${IMG}_imffespace.nii.gz
 
      sct_apply_transfo -i ${IMG}.nii.gz \
-	 -w warp_${FMRI}_moco_mean2${MFFE}.nii.gz warp_${MFFE}_gw2PAM50_gw.nii.gz \
+	 -w warp_${FMRI}_moco_mean2${MFFE}.nii.gz warp_i${MFFE}_gw2PAM50_gw.nii.gz \
 	 -d ${TDIR}/PAM50_t2s.nii.gz -o ${IMG}_PAM50space.nii.gz
 
  done

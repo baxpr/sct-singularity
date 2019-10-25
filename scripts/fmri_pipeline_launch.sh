@@ -35,10 +35,6 @@ do
       export PHYSLOG_DCM="$2"
       shift; shift
       ;;
-    --initcenter)
-      export INITCENTER="$2"
-      shift; shift
-      ;;
     --masksize)
       export MASKSIZE="$2"
       shift; shift
@@ -75,7 +71,6 @@ echo T2SAG_NIIGZ = "${T2SAG_NIIGZ}"
 echo FMRI_NIIGZ  = "${FMRI_NIIGZ}"
 echo FMRI_DCM    = "${FMRI_DCM}"
 echo PHYSLOG_DCM = "${PHYSLOG_DCM}"
-echo INITCENTER  = "${INITCENTER}"
 echo MASKSIZE    = "${MASKSIZE}"
 
 

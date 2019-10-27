@@ -9,104 +9,22 @@
 # Image filenames are <geometry>_<content>.nii.gz
 # Template content always marked as "template", otherwise it's subject content
 
-# Location of template
-TDIR=${SCTDIR}/data/PAM50/template
-
 # Use first echo of mffe
 cp mffe1.nii.gz mffe_mffe.nii.gz
 cp t2sag.nii.gz t2sag_t2sag.nii.gz
 cp fmri.nii.gz fmri_fmri.nii.gz
 
-# Segment GM and WM on mffe
-sct_deepseg_sc -i mffe_mffe.nii.gz -c t2
-mv mffe_mffe_seg.nii.gz mffe_cord.nii.gz
-sct_deepseg_gm -i mffe_mffe.nii.gz
-mv mffe_mffe_gmseg.nii.gz mffe_gm.nii.gz
-sct_maths -i mffe_cord.nii.gz -sub mffe_gm.nii.gz -o tmp.nii.gz
-sct_maths -i tmp.nii.gz -thr 0 -o mffe_wm.nii.gz
-rm tmp.nii.gz
-sct_maths -i mffe_gm.nii.gz -add mffe_cord.nii.gz -o mffe_synt2.nii.gz
+# MFFE processing
+pipeline_mffe.sh
 
-# Create mask for t2sag/mffe registration
-sct_create_mask -i mffe_mffe.nii.gz -p centerline,mffe_cord.nii.gz -size ${MASKSIZE}mm \
-	-o mffe_mask${MASKSIZE}.nii.gz
+# T2SAG processing for vertebral labels, markers. Includes registration to mffe
+pipeline_t2sag.sh
 
-# Get cord seg for the T2 sag
-sct_deepseg_sc -i t2sag_t2sag.nii.gz -c t2
-mv t2sag_t2sag_seg.nii.gz t2sag_cord.nii.gz
-
-# Invert t2sag contrast so level-finding works better
-invert_t2sag.py t2sag_t2sag.nii.gz t2sag_invt2sag.nii.gz
-
-# Get vert labels on the inverted t2sag and list them
-sct_label_vertebrae -i t2sag_invt2sag.nii.gz -s t2sag_cord.nii.gz -c t1
-sct_label_utils -i t2sag_cord_labeled_discs.nii.gz -display 
-
-# Register t2sag to mffe
-sct_register_multimodal -i t2sag_t2sag.nii.gz -iseg t2sag_cord.nii.gz \
-	-d mffe_mffe.nii.gz -dseg mffe_cord.nii.gz \
-	-m mffe_mask${MASKSIZE}.nii.gz \
-	-o mffe_t2sag.nii.gz \
-	-owarp warp_t2sag2mffe.nii.gz
-mv warp_mffe_mffe2t2sag_t2sag.nii.gz warp_mffe2t2sag.nii.gz
-mv mffe_t2sag_inv.nii.gz t2sag_mffe.nii.gz
+# Registration to template
+pipeline_templatereg.sh
 
 
-
-# Resample mffe to iso voxel for better label placement
-FAC=$(get_ijk.py f mffe_mffe.nii.gz)
-sct_resample -i mffe_mffe.nii.gz -f 1x1x${FAC} -x nn -o imffe_mffe.nii.gz
-sct_resample -i mffe_cord.nii.gz -ref imffe_mffe.nii.gz -x nn -o imffe_cord.nii.gz
-sct_resample -i mffe_synt2.nii.gz -ref imffe_mffe.nii.gz -x nn -o imffe_synt2.nii.gz
-
-# Make a padded imffe to put body markers in
-sct_image -i imffe_mffe.nii.gz -pad 0,0,40 -o pimffe_mffe.nii.gz
-
-# Resample level ROIs to pimffe space
-sct_apply_transfo -i t2sag_cord_labeled.nii.gz -d pimffe_mffe.nii.gz \
-    -w warp_t2sag2mffe.nii.gz -x nn \
-	-o pimffe_cord_labeled.nii.gz
-
-# Create body markers in pimffe space
-sct_label_utils -i pimffe_cord_labeled.nii.gz -vert-body 0 \
-	-o pimffe_cord_labeled_body.nii.gz
-
-# Crop body markers and level image back to imffe space
-sct_crop_image -i pimffe_cord_labeled_body.nii.gz \
-	-ref imffe_mffe.nii.gz -o imffe_cord_labeled_body.nii.gz
-sct_crop_image -i pimffe_cord_labeled.nii.gz \
-	-ref imffe_mffe.nii.gz -o imffe_cord_labeled.nii.gz
-
-# Crop template to relevant levels. sct_register_multimodal is not smart enough to 
-# handle non-identical label sets.
-sct_label_utils -i ${TDIR}/PAM50_label_body.nii.gz \
-	-remove-reference imffe_cord_labeled_body.nii.gz \
-	-o PAM50_template_cord_labeled_body.nii.gz
-
-# Create synthetic T2 from template
-sct_maths -i ${TDIR}/PAM50_gm.nii.gz -add ${TDIR}/PAM50_cord.nii.gz -o PAM50_template_synt2.nii.gz
-
-# Register imffe to template via GM/WM seg
-sct_register_multimodal \
--i mffe_synt2.nii.gz \
--iseg mffe_cord.nii.gz \
--ilabel imffe_cord_labeled_body.nii.gz \
--d PAM50_template_synt2.nii.gz \
--dseg ${TDIR}/PAM50_cord.nii.gz \
--dlabel PAM50_template_cord_labeled_body.nii.gz \
--o PAM50_synt2.nii.gz \
--param step=0,type=label,dof=Tx_Ty_Tz_Sz:\
-step=1,type=seg,algo=slicereg,poly=3:\
-step=2,type=im,algo=syn
-
-mv warp_mffe_synt22PAM50_template_synt2.nii.gz warp_mffe2PAM50.nii.gz
-mv warp_PAM50_template_synt22mffe_synt2.nii.gz warp_PAM502mffe.nii.gz 
-mv PAM50_synt2_inv.nii.gz mffe_PAM50_template_synt2.nii.gz
-
-# Warp level labels to template
-sct_apply_transfo -i t2sag_cord_labeled.nii.gz -d PAM50_synt2.nii.gz \
-    -w warp_t2sag2mffe.nii.gz warp_mffe2PAM50.nii.gz \
-	-x nn -o PAM50_cord_labeled.nii.gz
+exit 0
 
 
 # Extract first fmri volume, find centerline, make fmri space mask
@@ -136,8 +54,11 @@ sct_register_multimodal \
 -i fmri_moco_mean.nii.gz -iseg fmri_cord.nii.gz \
 -d mffe_mffe.nii.gz -dseg mffe_cord.nii.gz \
 -m mffe_mask${MASKSIZE}.nii.gz \
--param step=1,type=seg,algo=centermass,metric=MeanSquares,smooth=2:\
-step=2,type=im,algo=slicereg,metric=MI
+-param step=1,type=seg,algo=slicereg,metric=MeanSquares,smooth=2:\
+step=2,type=im,algo=rigid,metric=CC
+#:\
+#step=3,type=im,algo=affine,metric=CC
+
 
 mv warp_fmri_moco_mean2mffe_mffe.nii.gz warp_fmri2mffe.nii.gz
 mv warp_mffe_mffe2fmri_moco_mean.nii.gz warp_mffe2fmri.nii.gz

@@ -30,6 +30,12 @@ pipeline_templatereg.sh
 # fMRI processing
 pipeline_fmri.sh
 
+# Generate RETROICOR regressors
+parse_physlog.py SCANPHYSLOG*.log 496 fmri.dcm
+RetroTS.py -r physlog_respiratory.csv -c physlog_cardiac.csv -p 496 -n 1 \
+    -v `cat volume_acquisition_time.txt` -cardiac_out 0 -prefix ricor
+cleanup_physlog.py
+
 # Geom transforms
 pipeline_transforms.sh
 
@@ -42,12 +48,6 @@ exit 0
 make_gm_rois.py ${FMRI}_moco_GM.nii.gz ${FMRI}_moco_LABEL.nii.gz 
 
 
-# RETROICOR
-# First split physlog into card and resp, and trim to match length of scan.
-parse_physlog.py SCANPHYSLOG*.log 496 fmri.dcm
-RetroTS.py -r physlog_respiratory.csv -c physlog_cardiac.csv -p 496 -n 1 \
-    -v `cat volume_acquisition_time.txt` -cardiac_out 0 -prefix ricor
-cleanup_physlog.py
 
 
 # Regression-based cleanup of confounds

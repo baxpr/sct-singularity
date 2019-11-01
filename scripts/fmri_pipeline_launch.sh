@@ -6,6 +6,9 @@
 # Where is sct installed?
 export SCTDIR=/opt/sct
 
+# Location of template
+export TDIR=${SCTDIR}/data/PAM50/template
+
 # Parse inputs
 while [[ $# -gt 0 ]]
 do

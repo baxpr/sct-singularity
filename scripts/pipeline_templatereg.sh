@@ -23,9 +23,6 @@
 #   warp_mffe2PAM50.nii.gz
 #   warp_PAM502mffe.nii.gz
 
-# Location of template
-TDIR=${SCTDIR}/data/PAM50/template
-
 # Crop template to relevant levels. sct_register_multimodal is not smart enough to 
 # handle non-identical label sets.
 sct_label_utils -i ${TDIR}/PAM50_label_body.nii.gz \

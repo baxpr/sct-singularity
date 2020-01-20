@@ -26,17 +26,30 @@ physlog_Hz = float(physlog_Hz)
 
 ###########################################################################################
 # Get acquisition duration from the DICOM
+
 ds = pydicom.dcmread(dicom_file)
 
-# AcquisitionDuration
-acqdur = ds[0x0018,0x9073].value
+# (5200,9230)       PerFrameFunctionalGroupsSequence
+#   (0020,9111)     FrameContentSequence
+#     (0018,9074)   FrameAcquisitionDateTime
+#     (0020,9157)   DimensionIndexValues
+# Acquisition time for each frame (Sequence)
+PerFrameFunctionalGroupsSequence = ds[0x5200,0x9230]
+FrameAcquisitionDateTime = [x[0x0020,0x9111][0][0x0018,0x9074] for x in PerFrameFunctionalGroupsSequence]
+DimensionIndexValues = [x[0x0020,0x9111][0][0x0020,0x9157] for x in PerFrameFunctionalGroupsSequence]
+
+
+
+# AcquisitionDuration (WARNING - INCLUDES DUMMY SCANS)
+#acqdur = ds[0x0018,0x9073].value
 
 # NumberOfTemporalPositions from first frame (Philips private field)
 # PerFrameFunctionalGroupsSequence[0].Private_2005_140f[0].NumberOfTemporalPositions
-nvols = int( ds[0x5200,0x9230][0][0x2005,0x140f][0][0x0020,0x0105].value )
+# WARNING - DOES NOT INCLUDE DUMMY SCANS
+#nvols = int( ds[0x5200,0x9230][0][0x2005,0x140f][0][0x0020,0x0105].value )
 
 # Estimate of volume time (sec)
-voltime = acqdur / nvols
+#voltime = acqdur / nvols
 
 # Save voltime in sec to file
 print('Saving estimated voltime %f in volume_acquisition_time.txt' % (voltime))

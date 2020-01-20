@@ -45,6 +45,8 @@ sct_apply_transfo -i mffe_gm.nii.gz -x nn \
 
 # FIXME We are here. Sort out CSF, GMcutlabel, etc
 
+exit 0
+
 sct_apply_transfo -i ${FMRI}_moco_GMcutlabel.nii.gz  -x nn \
 -w warp_${FMRI}_moco_mean2mffe1.nii.gz warp_i${MFFE}_gw2PAM50_gw.nii.gz \
 -d PAM50_t2s_cropped.nii.gz  -o ${FMRI}_moco_GMcutlabel_PAM50space.nii.gz

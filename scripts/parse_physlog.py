@@ -36,9 +36,15 @@ ds = pydicom.dcmread(dicom_file)
 # Acquisition time for each frame (Sequence)
 PerFrameFunctionalGroupsSequence = ds[0x5200,0x9230]
 FrameAcquisitionDateTime = [x[0x0020,0x9111][0][0x0018,0x9074] for x in PerFrameFunctionalGroupsSequence]
-DimensionIndexValues = [x[0x0020,0x9111][0][0x0020,0x9157] for x in PerFrameFunctionalGroupsSequence]
+DimensionIndexValues1 = [x[0x0020,0x9111][0][0x0020,0x9157][1] for x in PerFrameFunctionalGroupsSequence]
+DimensionIndexValues2 = [x[0x0020,0x9111][0][0x0020,0x9157][2] for x in PerFrameFunctionalGroupsSequence]
 
+min1 = [i for i,x in enumerate(DimensionIndexValues1) if x==min(DimensionIndexValues1)]
+min2 = [i for i,x in enumerate(DimensionIndexValues2) if x==min(DimensionIndexValues2)]
+max2 = [i for i,x in enumerate(DimensionIndexValues2) if x==max(DimensionIndexValues2)]
 
+mindt = FrameAcquisitionDateTime[ set(min1) & set(min2) ]
+maxdt = FrameAcquisitionDateTime[ set(min1) & set(max2) ]
 
 # AcquisitionDuration (WARNING - INCLUDES DUMMY SCANS)
 #acqdur = ds[0x0018,0x9073].value

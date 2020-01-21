@@ -75,7 +75,7 @@ voltime = totaltime / (max(DimensionIndexValues2) - min(DimensionIndexValues2))
 #voltime = acqdur / nvols
 
 # Save voltime in sec to file
-print('Saving estimated voltime %f in volume_acquisition_time.txt' % (voltime))
+print('Saving estimated voltime %f sec in volume_acquisition_time.txt' % (voltime))
 with open('volume_acquisition_time.txt','w') as f:
     f.write( '%f' % (voltime) )
 

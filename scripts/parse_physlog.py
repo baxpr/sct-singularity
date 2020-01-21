@@ -6,6 +6,7 @@
 import sys
 import pandas
 import pydicom
+import datetime
 
 
 ###########################################################################################
@@ -32,19 +33,35 @@ ds = pydicom.dcmread(dicom_file)
 # (5200,9230)       PerFrameFunctionalGroupsSequence
 #   (0020,9111)     FrameContentSequence
 #     (0018,9074)   FrameAcquisitionDateTime
-#     (0020,9157)   DimensionIndexValues
-# Acquisition time for each frame (Sequence)
+#     (0020,9157)   DimensionIndexValues (0=irrelevant,1=slice,2=volume)
+
+# Acquisition time and dim index for each frame
 PerFrameFunctionalGroupsSequence = ds[0x5200,0x9230]
 FrameAcquisitionDateTime = [x[0x0020,0x9111][0][0x0018,0x9074] for x in PerFrameFunctionalGroupsSequence]
 DimensionIndexValues1 = [x[0x0020,0x9111][0][0x0020,0x9157][1] for x in PerFrameFunctionalGroupsSequence]
 DimensionIndexValues2 = [x[0x0020,0x9111][0][0x0020,0x9157][2] for x in PerFrameFunctionalGroupsSequence]
 
-min1 = [i for i,x in enumerate(DimensionIndexValues1) if x==min(DimensionIndexValues1)]
-min2 = [i for i,x in enumerate(DimensionIndexValues2) if x==min(DimensionIndexValues2)]
-max2 = [i for i,x in enumerate(DimensionIndexValues2) if x==max(DimensionIndexValues2)]
+# Boolean - is this element the min or max index of the entire bunch?
+min1 = [x==min(DimensionIndexValues1) for x in DimensionIndexValues1]
+min2 = [x==min(DimensionIndexValues2) for x in DimensionIndexValues2]
+max2 = [x==max(DimensionIndexValues2) for x in DimensionIndexValues2]
 
-mindt = FrameAcquisitionDateTime[ set(min1) & set(min2) ]
-maxdt = FrameAcquisitionDateTime[ set(min1) & set(max2) ]
+# Index value of min slice + min volume, and min slice + max volume
+# (The first and last volumes of the time series)
+minloc = [i for i,xy in enumerate(zip(min1,min2)) if xy[0] and xy[1]][0]
+maxloc = [i for i,xy in enumerate(zip(min1,max2)) if xy[0] and xy[1]][0]
+
+# Datetime for first and last volumes, converted to datetime
+mindtstr = FrameAcquisitionDateTime[ minloc ]
+maxdtstr = FrameAcquisitionDateTime[ maxloc ]
+mindt = datetime.datetime.strptime(mindtstr.value,'%Y%m%d%H%M%S.%f')
+maxdt = datetime.datetime.strptime(maxdtstr.value,'%Y%m%d%H%M%S.%f')
+
+# Compute volume acquisition time. Note, totaltime is from beginning of first volume to
+# beginning of last volume
+totaltime = (maxdt-mindt).total_seconds()
+voltime = totaltime / (max(DimensionIndexValues2) - min(DimensionIndexValues2))
+
 
 # AcquisitionDuration (WARNING - INCLUDES DUMMY SCANS)
 #acqdur = ds[0x0018,0x9073].value

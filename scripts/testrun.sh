@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export PATH=/wkdir/scripts:${PATH}
+export PATH=/wkdir/scripts:/wkdir/scripts/external/afni:${PATH}
 
 fmri_pipeline_launch.sh \
 --outdir ../OUTPUTS \

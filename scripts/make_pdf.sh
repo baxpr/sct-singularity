@@ -10,13 +10,13 @@ FSLEYES=/opt/sct/python/envs/venv_sct/bin/fsleyes
 TDIR=/opt/sct/data/PAM50/template/
 
 # Get mffe voxel dims
-IDIM=$(get_ijk.py i mffe1.nii.gz)
+IDIM=$(get_ijk.py i mffe_mffe.nii.gz)
 let "IMID = $IDIM / 2"
-JDIM=$(get_ijk.py j mffe1.nii.gz)
+JDIM=$(get_ijk.py j mffe_mffe.nii.gz)
 let "JMID = $JDIM / 2"
-KDIM=$(get_ijk.py k mffe1.nii.gz)
+KDIM=$(get_ijk.py k mffe_mffe.nii.gz)
 let "KMAX = $KDIM - 1"
-KSQRT=$(get_ijk.py s mffe1.nii.gz)
+KSQRT=$(get_ijk.py s mffe_mffe.nii.gz)
 
 # fmri voxel dims
 IDIM_F=$(get_ijk.py i fmri_moco_mean.nii.gz)
@@ -75,9 +75,9 @@ for K in $(seq -w 0 $KMAX) ; do
     --zzoom 2300 \
     --outfile roi_slice${K}.png --size 600 600 \
     --voxelLoc $IMID $JMID $K \
-  mffe1.nii.gz \
+  mffe_mffe.nii.gz \
     --interpolation linear \
-  fmri_moco_GMcutlabel_mffespace.nii.gz \
+  mffe_gmcutlabel.nii.gz \
     --lut random_big \
     --overlayType label
 done
@@ -88,9 +88,9 @@ ${FSLEYES} render \
   --scene ortho \
   --hideCursor --hidex --hidez \
   --outfile registration_cor_template.png --size 600 600 \
-  PAM50_t2s_cropped.nii.gz \
+  PAM50_template_t2s_cropped.nii.gz \
     --interpolation linear \
-  mffe1_gmseg_PAM50space.nii.gz \
+  PAM50_gm.nii.gz \
     --lut harvard-oxford-subcortical \
     --overlayType label \
     --outline --outlineWidth 2
@@ -99,9 +99,9 @@ ${FSLEYES} render \
   --scene ortho \
   --hideCursor --hidex --hidez \
   --outfile registration_cor_mffe.png --size 600 600 \
-  mffe1_PAM50space.nii.gz \
+  PAM50_mffe.nii.gz \
     --interpolation linear \
-  mffe1_gmseg_PAM50space.nii.gz \
+  PAM50_gm.nii.gz \
     --lut harvard-oxford-subcortical \
     --overlayType label \
     --outline --outlineWidth 2
@@ -110,9 +110,9 @@ ${FSLEYES} render \
   --scene ortho \
   --hideCursor --hidex --hidez \
   --outfile registration_cor_fmri.png --size 600 600 \
-  fmri_moco_mean_PAM50space.nii.gz \
+  PAM50_moco_mean.nii.gz \
     --interpolation linear \
-  mffe1_gmseg_PAM50space.nii.gz \
+  PAM50_gm.nii.gz \
     --lut harvard-oxford-subcortical \
     --overlayType label \
     --outline --outlineWidth 2
@@ -128,11 +128,11 @@ for K in $(seq -w 0 $KMAX_F) ; do
     --voxelLoc $IMID_F $JMID_F $K \
   fmri_moco_mean.nii.gz \
     --interpolation linear \
-  fmri_moco_WM.nii.gz \
+  fmri_wm.nii.gz \
     --lut melodic-classes \
     --overlayType label \
     --outline --outlineWidth 3 \
-  fmri_moco_CSF.nii.gz \
+  fmri_csf.nii.gz \
     --lut harvard-oxford-subcortical \
     --overlayType label \
     --outline --outlineWidth 3
@@ -148,13 +148,13 @@ for K in $(seq -w 0 $KMAX) ; do
     --zzoom 2300 \
     --outfile templateregistration_slice${K}.png --size 600 600 \
     --voxelLoc $IMID $JMID $K \
-  PAM50_t2s_mffespace.nii.gz \
+  mffe_template_t2s.nii.gz \
     --interpolation linear \
-  mffe1_gw.nii.gz \
+  mffe_gw.nii.gz \
     --lut melodic-classes \
     --overlayType label \
     --outline --outlineWidth 3 \
-  mffe1_CSF.nii.gz \
+  mffe_csf.nii.gz \
     --lut harvard-oxford-subcortical \
     --overlayType label \
     --outline --outlineWidth 3
@@ -170,13 +170,13 @@ for K in $(seq -w 0 $KMAX) ; do
     --zzoom 2300 \
     --outfile segmentation_slice${K}.png --size 600 600 \
     --voxelLoc $IMID $JMID $K \
-  mffe1.nii.gz \
+  mffe_mffe.nii.gz \
     --interpolation linear \
-  mffe1_gw.nii.gz \
+  mffe_gw.nii.gz \
     --lut melodic-classes \
     --overlayType label \
     --outline --outlineWidth 3 \
-  mffe1_CSF.nii.gz \
+  mffe_csf.nii.gz \
     --lut harvard-oxford-subcortical \
     --overlayType label \
     --outline --outlineWidth 3
@@ -193,13 +193,13 @@ for v in 0 1 2 3; do
       --zzoom 2300 \
       --outfile connectivity_r_roi${v}_slice${K}.png --size 600 600 \
       --voxelLoc $IMID $JMID $K \
-    mffe1.nii.gz \
-    connectivity_r_slice_mffespace.nii.gz \
+    mffe_mffe.nii.gz \
+    fmri_R_slice.nii.gz \
       --volume $v \
       --useNegativeCmap \
       --cmap red-yellow --negativeCmap blue-lightblue \
       --displayRange 0.4 1.0 \
-    mffe1_gmseg.nii.gz \
+    mffe_gm.nii.gz \
       --overlayType label \
       --outline --outlineWidth 2
   done

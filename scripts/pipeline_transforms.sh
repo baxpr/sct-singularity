@@ -85,7 +85,7 @@ sct_apply_transfo -i fmri_gmcutlabel.nii.gz -x nn \
 -d PAM50_template_t2s_cropped.nii.gz -o PAM50_gmcutlabel.nii.gz
 
 sct_apply_transfo -i fmri_gmcutlabel.nii.gz  -x nn \
--w warp_fmri_2mffe.nii.gz \
+-w warp_fmri2mffe.nii.gz \
 -d mffe_mffe.nii.gz -o mffe_gmcutlabel.nii.gz
 
 

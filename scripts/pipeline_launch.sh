@@ -108,7 +108,6 @@ cp "${MFFE_DIR}"/*_e3.nii.gz "${OUTDIR}"/mffe3.nii.gz
 
 # Launch the pipeline
 cd "${OUTDIR}"
-fmri_pipeline.sh
+pipeline.sh
 
-	
 

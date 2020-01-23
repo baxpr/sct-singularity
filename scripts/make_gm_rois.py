@@ -63,14 +63,14 @@ for s in range(nslices):
     horn_data[:,:,s] = numpy.multiply(slicedata,quadrants)
 
 horn = nibabel.Nifti1Image(horn_data,gm.affine,gm.header)
-nibabel.save(horn,'fmri_moco_GMcut.nii.gz')
+nibabel.save(horn,'fmri_gmcut.nii.gz')
 
 # Mask labels by gray matter and write to file
 label_data = label.get_data()
 gm_inds = gm_data>0
 gm_data[gm_inds] = label_data[gm_inds]
 gmmasked = nibabel.Nifti1Image(gm_data,gm.affine,gm.header)
-nibabel.save(gmmasked,'fmri_moco_GMlabeled.nii.gz')
+nibabel.save(gmmasked,'fmri_gmlabeled.nii.gz')
 
 # Label by level and horn:
 #    301 - C3, left ventral
@@ -80,5 +80,5 @@ label_data = numpy.multiply(label_data,horn_data>0)
 horn_data = numpy.multiply(horn_data,label_data>0)
 hornlevel_data = 100*label_data + horn_data
 hornlevel = nibabel.Nifti1Image(hornlevel_data,gm.affine,gm.header)
-nibabel.save(hornlevel,'fmri_moco_GMcutlabel.nii.gz')
+nibabel.save(hornlevel,'fmri_gmcutlabel.nii.gz')
 

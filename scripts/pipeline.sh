@@ -44,9 +44,6 @@ exit 0
 
 
 
-# Make horn- and level-specific gray matter ROI images
-make_gm_rois.py ${FMRI}_moco_GM.nii.gz ${FMRI}_moco_LABEL.nii.gz 
-
 
 
 

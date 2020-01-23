@@ -40,13 +40,6 @@ cleanup_physlog.py
 pipeline_transforms.sh
 
 
-exit 0
-
-
-
-
-
-
 # Regression-based cleanup of confounds
 regress.py
 

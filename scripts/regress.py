@@ -8,8 +8,8 @@ import numpy
 
 ricor_file = 'ricor.csv'
 fmri_file = 'fmri_moco.nii.gz'
-csf_file = 'fmri_moco_CSF.nii.gz'
-notspine_file = 'fmri_moco_NOTSPINE.nii.gz'
+csf_file = 'fmri_csf.nii.gz'
+notspine_file = 'fmri_notspine.nii.gz'
 mocoX_file = 'fmri_moco_params_X.nii.gz'
 mocoY_file = 'fmri_moco_params_Y.nii.gz'
 

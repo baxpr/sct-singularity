@@ -62,14 +62,14 @@ maxdt = datetime.datetime.strptime(maxdtstr.value,'%Y%m%d%H%M%S.%f')
 totaltime = (maxdt-mindt).total_seconds()
 voltime = totaltime / (max(DimensionIndexValues2) - min(DimensionIndexValues2))
 
+# NumberOfTemporalPositions from first frame (Philips private field)
+# PerFrameFunctionalGroupsSequence[0].Private_2005_140f[0].NumberOfTemporalPositions
+# Does not include dummy scans
+nvols = int( PerFrameFunctionalGroupsSequence[0][0x2005,0x140f][0][0x0020,0x0105].value )
+
 
 # AcquisitionDuration (WARNING - INCLUDES DUMMY SCANS)
 #acqdur = ds[0x0018,0x9073].value
-
-# NumberOfTemporalPositions from first frame (Philips private field)
-# PerFrameFunctionalGroupsSequence[0].Private_2005_140f[0].NumberOfTemporalPositions
-# WARNING - DOES NOT INCLUDE DUMMY SCANS
-#nvols = int( ds[0x5200,0x9230][0][0x2005,0x140f][0][0x0020,0x0105].value )
 
 # Estimate of volume time (sec)
 #voltime = acqdur / nvols
@@ -87,7 +87,7 @@ card = physlog.iloc[:,4]
 resp = physlog.iloc[:,5]
 mark = physlog.iloc[:,9]
 lastmark = max(mark[mark==20].index)
-rowsneeded = round(acqdur * physlog_Hz)
+rowsneeded = round(nvols * voltime * physlog_Hz)
 firstmark = lastmark - rowsneeded + 1
 print('Keeping %d physlog points from %d to %d' % (rowsneeded,firstmark,lastmark+1))
 card = card[firstmark:lastmark+1]

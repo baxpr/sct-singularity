@@ -2,16 +2,15 @@
 #
 # On pre-processed data, compute functional connectivity. Use through-slice 3D ROIs
 
+import os
 import nibabel
 import numpy
 from nilearn.input_data import NiftiMasker,NiftiLabelsMasker
 
 fmri_file = 'ffmri_moco.nii.gz'
-roi_file = 'fmri_moco_GMcutlabel.nii.gz'
+roi_file = 'fmri_gmcutlabel.nii.gz'
 vat_file = 'volume_acquisition_time.txt'
-msize_file = 'masksize.txt'
-with open(msize_file,'r') as f:
-    msize = f.read().strip()
+msize = os.getenv('MASKSIZE')
 mask_file = 'fmri_mask' + msize + '.nii.gz'
 
 # Get TR (volume acquisition time, NOT actual scan TR for 3D fmris)

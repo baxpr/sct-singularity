@@ -10,7 +10,7 @@ from nilearn.masking import intersect_masks,unmask
 from nilearn.regions import img_to_signals_labels
 
 fmri_file = 'ffmri_moco.nii.gz'
-gm_file = 'fmri_moco_GMcut.nii.gz'
+gm_file = 'fmri_gmcut.nii.gz'
 vat_file = 'volume_acquisition_time.txt'
 
 
@@ -68,8 +68,10 @@ for s in range(nslices):
 
 
 # Save complete R,Z image to file
-# FIXME ROI mat needs to be slicewise and needs to have level label from level image
 r_img.to_filename('connectivity_r_slice.nii.gz')
 z_img.to_filename('connectivity_z_slice.nii.gz')
-numpy.savetxt('connectivity_r_matrix.csv',r_roi_mat,delimiter=',')
-numpy.savetxt('connectivity_z_matrix.csv',z_roi_mat,delimiter=',')
+
+
+# FIXME ROI mat needs to be slicewise and needs to have level label from level image
+#numpy.savetxt('connectivity_r_matrix.csv',r_roi_mat,delimiter=',')
+#numpy.savetxt('connectivity_z_matrix.csv',z_roi_mat,delimiter=',')

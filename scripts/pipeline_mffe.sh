@@ -37,6 +37,8 @@ FAC=$(get_ijk.py f mffe_mffe.nii.gz)
 sct_resample -i mffe_mffe.nii.gz -f 1x1x${FAC} -x nn -o imffe_mffe.nii.gz
 sct_resample -i mffe_cord.nii.gz -ref imffe_mffe.nii.gz -x nn -o imffe_cord.nii.gz
 sct_resample -i mffe_synt2.nii.gz -ref imffe_mffe.nii.gz -x nn -o imffe_synt2.nii.gz
+sct_resample -i mffe_gm.nii.gz -ref imffe_mffe.nii.gz -x nn -o imffe_gm.nii.gz
+sct_resample -i mffe_wm.nii.gz -ref imffe_mffe.nii.gz -x nn -o imffe_wm.nii.gz
 
 # Make a padded imffe to put body markers in
 sct_image -i imffe_mffe.nii.gz -pad 0,0,40 -o pimffe_mffe.nii.gz

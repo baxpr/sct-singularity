@@ -42,7 +42,7 @@ for s in range(nslices):
     
     slicedata = numpy.copy(gm_data[:,:,s])
     quadrants = numpy.zeros(dims[0:2])
-    
+
     com = [int(round(x)) for x in scipy.ndimage.center_of_mass(slicedata)]
 
     # Label quadrants. For correct data orientation, these are

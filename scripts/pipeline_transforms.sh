@@ -64,7 +64,7 @@ sct_apply_transfo -i ${TDIR}/PAM50_csf.nii.gz -x nn \
 # Get mffe GM/WM/label/centerline in fmri space
 sct_apply_transfo -i mffe_gm.nii.gz -x nn \
 -w warp_mffe2fmri.nii.gz \
--d fmri_moco_mean.nii.gz -o fmri_gm.nii.gz
+-d fmri_moco_mean.nii.gz -o fmri_gm.nii.gz   # FIXME no gm in top slice #13
 
 sct_apply_transfo -i mffe_wm.nii.gz -x nn \
 -w warp_mffe2fmri.nii.gz \

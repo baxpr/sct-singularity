@@ -88,6 +88,9 @@ sct_apply_transfo -i fmri_gmcutlabel.nii.gz  -x nn \
 -w warp_fmri2mffe.nii.gz \
 -d mffe_mffe.nii.gz -o mffe_gmcutlabel.nii.gz
 
+sct_apply_transfo -i fmri_gmcutlabel.nii.gz  -x nn \
+-w warp_fmri2mffe.nii.gz \
+-d imffe_mffe.nii.gz -o imffe_gmcutlabel.nii.gz
 
 
 

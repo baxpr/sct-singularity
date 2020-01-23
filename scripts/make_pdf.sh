@@ -77,7 +77,7 @@ for K in $(seq -w 0 $KMAX) ; do
     --voxelLoc $IMID $JMID $K \
   mffe_mffe.nii.gz \
     --interpolation linear \
-  mffe_gmcutlabel.nii.gz \
+  imffe_gmcutlabel.nii.gz \
     --lut random_big \
     --overlayType label
 done

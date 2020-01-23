@@ -56,12 +56,12 @@ for IMG in \
   ; do
 
      sct_apply_transfo -i ${IMG}.nii.gz \
-	 -w warp_${FMRI}_moco_mean2${MFFE}.nii.gz \
-	 -d i${MFFE}.nii.gz -o ${IMG}_imffespace.nii.gz
+	 -w warp_fmri2mffe.nii.gz \
+	 -d imffe_mffe.nii.gz -o imffe_${IMG}.nii.gz
 
      sct_apply_transfo -i ${IMG}.nii.gz \
-	 -w warp_${FMRI}_moco_mean2${MFFE}.nii.gz warp_i${MFFE}_gw2PAM50_gw.nii.gz \
-	 -d ${TDIR}/PAM50_t2s.nii.gz -o ${IMG}_PAM50space.nii.gz
+	 -w warp_fmri2mffe.nii.gz warp_mffe2PAM50.nii.gz \
+	 -d PAM50_template_t2s_cropped.nii.gz -o PAM50_${IMG}.nii.gz
 
  done
 

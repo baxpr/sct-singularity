@@ -6,12 +6,16 @@ import nibabel
 import nitime
 import numpy
 
+# Inputs
 ricor_file = 'ricor.csv'
 fmri_file = 'fmri_moco.nii.gz'
 csf_file = 'fmri_csf.nii.gz'
 notspine_file = 'fmri_notspine.nii.gz'
 mocoX_file = 'fmri_moco_params_X.nii.gz'
 mocoY_file = 'fmri_moco_params_Y.nii.gz'
+
+# Output
+ffmri_file = 'fmri_filt.nii.gz'
 
 numPCs = 5
 
@@ -111,7 +115,7 @@ for s in range(nslices):
 # Reshape filtered fmri and save
 ffmri_data = numpy.reshape(frfmri_data,dims,order='F')
 ffmri_img = nibabel.Nifti1Image(ffmri_data,fmri_img.affine,fmri_img.header)
-nibabel.save(ffmri_img,'f'+fmri_file)
+nibabel.save(ffmri_img,ffmri_file)
 
 # Test re-save of re-reshaped original data to verify correct reshaping
 #test_data = numpy.reshape(rfmri_data,dims,order='F')

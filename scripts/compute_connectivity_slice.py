@@ -9,7 +9,7 @@ from nilearn.input_data import NiftiMasker,NiftiLabelsMasker
 from nilearn.masking import intersect_masks,unmask
 from nilearn.regions import img_to_signals_labels
 
-fmri_file = 'ffmri_moco.nii.gz'
+fmri_file = 'fmri_filt.nii.gz'
 gm_file = 'fmri_gmcut.nii.gz'
 vat_file = 'volume_acquisition_time.txt'
 
@@ -68,8 +68,8 @@ for s in range(nslices):
 
 
 # Save complete R,Z image to file
-r_img.to_filename('connectivity_r_slice.nii.gz')
-z_img.to_filename('connectivity_z_slice.nii.gz')
+r_img.to_filename('fmri_R_slice.nii.gz')
+z_img.to_filename('fmri_Z_slice.nii.gz')
 
 
 # FIXME ROI mat needs to be slicewise and needs to have level label from level image

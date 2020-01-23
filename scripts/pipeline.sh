@@ -39,27 +39,20 @@ cleanup_physlog.py
 # Geom transforms
 pipeline_transforms.sh
 
-
 # Regression-based cleanup of confounds
 regress.py
 
 # Compute connectivity images
 compute_connectivity_slice.py
-compute_connectivity_level.py
 
 # Resample connectivity images to mffe and template space
-for IMG in \
-  connectivity_r_slice \
-  connectivity_z_slice \
-  connectivity_r_level \
-  connectivity_z_level \
-  ; do
+for IMG in R_slice Z_slice ; do
 
-     sct_apply_transfo -i ${IMG}.nii.gz \
+     sct_apply_transfo -i fmri_${IMG}.nii.gz \
 	 -w warp_fmri2mffe.nii.gz \
 	 -d imffe_mffe.nii.gz -o imffe_${IMG}.nii.gz
 
-     sct_apply_transfo -i ${IMG}.nii.gz \
+     sct_apply_transfo -i fmri_${IMG}.nii.gz \
 	 -w warp_fmri2mffe.nii.gz warp_mffe2PAM50.nii.gz \
 	 -d PAM50_template_t2s_cropped.nii.gz -o PAM50_${IMG}.nii.gz
 

@@ -5,8 +5,14 @@
 # Inputs
 #   warp_PAM502mffe.nii.gz
 #   warp_mffe2PAM50.nii.gz
+#   warp_fmri2mffe.nii.gz 
 #   mffe_mask${MASKSIZE}.nii.gz
-#   ???
+#   fmri_moco_mean.nii.gz
+#   mffe_mffe.nii.gz
+#   mffe_gm.nii.gz
+#   mffe_wm.nii.gz
+#   imffe_cord_labeled.nii.gz
+#   fmri_cord.nii.gz
 #
 # Outputs
 #   mffe_template_t2s.nii.gz            template t2s in mffe space
@@ -45,16 +51,6 @@ sct_apply_transfo -i mffe_gm.nii.gz -x nn \
 -d PAM50_template_t2s_cropped.nii.gz -o PAM50_gm.nii.gz
 
 
-# Warp ROI labels to template space and mffe space
-sct_apply_transfo -i fmri_gmcutlabel.nii.gz  -x nn \
--w warp_fmri2mffe.nii.gz warp_mffe2PAM50.nii.gz \
--d PAM50_template_t2s_cropped.nii.gz -o PAM50_gmcutlabel.nii.gz
-
-sct_apply_transfo -i fmri_gmcutlabel.nii.gz  -x nn \
--w warp_fmri_2mffe.nii.gz \
--d mffe_mffe.nii.gz -o mffe_gmcutlabel.nii.gz
-
-
 # Warp template CSF to fmri space and mffe space
 sct_apply_transfo -i ${TDIR}/PAM50_csf.nii.gz -x nn \
 -w warp_PAM502mffe.nii.gz warp_mffe2fmri.nii.gz \
@@ -81,6 +77,18 @@ sct_apply_transfo -i imffe_cord_labeled.nii.gz -x nn \
 
 # Make horn- and level-specific gray matter ROI images
 make_gm_rois.py fmri_gm.nii.gz fmri_cord_labeled.nii.gz
+
+
+# Warp ROI labels to template space and mffe space
+sct_apply_transfo -i fmri_gmcutlabel.nii.gz -x nn \
+-w warp_fmri2mffe.nii.gz warp_mffe2PAM50.nii.gz \
+-d PAM50_template_t2s_cropped.nii.gz -o PAM50_gmcutlabel.nii.gz
+
+sct_apply_transfo -i fmri_gmcutlabel.nii.gz  -x nn \
+-w warp_fmri_2mffe.nii.gz \
+-d mffe_mffe.nii.gz -o mffe_gmcutlabel.nii.gz
+
+
 
 
 # Make "not-spine" ROI in fmri space (combine CSF and seg, dilate, invert)

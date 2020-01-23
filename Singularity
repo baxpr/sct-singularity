@@ -44,9 +44,18 @@ From: ubuntu:18.04
   # For X
   apt-get -y install xvfb
   
+  # For AFNI
+  apt-get -y install libxkbcommon-x11-0
+  
+  # ImageMagick
+  apt-get install -y ghostscript imagemagick
+  sed -i 's/rights="none" pattern="PDF"/rights="read | write" pattern="PDF"/' \
+    /etc/ImageMagick-6/policy.xml
+
   # Possible dependencies for wxpython
   # https://github.com/wxWidgets/Phoenix/issues/465#issuecomment-321891912
-  # libwebkitgtk-dev libjpeg-dev libtiff-dev libgtk2.0-dev libsdl1.2-dev freeglut3 freeglut3-dev libnotify-dev libgstreamerd-3-dev
+  # libwebkitgtk-dev libjpeg-dev libtiff-dev libgtk2.0-dev libsdl1.2-dev freeglut3 freeglut3-dev
+  # libnotify-dev libgstreamerd-3-dev
   
   # Get fsleyes via pip. wxpython and pathlib2 are required first
   #   https://github.com/wxWidgets/Phoenix/blob/master/README.rst#prerequisites
@@ -58,15 +67,6 @@ From: ubuntu:18.04
       https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04 wxPython
   ${SCTDIR}/python/envs/venv_sct/bin/pip install pathlib2 fsleyes
 
-  # Get fsleyes via direct download instead (still won't run without wxpython)
-  #cd /opt
-  #wget -q https://users.fmrib.ox.ac.uk/~paulmc/fsleyes/dist/FSLeyes-0.30.1-ubuntu1804.tar.gz
-  #tar -zxf FSLeyes-0.30.1-ubuntu1804.tar.gz
-  #rm FSLeyes-0.30.1-ubuntu1804.tar.gz
-
-  # ImageMagick
-  apt-get install -y imagemagick
-  
 
 %environment
   PATH="/opt/scripts:/opt/scripts/external/afni:/opt/sct/bin:${PATH}"

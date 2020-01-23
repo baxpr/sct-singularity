@@ -3,9 +3,10 @@
 # Various image transforms between spaces
 #
 # Inputs
-warp_PAM502mffe.nii.gz
-warp_mffe2PAM50.nii.gz
-mffe_mask${MASKSIZE}.nii.gz
+#   warp_PAM502mffe.nii.gz
+#   warp_mffe2PAM50.nii.gz
+#   mffe_mask${MASKSIZE}.nii.gz
+#   ???
 #
 # Outputs
 #   mffe_template_t2s.nii.gz            template t2s in mffe space

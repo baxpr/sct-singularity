@@ -17,3 +17,12 @@ pipeline_launch.sh \
 --subject TESTSUBJ \
 --session TESTSESS \
 --scan TESTSCAN
+
+exit 0
+
+
+xvfb-run --server-num=$(($$ + 99)) \
+--server-args='-screen 0 1600x1200x24 -ac +extension GLX' \
+make_pdf.sh
+
+convert_pdf.sh

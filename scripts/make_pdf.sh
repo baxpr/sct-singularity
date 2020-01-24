@@ -116,7 +116,7 @@ for K in $(seq -w 0 $KMAX) ; do
     --voxelLoc $IMID $JMID $K \
   mffe_template_t2s.nii.gz \
     --interpolation linear \
-  mffe_gw.nii.gz \
+  mffe_synt2.nii.gz \
     --lut melodic-classes \
     --overlayType label \
     --outline --outlineWidth 3 \
@@ -138,7 +138,7 @@ for K in $(seq -w 0 $KMAX) ; do
     --voxelLoc $IMID $JMID $K \
   mffe_mffe.nii.gz \
     --interpolation linear \
-  mffe_gw.nii.gz \
+  mffe_synt2.nii.gz \
     --lut melodic-classes \
     --overlayType label \
     --outline --outlineWidth 3 \
@@ -160,7 +160,7 @@ for v in 0 1 2 3; do
       --outfile connectivity_r_roi${v}_slice${K}.png --size 600 600 \
       --voxelLoc $IMID $JMID $K \
     mffe_mffe.nii.gz \
-    fmri_R_slice.nii.gz \
+    mffe_R_slice.nii.gz \
       --volume $v \
       --useNegativeCmap \
       --cmap red-yellow --negativeCmap blue-lightblue \

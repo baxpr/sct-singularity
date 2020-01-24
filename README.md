@@ -18,6 +18,7 @@ Contents are
     _fmri0                First volume of unprocessed fMRI
     _fmri_moco            Motion corrected fMRI
     _fmri_moco_mean       Mean of motion corrected fMRI volumes
+    _filt                 fMRI processed/filtered for connectivity
     
     _mffe                 Unprocessed mFFE
     
@@ -31,9 +32,15 @@ Contents are
     
     _gm                   Segmented gray matter found on the mFFE
     _wm                   Segmented white matter found on the mFFE
-    _csf                  Segmented CSF from the PAM50 template    
+    _csf                  Segmented CSF from the PAM50 template
+    
+    _gmcut                Gray matter cut into four horns
+    _gmcutlabel           Gray matter cut into four horns and marked by level
     
     _synt2                Synthetic T2 built from the gray and white segmentations
+    
+    _R_slice              Connectivity maps for within-slice seeds (R)
+    _Z_slice              Connectivity maps for within-slice seeds (Z)
     
     _template_            Indicates data from template image, not subject image
 

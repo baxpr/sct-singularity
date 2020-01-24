@@ -2,6 +2,8 @@
 
 export PATH=/wkdir/scripts:/wkdir/scripts/external/afni:${PATH}
 
+xvfb-run --server-num=$(($$ + 99)) \
+--server-args='-screen 0 1600x1200x24 -ac +extension GLX' \
 pipeline_launch.sh \
 --outdir ../OUTPUTS \
 --mffe_dir ../INPUTS/mffe_dir \

@@ -14,8 +14,10 @@ sct_maths -i mffe_gm.nii.gz -add mffe_cord.nii.gz -o mffe_synt2.nii.gz
 sct_create_mask -i mffe_mffe.nii.gz -p centerline,mffe_cord.nii.gz -size ${MASKSIZE}mm \
 	-o mffe_mask${MASKSIZE}.nii.gz
 
-# Pad and resample mffe to iso voxel for better label placement
-sct_image -i mffe_mffe.nii.gz -pad 0,0,1 -o pmffe_mffe.nii.gz
+# Pad and resample mffe to iso voxel for better label placement. Padding includes
+# enough room to fully capture the levels at top and bottom that probably extend
+# past the mffe FOV but are captured in the t2sag
+sct_image -i mffe_mffe.nii.gz -pad 0,0,5 -o pmffe_mffe.nii.gz
 voxdim=$(get_ijk.py m mffe_mffe.nii.gz)
 sct_resample -i pmffe_mffe.nii.gz -mm ${voxdim} -x nn -o ipmffe_mffe.nii.gz
 

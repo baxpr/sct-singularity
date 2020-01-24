@@ -1,27 +1,4 @@
 #!/bin/bash
-#
-# Register to template
-#
-# Inputs of mffe for registration
-#   imffe_cord_labeled_body.nii.gz    Body labels (step 0)
-#   mffe_cord.nii.gz                  Cord "seg" (step 1)
-#   mffe_synt2.nii.gz                 Synthetic T2 (step 2)
-#
-# Inputs of t2sag to warp to template space for visualization
-#   t2sag_cord_labeled.nii.gz
-#
-# Outputs in template space
-#   PAM50_template_cord_labeled_body.nii.gz   Template body markers
-#   PAM50_template_synt2.nii.gz               Template synthetic T2
-#   PAM50_synt2.nii.gz                        Subject synthetic T2
-#   PAM50_cord_labeled.nii.gz                 Subject level ROIs
-#
-# Outputs in mffe space
-#   mffe_PAM50_template_synt2.nii.gz   Template synthetic T2
-#
-# Output warps between template and mffe space
-#   warp_mffe2PAM50.nii.gz
-#   warp_PAM502mffe.nii.gz
 
 # Crop template to relevant levels. sct_register_multimodal is not smart enough to 
 # handle non-identical label sets.

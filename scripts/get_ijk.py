@@ -33,4 +33,4 @@ if axis is 'f':
 
 # Minimum voxel dimension
 if axis is 'm':
-    print('%f' % (numpy.min(nibabel.affines.voxel_sizes(nii_img.affine)) / 2) )
+    print('%f' % (numpy.min(nibabel.affines.voxel_sizes(nii_img.affine)) / 1) )

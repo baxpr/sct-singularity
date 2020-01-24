@@ -1,48 +1,5 @@
 #!/bin/bash
 
-# Parse inputs
-while [[ $# -gt 0 ]]
-do
-  key="$1"
-  case $key in
-    --project)
-        PROJECT="$2"
-        shift; shift
-        ;;
-    --subject)
-        SUBJECT="$2"
-        shift; shift
-        ;;
-    --session)
-        SESSION="$2"
-        shift; shift
-        ;;
-    --scan)
-        SCAN="$2"
-        shift; shift
-        ;;
-    --outdir)
-        OUTDIR="$2"
-        shift; shift
-        ;;
-    *)
-        shift
-        ;;
-  esac
-done
-
-echo MP2RAGE_DIR = "${MP2RAGE_DIR}"
-echo PROJECT     = "${PROJECT}"
-echo SUBJECT     = "${SUBJECT}"
-echo SESSION     = "${SESSION}"
-echo SCAN        = "${SCAN}"
-echo OUTDIR      = "${OUTDIR}"
-
-
-PROJECT=TESTPROJ
-SUBJECT=TESTSUBJ
-SESSION=TESTSESS
-SCAN=TESTSCAN
 
 INFO="${PROJECT} ${SUBJECT} ${SESSION} ${SCAN}"
 

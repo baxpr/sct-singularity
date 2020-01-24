@@ -50,7 +50,7 @@ for IMG in R_slice Z_slice ; do
 
      sct_apply_transfo -i fmri_${IMG}.nii.gz \
 	 -w warp_fmri2mffe.nii.gz \
-	 -d imffe_mffe.nii.gz -o imffe_${IMG}.nii.gz
+	 -d mffe_mffe.nii.gz -o mffe_${IMG}.nii.gz
 
      sct_apply_transfo -i fmri_${IMG}.nii.gz \
 	 -w warp_fmri2mffe.nii.gz warp_mffe2PAM50.nii.gz \

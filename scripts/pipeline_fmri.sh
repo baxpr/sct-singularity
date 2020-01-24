@@ -55,10 +55,6 @@ sct_register_multimodal \
 step=2,type=im,algo=rigid,metric=CC,slicewise=1 \
 step=3,type=im,algo=slicereg,metric=CC
 
-#step=2,type=im,algo=rigid,metric=CC
-#step=2,type=im,algo=rigid,metric=CC,slicewise=1
-#step=2,type=im,algo=slicereg,metric=CC
-
 mv warp_fmri_moco_mean2mffe_mffe.nii.gz warp_fmri2mffe.nii.gz
 mv warp_mffe_mffe2fmri_moco_mean.nii.gz warp_mffe2fmri.nii.gz
 mv fmri_moco_mean_reg.nii.gz mffe_moco_mean.nii.gz

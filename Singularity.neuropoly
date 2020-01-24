@@ -27,7 +27,7 @@ From: ubuntu:18.04
   rm -fr pkgtemp
 
   ## SCT installation
-  apt-get install -y curl wget gcc git
+  apt-get install -y curl wget gcc git libglib2.0-0
   REPO=neuropoly
   SCTVER=4.2.1
   SCTDIR=/opt/sct

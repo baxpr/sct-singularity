@@ -5,12 +5,14 @@
 import numpy
 import nibabel
 import nilearn
+import pandas
 from nilearn.input_data import NiftiMasker,NiftiLabelsMasker
 from nilearn.masking import intersect_masks,unmask
 from nilearn.regions import img_to_signals_labels
 
 fmri_file = 'fmri_filt.nii.gz'
 gm_file = 'fmri_gmcut.nii.gz'
+gm_csv = 'fmri_gmcut.csv'
 vat_file = 'volume_acquisition_time.txt'
 
 
@@ -29,6 +31,8 @@ for s in range(nslices):
     slice_data[:,:,s] = 1
     slice_img.append( nibabel.Nifti1Image(slice_data,img.affine,img.header) )
 
+# Get the ROI label info
+roi_info = pandas.read_csv(gm_csv)
 
 # Compute connectivity within each slice, applying bandpass filter
 for s in range(nslices):

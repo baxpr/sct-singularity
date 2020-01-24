@@ -1,26 +1,6 @@
 #!/bin/bash
 #
 # Various image transforms between spaces
-#
-# Inputs
-#   warp_PAM502mffe.nii.gz
-#   warp_mffe2PAM50.nii.gz
-#   warp_fmri2mffe.nii.gz 
-#   mffe_mask${MASKSIZE}.nii.gz
-#   fmri_moco_mean.nii.gz
-#   mffe_mffe.nii.gz
-#   mffe_gm.nii.gz
-#   mffe_wm.nii.gz
-#   imffe_cord_labeled.nii.gz
-#   fmri_cord.nii.gz
-#
-# Outputs
-#   mffe_template_t2s.nii.gz            template t2s in mffe space
-#   PAM50_template_t2s_cropped.nii.gz   template t2s in PAM50 space, cropped to subject FOV
-#   PAM50_mask${MASKSIZE}.nii.gz        mffe mask in template space
-#   PAM50_moco_mean.nii.gz              fmri moco data in PAM50 space
-#   PAM50_mffe.nii.gz                   mffe in PAM50 space
-#   PAM50_gm.nii.gz                     subject gray matter mask in PAM50 space
 
 
 # Warp template t2s to mffe space

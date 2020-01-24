@@ -1,22 +1,4 @@
 #!/bin/bash
-#
-# Inputs
-#   mffe_mffe.nii.gz     MFFE first echo
-#
-# Outputs in original mffe space
-#   mffe_cord.nii.gz     Spinal cord mask ("seg")
-#   mffe_gm.nii.gz       Gray matter mask
-#   mffe_wm.nii.gz       White matter mask
-#   mffe_synt2.nii.gz    Synthetic T2 (white=1, gray=2)
-#   mffe_mask??.nii.gz   Generous mask for registration
-#
-# Outputs in imffe space (resampled to approx. isotropic voxel assuming axial)
-#   imffe_mffe.nii.gz
-#   imffe_cord.nii.gz
-#   imffe_synt2.nii.gz
-
-# Outputs in padded (pimffe) space for correct handling of body markers
-#   pimffe_mffe.nii.gz
 
 # Segment GM and WM on mffe
 sct_deepseg_sc -i mffe_mffe.nii.gz -c t2

@@ -1,29 +1,4 @@
 #!/bin/bash
-#
-# fMRI processing
-#
-# Inputs
-#   fmri_fmri.nii.gz     fmri 4D images
-#   mffe_mffe.nii.gz     mffe for registration
-#   mffe_cord.nii.gz     mffe cord for registration
-#   mffe_mask??.nii.gz   mffe space mask for registration
-#
-# Outputs
-#   fmri_fmri0.nii.gz           first vol of fmri
-#   fmri_centerline.nii.gz      fmri centerline
-#   fmri_centerline.csv         
-#   fmri_mask??.nii.gz          fmri space registration mask for moco
-#   fmri_moco.nii.gz            motion-corrected fmri
-#   fmri_moco_mean.nii.gz       mean of moco fmri over time
-#   fmri_moco_params_X.nii.gz   movement params
-#   fmri_moco_params_Y.nii.gz   
-#   fmri_moco_params.tsv        movement params averaged over vol
-#   fmri_cord.nii.gz            cord "seg" computed on mean fmri
-#   warp_fmri2mffe.nii.gz       warps between fmri and mffe space
-#   warp_mffe2fmri.nii.gz
-#   mffe_moco_mean.nii.gz       mean moco fmri warped to mffe space
-#   fmri_mffe.nii.gz            mffe warped to fmri space
-
 
 # Extract first fmri volume, find centerline, make fmri space mask
 sct_image -keep-vol 0 -i fmri_fmri.nii.gz -o fmri_fmri0.nii.gz

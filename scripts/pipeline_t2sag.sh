@@ -1,31 +1,4 @@
 #!/bin/bash
-#
-# T2SAG processing for vertebral labels, body markers
-#
-# Inputs
-#   t2sag_t2sag.nii.gz                T2SAG image
-#
-# Outputs in t2sag space
-#   t2sag_cord.nii.gz                 Cord "seg" from t2sag
-#   t2sag_invt2sag.nii.gz             t2sag with inverted contrast, pseudo-T1
-#   t2sag_cord_labeled.nii.gz         level label ROIs
-#   t2sag_cord_labeled_discs.nii.gz   disc marker points
-#   t2sag_mffe.nii.gz                 MFFE resampled to t2sag space
-#
-# Output warps
-#   warp_t2sag2mffe.nii.gz            Warps between t2sag/mffe spaces
-#   warp_mffe2t2sag.nii.gz
-#
-# Outputs in mffe space
-#   mffe_t2sag.nii.gz                 MFFE resampled to t2sag space
-#
-# Outputs in padded iso mffe space
-#   pimffe_cord_labeled.nii.gz        t2sag cord
-#   pimffe_cord_labeled_body.nii.gz   t2sag body markers
-#
-# Outputs in iso mffe space
-#   imffe_cord_labeled.nii.gz         t2sag cord
-#   imffe_cord_labeled_body.nii.gz    t2sag body markers
 
 # Get cord seg for the T2 sag
 sct_deepseg_sc -i t2sag_t2sag.nii.gz -c t2

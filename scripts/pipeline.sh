@@ -30,14 +30,14 @@ pipeline_templatereg.sh
 # fMRI processing
 pipeline_fmri.sh
 
+# Geom transforms
+pipeline_transforms.sh
+
 # Generate RETROICOR regressors
 parse_physlog.py SCANPHYSLOG*.log 496 fmri.dcm
 RetroTS.py -r physlog_respiratory.csv -c physlog_cardiac.csv -p 496 -n 1 \
     -v `cat volume_acquisition_time.txt` -cardiac_out 0 -prefix ricor
 cleanup_physlog.py
-
-# Geom transforms
-pipeline_transforms.sh
 
 # Regression-based cleanup of confounds
 regress.py
@@ -45,26 +45,12 @@ regress.py
 # Compute connectivity images
 compute_connectivity_slice.py
 
-# Resample connectivity images to mffe and template space
-for IMG in R_slice Z_slice ; do
+# Resample connectivity images
+resample_conn.sh
 
-     sct_apply_transfo -i fmri_${IMG}.nii.gz \
-	 -w warp_fmri2mffe.nii.gz \
-	 -d mffe_mffe.nii.gz -o mffe_${IMG}.nii.gz
-
-     sct_apply_transfo -i fmri_${IMG}.nii.gz \
-	 -w warp_fmri2mffe.nii.gz warp_mffe2PAM50.nii.gz \
-	 -d PAM50_template_t2s_cropped.nii.gz -o PAM50_${IMG}.nii.gz
-
- done
-
-
- # Output QA PDF
- xvfb-run --server-num=$(($$ + 99)) \
- --server-args='-screen 0 1600x1200x24 -ac +extension GLX' \
- make_pdf.sh
-
- convert_pdf.sh
+# Output QA PDF
+make_pdf.sh
+convert_pdf.sh
  
 
 

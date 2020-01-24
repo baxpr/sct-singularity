@@ -64,6 +64,17 @@ for s in range(nslices):
 
 horn = nibabel.Nifti1Image(horn_data,gm.affine,gm.header)
 nibabel.save(horn,'fmri_gmcut.nii.gz')
+# FIXME make fmri_gmcut.csv with label info like
+# horn,label
+# Lventral,1
+# Rventral,2
+# ...
+#
+# Then do same for below fmri_gmcutlabel like 
+# horn,level,label
+# Lventral,3,301
+# Rventral,3,302
+
 
 # Mask labels by gray matter and write to file
 label_data = label.get_data()

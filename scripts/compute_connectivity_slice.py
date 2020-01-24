@@ -33,12 +33,15 @@ for s in range(nslices):
 
 # Get the ROI label info
 roi_info = pandas.read_csv(gm_csv)
+print(roi_info)
 
 # Compute connectivity within each slice, applying bandpass filter
 for s in range(nslices):
 
     # ROI signals
     roi_data,roi_labels = img_to_signals_labels(fmri_file,gm_file,slice_img[s])
+    print(roi_labels)
+    roi_horns = roi_info["horn"][roi_info["label"]==roi_labels]
     roi_data = nilearn.signal.clean(roi_data,standardize=True,detrend=True,
                                     high_pass=0.01,low_pass=0.10,t_r=t_r)
     print('ROI data size %d,%d' % roi_data.shape)

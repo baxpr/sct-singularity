@@ -71,12 +71,15 @@ for s in range(nslices):
     level = numpy.median(level_data)
 
     # Build data frame of slicewise results
-    rownames = ["metric","slice","level"] + roi_labelvec
+    colnames = ["metric","slice","level"] + roi_labelvec
     rowdataR = ["R","%d" % s,"%d" % level] + ["%0.3f" % x for x in r_roi_vec]
     rowdataZ = ["Z","%d" % s,"%d" % level] + ["%0.3f" % x for x in z_roi_vec]
-    print(rownames)
-    print(rowdataR)
-    print(rowdataZ)
+    thisout = pandas.DataFrame([rowdataR,rowdataZ],columns=colnames)
+    print(thisout)
+    if s==0:
+        roi_out = thisout
+    else:
+        roi_out = roi_out.append(thisout)
     
     # Connectivity map computation
     # Relies on standardization to mean 0, sd 1 above
@@ -99,6 +102,8 @@ for s in range(nslices):
 # Save complete R,Z image to file
 r_img.to_filename('fmri_R_slice.nii.gz')
 z_img.to_filename('fmri_Z_slice.nii.gz')
+
+print(roi_out)
 
 
 # FIXME ROI mat needs to be slicewise and needs to have level label from level image

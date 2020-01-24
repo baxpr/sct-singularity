@@ -18,7 +18,7 @@ Contents are
     _fmri0                First volume of unprocessed fMRI
     _fmri_moco            Motion corrected fMRI
     _fmri_moco_mean       Mean of motion corrected fMRI volumes
-    _filt                 fMRI processed/filtered for connectivity
+    _filt                 fMRI with confounds projected out (bandpass not applied)
     
     _mffe                 Unprocessed mFFE
     

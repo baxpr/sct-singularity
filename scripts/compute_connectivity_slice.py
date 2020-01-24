@@ -11,6 +11,7 @@ from nilearn.masking import intersect_masks,unmask
 from nilearn.regions import img_to_signals_labels
 
 fmri_file = 'fmri_filt.nii.gz'
+level_file = 'fmri_cord_labeled.nii.gz'
 gm_file = 'fmri_gmcut.nii.gz'
 gm_csv = 'fmri_gmcut.csv'
 vat_file = 'volume_acquisition_time.txt'
@@ -33,14 +34,14 @@ for s in range(nslices):
 
 # Get the ROI label info
 roi_info = pandas.read_csv(gm_csv)
-print(roi_info)
 
 # Compute connectivity within each slice, applying bandpass filter
 for s in range(nslices):
 
+    print(slice_img[s].shape)
+    
     # ROI signals
     roi_data,roi_labels = img_to_signals_labels(fmri_file,gm_file,slice_img[s])
-    print(roi_labels)
     roi_horns = roi_info["horn"][roi_info["label"]==roi_labels]
     roi_data = nilearn.signal.clean(roi_data,standardize=True,detrend=True,
                                     high_pass=0.01,low_pass=0.10,t_r=t_r)
@@ -56,6 +57,15 @@ for s in range(nslices):
     r_roi_mat = numpy.dot(roi_data.T, roi_data) / roi_data.shape[0]
     z_roi_mat = numpy.arctanh(r_roi_mat) * numpy.sqrt(roi_data.shape[0]-3)
 
+    # Flatten the conn matrices to the unique values
+    k1,k2 = numpy.triu_indices(roi_data.shape[1],k=1)
+    r_roi_vec = r_roi_mat[k1,k2]
+    z_roi_vec = z_roi_mat[k1,k2]
+    roi_labelvec = ["{}_{}".format(a,b) for a,b in zip(roi_horns[k1],roi_horns[k2])]
+    
+    rowdata = ["R",str(s)] + roi_labelvec
+    print(rowdata)
+    
     # Connectivity map computation
     # Relies on standardization to mean 0, sd 1 above
     r_slice_data = numpy.dot(slice_data.T, roi_data) / roi_data.shape[0]

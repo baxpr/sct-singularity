@@ -27,18 +27,15 @@ From: ubuntu:18.04
   rm -fr pkgtemp
 
   ## SCT installation
-  apt-get install -y curl wget gcc git
-  REPO=baxpr
-  SCTVER=condafix-2c66d15
-  #SCTVER=condafix-91beb0b-shutil
-  #SCTVER=baxpr/condafix-4.0.2
-  #SCTVER=baxpr/condafix-2472-shutils-move
+  apt-get install -y curl wget gcc git libglib2.0-0
+  REPO=neuropoly
+  SCTVER=4.2.1
   SCTDIR=/opt/sct
   git clone --branch ${SCTVER} --depth 1 https://github.com/${REPO}/spinalcordtoolbox.git ${SCTDIR}
   cd ${SCTDIR}
   ASK_REPORT_QUESTION=false change_default_path=Yes add_to_path=No ./install_sct
 
-  ## Add DICOM and NII to the SCT python
+  ## Add DICOM, NII, time to the SCT python
   ${SCTDIR}/python/envs/venv_sct/bin/pip install pydicom nilearn nitime
   
   # For X

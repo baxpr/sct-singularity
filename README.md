@@ -45,6 +45,14 @@ Contents are
 
 Other outputs:
 
-    mffe_csa.csv          Cross-sectional areas
-    R_slice.csv           ROI-to-ROI connectivity (R)
-    Z_slice.csv           ROI-to-ROI connectivity (Z)
+    mffe_csa.csv              Cross-sectional areas
+    R_slice.csv               ROI-to-ROI connectivity (R)
+    Z_slice.csv               ROI-to-ROI connectivity (Z)
+    
+    fmri_gmcut.csv            Label info for ROI images of same base filename
+    fmri_gmcutlabel.csv
+    
+    physlog_cardiac.csv       Cardiac signal from physlog
+    physlog_respiratory.csv   Respiratory signal from physlog
+    ricor.csv                 Computed respiratory regressors
+

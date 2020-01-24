@@ -37,8 +37,6 @@ roi_info = pandas.read_csv(gm_csv)
 
 # Compute connectivity within each slice, applying bandpass filter
 for s in range(nslices):
-
-    print(slice_img[s].shape)
     
     # ROI signals
     roi_data,roi_labels = img_to_signals_labels(fmri_file,gm_file,slice_img[s])
@@ -55,16 +53,30 @@ for s in range(nslices):
 
     # Connectivity matrix computation
     r_roi_mat = numpy.dot(roi_data.T, roi_data) / roi_data.shape[0]
-    z_roi_mat = numpy.arctanh(r_roi_mat) * numpy.sqrt(roi_data.shape[0]-3)
+    #z_roi_mat = numpy.arctanh(r_roi_mat) * numpy.sqrt(roi_data.shape[0]-3)
 
     # Flatten the conn matrices to the unique values
     k1,k2 = numpy.triu_indices(roi_data.shape[1],k=1)
     r_roi_vec = r_roi_mat[k1,k2]
-    z_roi_vec = z_roi_mat[k1,k2]
+    z_roi_vec = numpy.arctanh(r_roi_vec) * numpy.sqrt(roi_data.shape[0]-3)
     roi_labelvec = ["{}_{}".format(a,b) for a,b in zip(roi_horns[k1],roi_horns[k2])]
     
-    rowdata = ["R",str(s)] + roi_labelvec
-    print(rowdata)
+    # Get level labels. Hack - list the same image twice because img_to_signals_labels
+    # requires 4D input for some reason. Trim the duplicate off afterwards
+    level_data,level_labels = img_to_signals_labels([level_file,level_file],gm_file,
+        slice_img[s],strategy="median")
+    level_data = level_data[0,:]
+    if not level_labels==roi_labels:
+        raise Exception("Label mismatch")
+    level = numpy.median(level_data)
+
+    # Build data frame of slicewise results
+    rownames = ["metric","slice","level"] + roi_labelvec
+    rowdataR = ["R","%d" % s,"%d" % level] + ["%0.3f" % x for x in r_roi_vec]
+    rowdataZ = ["Z","%d" % s,"%d" % level] + ["%0.3f" % x for x in z_roi_vec]
+    print(rownames)
+    print(rowdataR)
+    print(rowdataZ)
     
     # Connectivity map computation
     # Relies on standardization to mean 0, sd 1 above

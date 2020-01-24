@@ -24,6 +24,9 @@ pipeline_mffe.sh
 # T2SAG processing for vertebral labels, markers. Includes registration to mffe
 pipeline_t2sag.sh
 
+# Cord cross-sectional area
+csa_calc.sh
+
 # Registration to template
 pipeline_templatereg.sh
 

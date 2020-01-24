@@ -2,7 +2,7 @@
 
 export PATH=/wkdir/scripts:/wkdir/scripts/external/afni:${PATH}
 
-fmri_pipeline_launch.sh \
+pipeline_launch.sh \
 --outdir ../OUTPUTS \
 --mffe_dir ../INPUTS/mffe_dir \
 --t2sag_niigz ../INPUTS/t2sag.nii.gz \

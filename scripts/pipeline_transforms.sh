@@ -62,15 +62,15 @@ sct_apply_transfo -i ${TDIR}/PAM50_csf.nii.gz -x nn \
 
 
 # Get mffe GM/WM/label/centerline in fmri space
-sct_apply_transfo -i imffe_gm.nii.gz -x nn \
+sct_apply_transfo -i ipmffe_gm.nii.gz -x nn \
 -w warp_mffe2fmri.nii.gz \
 -d fmri_moco_mean.nii.gz -o fmri_gm.nii.gz
 
-sct_apply_transfo -i imffe_wm.nii.gz -x nn \
+sct_apply_transfo -i ipmffe_wm.nii.gz -x nn \
 -w warp_mffe2fmri.nii.gz \
 -d fmri_moco_mean.nii.gz -o fmri_wm.nii.gz
 
-sct_apply_transfo -i imffe_cord_labeled.nii.gz -x nn \
+sct_apply_transfo -i ipmffe_cord_labeled.nii.gz -x nn \
 -w warp_mffe2fmri.nii.gz \
 -d fmri_moco_mean.nii.gz -o fmri_cord_labeled.nii.gz
 
@@ -90,7 +90,7 @@ sct_apply_transfo -i fmri_gmcutlabel.nii.gz  -x nn \
 
 sct_apply_transfo -i fmri_gmcutlabel.nii.gz  -x nn \
 -w warp_fmri2mffe.nii.gz \
--d imffe_mffe.nii.gz -o imffe_gmcutlabel.nii.gz
+-d ipmffe_mffe.nii.gz -o ipmffe_gmcutlabel.nii.gz
 
 
 

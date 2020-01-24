@@ -47,17 +47,12 @@ sct_register_multimodal -i t2sag_t2sag.nii.gz -iseg t2sag_cord.nii.gz \
 mv warp_mffe_mffe2t2sag_t2sag.nii.gz warp_mffe2t2sag.nii.gz
 mv mffe_t2sag_inv.nii.gz t2sag_mffe.nii.gz
 
-# Resample level ROIs to pimffe space
-sct_apply_transfo -i t2sag_cord_labeled.nii.gz -d pimffe_mffe.nii.gz \
+# Resample level ROIs to ipmffe space
+sct_apply_transfo -i t2sag_cord_labeled.nii.gz -d ipmffe_mffe.nii.gz \
   -w warp_t2sag2mffe.nii.gz -x nn \
-  -o pimffe_cord_labeled.nii.gz
+  -o ipmffe_cord_labeled.nii.gz
 
-# Create body markers in pimffe space
-sct_label_utils -i pimffe_cord_labeled.nii.gz -vert-body 0 \
-  -o pimffe_cord_labeled_body.nii.gz
+# Create body markers in ipmffe space
+sct_label_utils -i ipmffe_cord_labeled.nii.gz -vert-body 0 \
+  -o ipmffe_cord_labeled_body.nii.gz
 
-# Crop body markers and level image back to imffe space
-sct_crop_image -i pimffe_cord_labeled_body.nii.gz \
-  -ref imffe_mffe.nii.gz -o imffe_cord_labeled_body.nii.gz
-sct_crop_image -i pimffe_cord_labeled.nii.gz \
-  -ref imffe_mffe.nii.gz -o imffe_cord_labeled.nii.gz

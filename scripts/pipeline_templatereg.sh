@@ -26,16 +26,16 @@
 # Crop template to relevant levels. sct_register_multimodal is not smart enough to 
 # handle non-identical label sets.
 sct_label_utils -i ${TDIR}/PAM50_label_body.nii.gz \
-  -remove-reference imffe_cord_labeled_body.nii.gz \
+  -remove-reference ipmffe_cord_labeled_body.nii.gz \
   -o PAM50_template_cord_labeled_body.nii.gz
 
 # Create synthetic T2 from template
 sct_maths -i ${TDIR}/PAM50_gm.nii.gz -add ${TDIR}/PAM50_cord.nii.gz -o PAM50_template_synt2.nii.gz
 
-# Register imffe to template via GM/WM seg
+# Register mffe to template via GM/WM seg
 sct_register_multimodal \
 -i mffe_synt2.nii.gz -iseg mffe_cord.nii.gz \
--ilabel imffe_cord_labeled_body.nii.gz \
+-ilabel ipmffe_cord_labeled_body.nii.gz \
 -d PAM50_template_synt2.nii.gz -dseg ${TDIR}/PAM50_cord.nii.gz \
 -dlabel PAM50_template_cord_labeled_body.nii.gz \
 -o PAM50_synt2.nii.gz \

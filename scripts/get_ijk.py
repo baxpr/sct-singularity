@@ -29,3 +29,8 @@ if axis is 's':
 # Resampling factor (z slice thickness / x voxel size)
 if axis is 'f':
     print('%d' % numpy.floor(numpy.floor(nii_img.header.get_zooms()[2] / nii_img.header.get_zooms()[0])) )
+
+
+# Minimum voxel dimension
+if axis is 'm':
+    print('%f' % (numpy.min(nibabel.affines.voxel_sizes(nii_img.affine)) / 2) )

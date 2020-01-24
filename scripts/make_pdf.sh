@@ -32,40 +32,6 @@ KSQRT_F=$(get_ijk.py s fmri_moco_mean.nii.gz)
 # Plot fmri mean movement from tsv with fixed axis limits
 
 
-# Plot cor sections with ROIs for fmri, mffe, template alignment
-# These are hard to see. Rather use slices
-#${FSLEYES} render \
-#  --scene ortho \
-#  --hideCursor --hidex --hidez \
-#  --outfile ROIs_cor_template.png --size 600 600 \
-#  PAM50_t2s_cropped.nii.gz \
-#    --interpolation linear \
-#  fmri_moco_GMcutlabel_PAM50space.nii.gz \
-#    --lut random_big \
-#    --overlayType label
-#
-#${FSLEYES} render \
-#  --scene ortho \
-#  --hideCursor --hidex --hidez \
-#  --outfile ROIs_cor_mffe.png --size 600 600 \
-#  mffe1_PAM50space.nii.gz \
-#    --interpolation linear \
-#  fmri_moco_GMcutlabel_PAM50space.nii.gz \
-#    --lut random_big \
-#    --overlayType label
-#		
-#${FSLEYES} render \
-#  --scene ortho \
-#  --hideCursor --hidex --hidez \
-#  --outfile ROIs_cor_fmri.png --size 600 600 \
-#  fmri_moco_mean_PAM50space.nii.gz \
-#    --interpolation linear \
-#  fmri_moco_GMcutlabel_PAM50space.nii.gz \
-#    --lut random_big \
-#    --overlayType label
-
-
-
 # Check segmentation: Subject segmentation overlaid on subject MFFE
 # ROIs on each mffe slice
 for K in $(seq -w 0 $KMAX) ; do

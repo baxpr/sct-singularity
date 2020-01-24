@@ -43,13 +43,13 @@ for s in range(nslices):
     roi_horns = roi_info["horn"][roi_info["label"]==roi_labels]
     roi_data = nilearn.signal.clean(roi_data,standardize=True,detrend=True,
                                     high_pass=0.01,low_pass=0.10,t_r=t_r)
-    print('ROI data size %d,%d' % roi_data.shape)
+    #print('ROI data size %d,%d' % roi_data.shape)
 
     # Get filtered fmri data for this slice
     slice_masker = NiftiMasker(slice_img[s],standardize=True,detrend=True,
                     high_pass=0.01,low_pass=0.10,t_r=t_r)
     slice_data = slice_masker.fit_transform(fmri_file)
-    print('Slice data size %d,%d' % slice_data.shape)
+    #print('Slice data size %d,%d' % slice_data.shape)
 
     # Connectivity matrix computation
     r_roi_mat = numpy.dot(roi_data.T, roi_data) / roi_data.shape[0]
@@ -74,12 +74,15 @@ for s in range(nslices):
     colnames = ["metric","slice","level"] + roi_labelvec
     rowdataR = ["R","%d" % s,"%d" % level] + ["%0.3f" % x for x in r_roi_vec]
     rowdataZ = ["Z","%d" % s,"%d" % level] + ["%0.3f" % x for x in z_roi_vec]
-    thisout = pandas.DataFrame([rowdataR,rowdataZ],columns=colnames)
-    print(thisout)
+    thisR = pandas.DataFrame([rowdataR],columns=colnames)
+    thisZ = pandas.DataFrame([rowdataZ],columns=colnames)
+    print(thisR)
     if s==0:
-        roi_out = thisout
+        roiR = thisR
+        roiZ = thisZ
     else:
-        roi_out = roi_out.append(thisout)
+        roiR = roiR.append(thisR)
+        roiZ = roiZ.append(thisZ)
     
     # Connectivity map computation
     # Relies on standardization to mean 0, sd 1 above
@@ -103,8 +106,8 @@ for s in range(nslices):
 r_img.to_filename('fmri_R_slice.nii.gz')
 z_img.to_filename('fmri_Z_slice.nii.gz')
 
-print(roi_out)
-
+roiR.to_csv('R_slice.csv')
+roiZ.to_csv('Z_slice.csv')
 
 # FIXME ROI mat needs to be slicewise and needs to have level label from level image
 #numpy.savetxt('connectivity_r_matrix.csv',r_roi_mat,delimiter=',')

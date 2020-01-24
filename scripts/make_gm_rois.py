@@ -62,19 +62,21 @@ for s in range(nslices):
     # Label the four horns
     horn_data[:,:,s] = numpy.multiply(slicedata,quadrants)
 
+# Save labeled horns to file with CSV index
+leveldict = {
+    1: "Lventral",
+    2: "Rventral",
+    3: "Ldorsal",
+    4: "Rdorsal"
+}
 horn = nibabel.Nifti1Image(horn_data,gm.affine,gm.header)
 nibabel.save(horn,'fmri_gmcut.nii.gz')
-# FIXME make fmri_gmcut.csv with label info like
-# horn,label
-# Lventral,1
-# Rventral,2
-# ...
-#
-# Then do same for below fmri_gmcutlabel like 
-# horn,level,label
-# Lventral,3,301
-# Rventral,3,302
-
+with open('fmri_gmcut.csv','w') as f:
+    f.write("horn,label\n")
+    f.write(leveldict.get(1) + ",1\n")
+    f.write(leveldict.get(2) + ",2\n")
+    f.write(leveldict.get(3) + ",3\n")
+    f.write(leveldict.get(4) + ",4\n")
 
 # Mask labels by gray matter and write to file
 label_data = label.get_data()
@@ -93,3 +95,15 @@ hornlevel_data = 100*label_data + horn_data
 hornlevel = nibabel.Nifti1Image(hornlevel_data,gm.affine,gm.header)
 nibabel.save(hornlevel,'fmri_gmcutlabel.nii.gz')
 
+hvals=numpy.round(numpy.unique(hornlevel_data))
+hvals = hvals[hvals!=0]
+with open('fmri_gmcutlabel.csv','w') as f:
+    f.write("horn_level,horn,level,label\n")
+    for hval in hvals:
+        thishorn = str(int(hval))[-1]
+        thislevel = str(int(hval))[0:-2]
+        thishornlevel = "%s_%s" % (leveldict.get(int(thishorn)),thislevel)
+        f.write("%s,%s,%s,%d\n" % (thishornlevel,leveldict.get(int(thishorn)),thislevel,hval))
+
+    
+    

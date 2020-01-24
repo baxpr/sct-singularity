@@ -42,5 +42,7 @@ Contents are
     _R_slice              Connectivity maps for within-slice seeds (R)
     _Z_slice              Connectivity maps for within-slice seeds (Z)
     
+    _csa                  Cross-sectional area (.csv)
+    
     _template_            Indicates data from template image, not subject image
 

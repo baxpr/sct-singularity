@@ -52,7 +52,8 @@ sct_register_multimodal \
 -d mffe_mffe.nii.gz -dseg mffe_cord.nii.gz \
 -m mffe_mask${MASKSIZE}.nii.gz \
 -param step=1,type=seg,algo=slicereg,metric=MeanSquares,smooth=2:\
-step=2,type=im,algo=slicereg,metric=CC
+step=2,type=im,algo=rigid,metric=CC,slicewise=1 \
+step=3,type=im,algo=slicereg,metric=CC
 
 #step=2,type=im,algo=rigid,metric=CC
 #step=2,type=im,algo=rigid,metric=CC,slicewise=1

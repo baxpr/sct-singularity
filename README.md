@@ -26,6 +26,7 @@ Contents are
     _cord                 Segmented spinal cord ("seg")
     _cord_labeled         Vertebral label ROIs found on the t2sag
     _cord_labeled_discs   Disc point labels found on the t2sag
+    _cord_labeled_body    Body center points from _cord_labeled
     _centerline           Cord centerline
     
     _gm                   Segmented gray matter found on the mffe_mffe

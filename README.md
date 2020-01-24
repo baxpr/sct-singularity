@@ -11,7 +11,6 @@ Geometries are
                   resample the vertebral locations between geometries.
     warp_     Warp field between two geometries
 
-
 Contents are
 
     _fmri                 Unprocessed fMRI
@@ -42,7 +41,10 @@ Contents are
     _R_slice              Connectivity maps for within-slice seeds (R)
     _Z_slice              Connectivity maps for within-slice seeds (Z)
     
-    _csa                  Cross-sectional area (.csv)
-    
     _template_            Indicates data from template image, not subject image
 
+Other outputs:
+
+    mffe_csa.csv          Cross-sectional areas
+    R_slice.csv           ROI-to-ROI connectivity (R)
+    Z_slice.csv           ROI-to-ROI connectivity (Z)

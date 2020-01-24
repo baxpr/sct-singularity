@@ -88,8 +88,8 @@ for s in range(nslices):
     # Relies on standardization to mean 0, sd 1 above
     r_slice_data = numpy.dot(slice_data.T, roi_data) / roi_data.shape[0]
     z_slice_data = numpy.arctanh(r_slice_data) * numpy.sqrt(roi_data.shape[0]-3)
-    print( 'R %d,%d ranges %f,%f' % (r_slice_data.shape[0],r_slice_data.shape[1],
-                                     r_slice_data.min(),r_slice_data.max()) )
+    #print( 'R %d,%d ranges %f,%f' % (r_slice_data.shape[0],r_slice_data.shape[1],
+    #                                 r_slice_data.min(),r_slice_data.max()) )
     r_slice_img = slice_masker.inverse_transform(r_slice_data.T)
     z_slice_img = slice_masker.inverse_transform(z_slice_data.T)
 
@@ -106,9 +106,5 @@ for s in range(nslices):
 r_img.to_filename('fmri_R_slice.nii.gz')
 z_img.to_filename('fmri_Z_slice.nii.gz')
 
-roiR.to_csv('R_slice.csv')
-roiZ.to_csv('Z_slice.csv')
-
-# FIXME ROI mat needs to be slicewise and needs to have level label from level image
-#numpy.savetxt('connectivity_r_matrix.csv',r_roi_mat,delimiter=',')
-#numpy.savetxt('connectivity_z_matrix.csv',z_roi_mat,delimiter=',')
+roiR.to_csv('R_slice.csv',index=False)
+roiZ.to_csv('Z_slice.csv',index=False)

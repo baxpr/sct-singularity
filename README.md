@@ -29,10 +29,10 @@ Contents are
     _cord_labeled_body    Body center points from _cord_labeled
     _centerline           Cord centerline
     
-    _gm                   Segmented gray matter found on the mffe_mffe
-    _wm                   Segmented white matter found on the mffe_mffe
-    _csf                  Segmented CSF warped from the PAM50 template    
-     
+    _gm                   Segmented gray matter found on the mFFE
+    _wm                   Segmented white matter found on the mFFE
+    _csf                  Segmented CSF from the PAM50 template    
+    
     _synt2                Synthetic T2 built from the gray and white segmentations
     
     _template_            Indicates data from template image, not subject image

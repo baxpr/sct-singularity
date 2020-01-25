@@ -1,9 +1,17 @@
 Bootstrap: docker
 From: ubuntu:18.04
 
+%help
 
+  Full installation of Spinal Cord Toolbox in /opt/sct. For more information:
+    /opt/README.md
+    singularity apps <container>
+    singularity help --app fmri_pipeline <container>
+
+  
 %files
   fmri_pipeline /opt
+  README.md /opt
 
 
 %post
@@ -73,7 +81,10 @@ From: ubuntu:18.04
   sct_check_dependencies "$@"
 
 
-  
+
+%apphelp fmri_pipeline
+  Functional MRI analysis pipeline in /opt/fmri_pipeline.
+
 %appenv fmri_pipeline
   PATH="/opt/fmri_pipeline:/opt/fmri_pipeline/external/afni:${PATH}"
 

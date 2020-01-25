@@ -1,15 +1,9 @@
 INPUTS*
 OUTPUTS*
-LUMBAR
 *~
 local*
 *.simg
 *.gz
 .DS_Store
 error.log
-sandbox
-spinalcordtoolbox
-reg_issue
-neuropoly-spinalcordtoolbox
-physlog_test
 __pycache__

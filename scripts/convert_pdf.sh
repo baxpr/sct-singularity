@@ -18,7 +18,7 @@ montage -mode concatenate \
 
 convert \
 -size 1224x1584 xc:white \
--gravity center \( page_levels.png -resize 1194x1454 \) -geometry +0+0 -composite \
+-gravity center \( page_levels.png -resize 1194x1354 \) -geometry +0+0 -composite \
 -gravity SouthEast -pointsize 24 -annotate +15+10 "$(date)" \
 -gravity NorthWest -pointsize 24 -annotate +15+20 "Level-finding and fMRI movement\n${INFO}" \
 page_levels.png

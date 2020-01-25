@@ -36,7 +36,7 @@ convert \
 -size 1224x1584 xc:white \
 -gravity center \( page_cor.png -resize 1194x1354 \) -geometry +0+60 -composite \
 -gravity SouthEast -pointsize 24 -annotate +15+10 "$(date)" \
--gravity NorthWest -pointsize 24 -annotate +15+20 "Coronal view\n${INFO}" \
+-gravity NorthWest -pointsize 24 -annotate +15+20 "Coronal view in template space\n${INFO}" \
 page_cor.png
 
 
@@ -122,8 +122,8 @@ done
 
 # Stitch together
 convert \
-  page_cor.png \
   page_levels.png \
+  page_cor.png \
   page_seg.png \
   page_fmri.png \
   page_template.png \

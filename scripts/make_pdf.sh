@@ -78,7 +78,8 @@ for K in $(seq -w 0 $KMAX) ; do
     --interpolation linear \
   ipmffe_gmcutlabel.nii.gz \
     --lut random_big \
-    --overlayType label
+    --overlayType label \
+    --outline --outlineWidth 4
 done
 
 

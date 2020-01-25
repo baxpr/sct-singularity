@@ -1,17 +1,16 @@
 #!/bin/bash
 
-export PATH=/wkdir/scripts:/wkdir/scripts/external/afni:${PATH}
+export PATH=/wkdir/fmri_pipeline:/wkdir/fmri_pipeline/external/afni:${PATH}
 
 xvfb-run --server-num=$(($$ + 99)) \
 --server-args='-screen 0 1600x1200x24 -ac +extension GLX' \
-pipeline_launch.sh \
+fmri_pipeline_launch.sh \
 --outdir ../OUTPUTS \
 --mffe_dir ../INPUTS/mffe_dir \
 --t2sag_niigz ../INPUTS/t2sag.nii.gz \
 --fmri_niigz ../INPUTS/fmri.nii.gz \
 --fmri_dcm ../INPUTS/fmri.dcm \
---physlog_dcm ../INPUTS/physlog.dcm \
---initcenter 3 \
+--physlog ../INPUTS/SCANPHYSLOG.log \
 --masksize 30 \
 --project TESTPROJ \
 --subject TESTSUBJ \

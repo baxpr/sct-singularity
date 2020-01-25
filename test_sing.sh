@@ -3,7 +3,7 @@
 singularity run \
 --app fmri_pipeline \
 --bind `pwd`:/wkdir \
-container.simg \
+baxpr-sct-fmri-master-v1.0.0.simg \
 --outdir OUTPUTS \
 --mffe_dir INPUTS/mffe_dir \
 --t2sag_niigz INPUTS/t2sag.nii.gz \

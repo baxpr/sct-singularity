@@ -15,27 +15,27 @@ do
   key="$1"
   case $key in
     --outdir)
-      export OUTDIR="$2"
+      export OUTDIR=$(realpath "$2")
       shift; shift
       ;;
     --mffe_dir)
-      export MFFE_DIR="$2"
+      export MFFE_DIR=$(realpath "$2")
       shift; shift
       ;;
     --t2sag_niigz)
-      export T2SAG_NIIGZ="$2"
+      export T2SAG_NIIGZ=$(realpath "$2")
       shift; shift
       ;;
     --fmri_niigz)
-      export FMRI_NIIGZ="$2"
+      export FMRI_NIIGZ=$(realpath "$2")
       shift; shift
       ;;
     --fmri_dcm)
-      export FMRI_DCM="$2"
+      export FMRI_DCM=$(realpath "$2")
       shift; shift
       ;;
     --physlog)
-      export PHYSLOG="$2"
+      export PHYSLOG=$(realpath "$2")
       shift; shift
       ;;
     --masksize)

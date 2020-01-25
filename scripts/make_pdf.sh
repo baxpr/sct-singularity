@@ -184,17 +184,16 @@ done
 
 # Check connectivity: Seed connectivity maps overlaid on subject MFFE
 # Connectivity maps for each mffe slice
-for v in 0 1 2 3; do
+for roi in Rdorsal Rventral Ldorsal Lventral ; do
   for K in $(seq -w 0 $KMAX) ; do
     ${FSLEYES} render \
       --scene ortho \
       --hideCursor --hidex --hidey \
       --zzoom 2300 \
-      --outfile connectivity_r_roi${v}_slice${K}.png --size 600 600 \
+      --outfile R_${roi}_slice${K}.png --size 600 600 \
       --voxelLoc $IMID $JMID $K \
     mffe_mffe.nii.gz \
-    mffe_R_slice.nii.gz \
-      --volume $v \
+    mffe_R_${roi}_inslice.nii.gz \
       --useNegativeCmap \
       --cmap red-yellow --negativeCmap blue-lightblue \
       --displayRange 0.4 1.0 \
@@ -203,4 +202,3 @@ for v in 0 1 2 3; do
       --outline --outlineWidth 2
   done
 done
-

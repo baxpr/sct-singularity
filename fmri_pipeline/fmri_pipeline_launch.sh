@@ -9,6 +9,12 @@ export SCTDIR=/opt/sct
 # Location of template
 export TDIR=${SCTDIR}/data/PAM50/template
 
+# Default inputs
+export MASKSIZE=30
+export FMRI_VOLTIMESEC="fromDICOM"
+export PHYSLOG_HZ=496
+
+
 # Parse inputs
 while [[ $# -gt 0 ]]
 do
@@ -38,6 +44,14 @@ do
       export PHYSLOG=$(realpath "$2")
       shift; shift
       ;;
+    --fmri_voltimesec)
+      export FMRI_VOLTIMESEC="$2"
+      shift; shift
+      ;;
+    --physlog_hz)
+      export PHYSLOG_HZ="$2"
+      shift; shift
+      ;;
     --masksize)
       export MASKSIZE="$2"
       shift; shift
@@ -64,17 +78,19 @@ do
   esac
 done
 
-echo PROJECT     = "${PROJECT}"
-echo SUBJECT     = "${SUBJECT}"
-echo SESSION     = "${SESSION}"
-echo SCAN        = "${SCAN}"
-echo OUTDIR      = "${OUTDIR}"
-echo MFFE_DIR    = "${MFFE_DIR}"
-echo T2SAG_NIIGZ = "${T2SAG_NIIGZ}"
-echo FMRI_NIIGZ  = "${FMRI_NIIGZ}"
-echo FMRI_DCM    = "${FMRI_DCM}"
-echo PHYSLOG     = "${PHYSLOG}"
-echo MASKSIZE    = "${MASKSIZE}"
+echo PROJECT         = "${PROJECT}"
+echo SUBJECT         = "${SUBJECT}"
+echo SESSION         = "${SESSION}"
+echo SCAN            = "${SCAN}"
+echo OUTDIR          = "${OUTDIR}"
+echo MFFE_DIR        = "${MFFE_DIR}"
+echo T2SAG_NIIGZ     = "${T2SAG_NIIGZ}"
+echo FMRI_NIIGZ      = "${FMRI_NIIGZ}"
+echo FMRI_DCM        = "${FMRI_DCM}"
+echo FMRI_VOLTIMESEC = "${FMRI_VOLTIMESEC}"
+echo PHYSLOG         = "${PHYSLOG}"
+echo PHYSLOG_HZ      = "${PHYSLOG_HZ}"
+echo MASKSIZE        = "${MASKSIZE}"
 
 
 # Copy most files to working dir OUTDIR

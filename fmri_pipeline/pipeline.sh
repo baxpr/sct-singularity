@@ -1,11 +1,7 @@
 #!/bin/bash
 #
-# Process fMRI:
-#    Motion correction
-#    Registration to mFFE
-#    Warp to atlas space
-#    ROI time series extraction
-
+# Spinal cord fMRI processing pipeline.
+#
 # Image filenames are <geometry>_<content>.nii.gz
 # Template content always marked as "template". Otherwise it's subject content
 
@@ -36,8 +32,11 @@ pipeline_fmri.sh
 # Geom transforms
 pipeline_transforms.sh
 
+# Get fmri vol acq time
+get_voltime.py
+
 # Generate RETROICOR regressors
-parse_physlog.py SCANPHYSLOG.log 496 fmri.dcm
+parse_physlog.py
 RetroTS.py -r physlog_respiratory.csv -c physlog_cardiac.csv -p 496 -n 1 \
     -v `cat volume_acquisition_time.txt` -cardiac_out 0 -prefix ricor
 cleanup_physlog.py

@@ -1,4 +1,7 @@
+PDF
+qcreport.pdf
 
+WARPS
 warp_fmri2mffe.nii.gz
 warp_mffe2fmri.nii.gz
 warp_mffe2PAM50.nii.gz
@@ -6,87 +9,135 @@ warp_PAM502mffe.nii.gz
 warp_mffe2t2sag.nii.gz
 warp_t2sag2mffe.nii.gz
 
+MFFE
 mffe_mffe.nii.gz
 fmri_mffe.nii.gz
 PAM50_mffe.nii.gz
 t2sag_mffe.nii.gz
 
+T2SAG
 t2sag_t2sag.nii.gz
 mffe_t2sag.nii.gz
 
+MOTION
 fmri_moco_params.tsv
 fmri_moco_params_X.nii.gz
 fmri_moco_params_Y.nii.gz
 
+FMRI_MOCO
 fmri_moco.nii.gz
 
+MOCO_MEAN
 fmri_moco_mean.nii.gz
 mffe_moco_mean.nii.gz
 PAM50_moco_mean.nii.gz
 
+GM
 fmri_gm.nii.gz
 mffe_gm.nii.gz
 PAM50_gm.nii.gz
 
+WM
 fmri_wm.nii.gz
 mffe_wm.nii.gz
 
+CSF
 fmri_csf.nii.gz
 mffe_csf.nii.gz
 
+NOTSPINE
 fmri_notspine.nii.gz
 
+MASK
 fmri_mask30.nii.gz
 mffe_mask30.nii.gz
 PAM50_mask30.nii.gz
 
+SYNT2
 mffe_synt2.nii.gz
 PAM50_synt2.nii.gz
 
+FMRI_CENTERLINE
 fmri_centerline.csv
 fmri_centerline.nii.gz
 
+GMCUT
 fmri_gmcut.nii.gz
 fmri_gmcut.csv
 
+GMCUTLABEL
 fmri_gmcutlabel.nii.gz
 fmri_gmcutlabel.csv
 mffe_gmcutlabel.nii.gz
 PAM50_gmcutlabel.nii.gz
 
+CORD
 fmri_cord.nii.gz
 mffe_cord.nii.gz
 t2sag_cord.nii.gz
 
+CORD_LABELED
 fmri_cord_labeled.nii.gz
 mffe_cord_labeled.nii.gz
 ipmffe_cord_labeled.nii.gz
 t2sag_cord_labeled.nii.gz
 PAM50_cord_labeled.nii.gz
 
+LABEL_POINTS
 ipmffe_cord_labeled_body.nii.gz
 t2sag_cord_labeled_discs.nii.gz
 
+RMAPS_FMRI
 fmri_R_Rdorsal_inslice.nii.gz
 fmri_R_Rventral_inslice.nii.gz
 fmri_R_Ldorsal_inslice.nii.gz
 fmri_R_Lventral_inslice.nii.gz
+
+ZMAPS_FMRI
 fmri_Z_Rdorsal_inslice.nii.gz
 fmri_Z_Rventral_inslice.nii.gz
 fmri_Z_Ldorsal_inslice.nii.gz
 fmri_Z_Lventral_inslice.nii.gz
 
+RMAPS_MFFE
+mffe_R_Rdorsal_inslice.nii.gz
+mffe_R_Rventral_inslice.nii.gz
+mffe_R_Ldorsal_inslice.nii.gz
+mffe_R_Lventral_inslice.nii.gz
+
+ZMAPS_MFFE
+mffe_Z_Rdorsal_inslice.nii.gz
+mffe_Z_Rventral_inslice.nii.gz
+mffe_Z_Ldorsal_inslice.nii.gz
+mffe_Z_Lventral_inslice.nii.gz
+
+RMAPS_PAM50
+PAM50_R_Rdorsal_inslice.nii.gz
+PAM50_R_Rventral_inslice.nii.gz
+PAM50_R_Ldorsal_inslice.nii.gz
+PAM50_R_Lventral_inslice.nii.gz
+
+ZMAPS_PAM50
+PAM50_Z_Rdorsal_inslice.nii.gz
+PAM50_Z_Rventral_inslice.nii.gz
+PAM50_Z_Ldorsal_inslice.nii.gz
+PAM50_Z_Lventral_inslice.nii.gz
+
+RMATRIX
 R_inslice.csv
+
+ZMATRIX
 Z_inslice.csv
 
+CSA
 mffe_csa.csv
 
+PHYSLOG
 physlog_cardiac.csv
 physlog_respiratory.csv
 ricor.csv
 ricor.slibase.1D
 
+VOL_ACQTIME
 volume_acquisition_time.txt
-
-PAM50_template_t2s_cropped.nii.gz
 

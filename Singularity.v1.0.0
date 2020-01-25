@@ -3,7 +3,7 @@ From: ubuntu:18.04
 
 
 %files
-  #scripts /opt
+  scripts /opt
 
 
 %post

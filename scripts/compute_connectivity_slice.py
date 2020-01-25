@@ -38,7 +38,8 @@ roi_info = pandas.read_csv(gm_csv)
 # Compute connectivity within each slice, applying bandpass filter
 for s in range(nslices):
     
-    # ROI signals
+    # ROI signals. Labels are the same every time because they come from
+    # the full gm_file. The slice_img varies but is only an extra mask
     roi_data,roi_labels = img_to_signals_labels(fmri_file,gm_file,slice_img[s])
     roi_horns = roi_info["horn"][roi_info["label"]==roi_labels]
     roi_data = nilearn.signal.clean(roi_data,standardize=True,detrend=True,
@@ -71,6 +72,7 @@ for s in range(nslices):
     level = numpy.round(numpy.median(level_data))
 
     # Build data frame of slicewise results
+    # DataFrame.append handles varying/mismatched colnames correctly
     colnames = ["metric","slice","level"] + roi_labelvec
     rowdataR = ["R","%d" % s,"%d" % level] + ["%0.3f" % x for x in r_roi_vec]
     rowdataZ = ["Z","%d" % s,"%d" % level] + ["%0.3f" % x for x in z_roi_vec]
@@ -93,18 +95,20 @@ for s in range(nslices):
     r_slice_img = slice_masker.inverse_transform(r_slice_data.T)
     z_slice_img = slice_masker.inverse_transform(z_slice_data.T)
 
-    # Put R back into image space
+    # Put R back into image space slice by slice. Initialized to zero
+    # and slices don't overlap, so we can just add one at a time
     if s==0:
         r_img = r_slice_img  # Initialize
-        z_img = z_slice_img  # Initialize
+        z_img = z_slice_img
     else:
         r_img = nilearn.image.math_img("a+b",a=r_img,b=r_slice_img)
         z_img = nilearn.image.math_img("a+b",a=z_img,b=z_slice_img)
 
 
-# Save complete R,Z image to file
-r_img.to_filename('fmri_R_slice.nii.gz')
-z_img.to_filename('fmri_Z_slice.nii.gz')
+# Save complete R,Z images to file
+for k,horn in enumerate(roi_horns):
+    nilearn.image.index_img(r_img,k).to_filename('fmri_R_%s_inslice.nii.gz' % horn)
+    nilearn.image.index_img(z_img,k).to_filename('fmri_Z_%s_inslice.nii.gz' % horn)
 
-roiR.to_csv('R_slice.csv',index=False)
-roiZ.to_csv('Z_slice.csv',index=False)
+roiR.to_csv('R_inslice.csv',index=False)
+roiZ.to_csv('Z_inslice.csv',index=False)

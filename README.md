@@ -38,16 +38,16 @@ Contents are
     
     _synt2                Synthetic T2 built from the gray and white segmentations
     
-    _R_slice              Connectivity maps for within-slice seeds (R)
-    _Z_slice              Connectivity maps for within-slice seeds (Z)
+    _R_*_inslice          Connectivity maps for within-slice seeds (R)
+    _Z_*_inslice          Connectivity maps for within-slice seeds (Z)
     
     _template_            Indicates data from template image, not subject image
 
 Other outputs:
 
     mffe_csa.csv              Cross-sectional areas
-    R_slice.csv               ROI-to-ROI connectivity (R)
-    Z_slice.csv               ROI-to-ROI connectivity (Z)
+    R_inslice.csv             ROI-to-ROI connectivity within slice (R)
+    Z_inslice.csv             ROI-to-ROI connectivity within slice (Z)
     
     fmri_gmcut.csv            Label info for ROI images of same base filename
     fmri_gmcutlabel.csv

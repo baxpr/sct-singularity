@@ -56,7 +56,7 @@ resample_conn.sh
 # warnings caused by fsleyes 0.32.0. Earlier fsleyes 0.31.2 doesn't work
 make_pdf.sh > /dev/null
 convert_pdf.sh
- 
+
 
 
 # Retroicor:

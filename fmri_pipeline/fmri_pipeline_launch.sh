@@ -34,8 +34,8 @@ do
       export FMRI_DCM="$2"
       shift; shift
       ;;
-    --physlog_dcm)
-      export PHYSLOG_DCM="$2"
+    --physlog)
+      export PHYSLOG="$2"
       shift; shift
       ;;
     --masksize)
@@ -73,7 +73,7 @@ echo MFFE_DIR    = "${MFFE_DIR}"
 echo T2SAG_NIIGZ = "${T2SAG_NIIGZ}"
 echo FMRI_NIIGZ  = "${FMRI_NIIGZ}"
 echo FMRI_DCM    = "${FMRI_DCM}"
-echo PHYSLOG_DCM = "${PHYSLOG_DCM}"
+echo PHYSLOG     = "${PHYSLOG}"
 echo MASKSIZE    = "${MASKSIZE}"
 
 
@@ -81,9 +81,8 @@ echo MASKSIZE    = "${MASKSIZE}"
 cp "${T2SAG_NIIGZ}" "${OUTDIR}"/t2sag.nii.gz
 cp "${FMRI_NIIGZ}" "${OUTDIR}"/fmri.nii.gz
 cp "${FMRI_DCM}" "${OUTDIR}"/fmri.dcm
-#echo "${INITCENTER}" > "${OUTDIR}"/initcenter.txt
-#echo "${MASKSIZE}" > "${OUTDIR}"/masksize.txt
-unzip "${PHYSLOG_DCM}" -d "${OUTDIR}"
+cp "${PHYSLOG}" "${OUTDIR}"/SCANPHYSLOG.log
+
 
 # Find, verify, copy the multiple echoes of the MFFE
 NUM_E1=`ls -d "${MFFE_DIR}"/*_e1.nii.gz | wc -l`

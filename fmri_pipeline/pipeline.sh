@@ -37,7 +37,7 @@ pipeline_fmri.sh
 pipeline_transforms.sh
 
 # Generate RETROICOR regressors
-parse_physlog.py SCANPHYSLOG*.log 496 fmri.dcm
+parse_physlog.py SCANPHYSLOG.log 496 fmri.dcm
 RetroTS.py -r physlog_respiratory.csv -c physlog_cardiac.csv -p 496 -n 1 \
     -v `cat volume_acquisition_time.txt` -cardiac_out 0 -prefix ricor
 cleanup_physlog.py
@@ -56,18 +56,4 @@ resample_conn.sh
 # warnings caused by fsleyes 0.32.0. Earlier fsleyes 0.31.2 doesn't work
 make_pdf.sh > /dev/null
 convert_pdf.sh
-
-
-
-# Retroicor:
-# 
-# Motion correction first: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2833099/
-#
-# Barry 2014 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4120419/
-#
-# Another procedure using FSL / PNM https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5315056/
-#     popp, pnm_evs
-
-
-
 

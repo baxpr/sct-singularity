@@ -5,6 +5,7 @@ INFO="${PROJECT} ${SUBJECT} ${SESSION} ${SCAN}"
 
 KSQRT=$(get_ijk.py s mffe1.nii.gz)
 
+DS=$(date)
 
 # Levels
 montage -mode concatenate \
@@ -19,8 +20,8 @@ montage -mode concatenate \
 convert \
 -size 1224x1584 xc:white \
 -gravity center \( page_levels.png -resize 1194x1354 \) -geometry +0+0 -composite \
--gravity SouthEast -pointsize 24 -annotate +15+10 "$(date)" \
--gravity NorthWest -pointsize 24 -annotate +15+20 "Level-finding and fMRI movement\n${INFO}" \
+-gravity SouthEast -pointsize 24 -annotate +15+10 "$DS" \
+-gravity NorthWest -pointsize 24 -annotate +15+20 "${INFO}\nLevel-finding and fMRI movement" \
 page_levels.png
 
 
@@ -36,8 +37,8 @@ montage -mode concatenate \
 convert \
 -size 1224x1584 xc:white \
 -gravity center \( page_cor.png -resize 1194x1354 \) -geometry +0+60 -composite \
--gravity SouthEast -pointsize 24 -annotate +15+10 "$(date)" \
--gravity NorthWest -pointsize 24 -annotate +15+20 "Coronal view in template space\n${INFO}" \
+-gravity SouthEast -pointsize 24 -annotate +15+10 "$DS" \
+-gravity NorthWest -pointsize 24 -annotate +15+20 "${INFO}\nCoronal view in template space" \
 page_cor.png
 
 
@@ -52,8 +53,8 @@ roi_slice*.png \
 convert \
 -size 1224x1584 xc:white \
 -gravity center \( page_roi.png -resize 1194x1354 \) -geometry +0+60 -composite \
--gravity SouthEast -pointsize 24 -annotate +15+10 "$(date)" \
--gravity NorthWest -pointsize 24 -annotate +15+20 "ROIS by level\n${INFO}" \
+-gravity SouthEast -pointsize 24 -annotate +15+10 "$DS" \
+-gravity NorthWest -pointsize 24 -annotate +15+20 "${INFO}\nROIS by level" \
 page_roi.png
 
 
@@ -67,8 +68,8 @@ segmentation_slice*.png \
 convert \
 -size 1224x1584 xc:white \
 -gravity center \( page_seg.png -resize 1194x1354 \) -geometry +0+60 -composite \
--gravity SouthEast -pointsize 24 -annotate +15+10 "$(date)" \
--gravity NorthWest -pointsize 24 -annotate +15+20 "Segmentation on mFFE\n${INFO}" \
+-gravity SouthEast -pointsize 24 -annotate +15+10 "$DS" \
+-gravity NorthWest -pointsize 24 -annotate +15+20 "${INFO}\nSegmentation on mFFE" \
 page_seg.png
 
 
@@ -82,8 +83,8 @@ fmriregistration_slice*.png \
 convert \
 -size 1224x1584 xc:white \
 -gravity center \( page_fmri.png -resize 1194x1354 \) -geometry +0+60 -composite \
--gravity SouthEast -pointsize 24 -annotate +15+10 "$(date)" \
--gravity NorthWest -pointsize 24 -annotate +15+20 "mFFE segmentation on fMRI\n${INFO}" \
+-gravity SouthEast -pointsize 24 -annotate +15+10 "$DS" \
+-gravity NorthWest -pointsize 24 -annotate +15+20 "${INFO}\nmFFE segmentation on fMRI" \
 page_fmri.png
 
 
@@ -97,8 +98,8 @@ templateregistration_slice*.png \
 convert \
 -size 1224x1584 xc:white \
 -gravity center \( page_template.png -resize 1194x1354 \) -geometry +0+60 -composite \
--gravity SouthEast -pointsize 24 -annotate +15+10 "$(date)" \
--gravity NorthWest -pointsize 24 -annotate +15+20 "mFFE segmentation on template\n${INFO}" \
+-gravity SouthEast -pointsize 24 -annotate +15+10 "$DS" \
+-gravity NorthWest -pointsize 24 -annotate +15+20 "${INFO}\nmFFE segmentation on template" \
 page_template.png
 
 
@@ -114,8 +115,8 @@ for roi in Rdorsal Rventral Ldorsal Lventral ; do
   convert \
   -size 1224x1584 xc:white \
   -gravity center \( page_roi_${roi}.png -resize 1194x1354 \) -geometry +0+60 -composite \
-  -gravity SouthEast -pointsize 24 -annotate +15+10 "$(date)" \
-  -gravity NorthWest -pointsize 24 -annotate +15+20 "${roi} connectivity (R) within slice\n${INFO}" \
+  -gravity SouthEast -pointsize 24 -annotate +15+10 "$DS" \
+  -gravity NorthWest -pointsize 24 -annotate +15+20 "${INFO}\n${roi} connectivity (R) within slice" \
   page_roi_${roi}.png
 
 done

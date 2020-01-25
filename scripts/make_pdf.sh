@@ -28,9 +28,11 @@ let "KMAX_F = $KDIM_F - 1"
 KSQRT_F=$(get_ijk.py s fmri_moco_mean.nii.gz)
 
 
+#xvfb-run --server-num=$(($$ + 99)) --server-args='-screen 0 1600x1200x24 -ac +extension GLX' \
+
 # Level labels on t2sag and mffe
 ${FSLEYES} render \
-    --scene ortho \
+    --scene ortho --displaySpace t2sag_t2sag.nii.gz  \
     --hideCursor --hidex --hidey --zzoom 1000 \
     --outfile t2sag_levels.png --size 600 800 \
   t2sag_t2sag.nii.gz \
@@ -39,20 +41,23 @@ ${FSLEYES} render \
     --overlayType label \
     --outline --outlineWidth 3
 
+xvfb-run --server-num=$(($$ + 99)) --server-args='-screen 0 1600x1200x24 -ac +extension GLX' \
 ${FSLEYES} render \
-    --scene ortho \
-    --hideCursor --hidey --hidez --xzoom 2000 \
-    --outfile fmri_levels.png --size 300 600 \
+    --scene ortho --displaySpace t2sag_t2sag.nii.gz  \
+    --hideCursor --hidex --hidey --zzoom 1000 \
+    --outfile fmri_levels.png --size 600 800 \
+  t2sag_t2sag.nii.gz \
   mffe_moco_mean.nii.gz \
-  ipmffe_cord_labeled.nii.gz \
+  mffe_cord_labeled.nii.gz \
     --lut random_big \
     --overlayType label \
     --outline --outlineWidth 3
 
 ${FSLEYES} render \
-    --scene ortho \
-    --hideCursor --hidey --hidez --xzoom 2000 \
-    --outfile mffe_levels.png --size 300 600 \
+    --scene ortho --displaySpace t2sag_t2sag.nii.gz  \
+    --hideCursor --hidex --hidey --zzoom 1000 \
+    --outfile mffe_levels.png --size 600 800 \
+  t2sag_t2sag.nii.gz \
   mffe_mffe.nii.gz \
   ipmffe_cord_labeled.nii.gz \
     --lut random_big \

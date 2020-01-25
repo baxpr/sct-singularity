@@ -11,13 +11,13 @@ montage -mode concatenate \
 -stroke white -fill white -pointsize 20 \
 \( t2sag_levels.png -annotate +10+30 "Levels" \) \
 \( mffe_levels.png -annotate +10+30 "on mFFE" \) \
-\( fmri_levels.png -annotate +10+30 "on fMRI" \) \
--tile 3x -quality 100 -background white -gravity center \
+\( fmri_levels.png -annotate +10+30 "on mean fMRI" \) \
+-tile 2x -quality 100 -background white -gravity center \
 -border 10 -bordercolor white page_levels.png
 
 convert \
 -size 1224x1584 xc:white \
--gravity center \( page_levels.png -resize 1194x1354 \) -geometry +0+60 -composite \
+-gravity center \( page_levels.png -resize 1194x1354 \) -geometry +0+0 -composite \
 -gravity SouthEast -pointsize 24 -annotate +15+10 "$(date)" \
 -gravity NorthWest -pointsize 24 -annotate +15+20 "Level-finding\n${INFO}" \
 page_levels.png

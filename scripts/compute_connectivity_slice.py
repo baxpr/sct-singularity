@@ -68,7 +68,7 @@ for s in range(nslices):
     level_data = level_data[0,:]
     if not level_labels==roi_labels:
         raise Exception("Label mismatch")
-    level = numpy.median(level_data)
+    level = numpy.round(numpy.median(level_data))
 
     # Build data frame of slicewise results
     colnames = ["metric","slice","level"] + roi_labelvec

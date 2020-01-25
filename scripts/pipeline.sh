@@ -52,7 +52,9 @@ compute_connectivity_slice.py
 resample_conn.sh
 
 # Output QA PDF
-make_pdf.sh
+# Redirect stdout for make_pdf.sh to hide a bunch of nibabel deprecation
+# warnings caused by fsleyes 0.32.0. Earlier fsleyes 0.31.2 doesn't work
+make_pdf.sh > /dev/null
 convert_pdf.sh
  
 

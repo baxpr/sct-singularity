@@ -41,7 +41,6 @@ ${FSLEYES} render \
     --overlayType label \
     --outline --outlineWidth 3
 
-xvfb-run --server-num=$(($$ + 99)) --server-args='-screen 0 1600x1200x24 -ac +extension GLX' \
 ${FSLEYES} render \
     --scene ortho --displaySpace t2sag_t2sag.nii.gz  \
     --hideCursor --hidex --hidey --zzoom 1000 \

@@ -3,7 +3,7 @@ From: ubuntu:18.04
 
 
 %files
-  scripts /opt
+  fmri_pipeline /opt
 
 
 %post
@@ -66,8 +66,20 @@ From: ubuntu:18.04
 
 
 %environment
-  PATH="/opt/scripts:/opt/scripts/external/afni:/opt/sct/bin:${PATH}"
+  PATH="/opt/sct/bin:${PATH}"
 
 
 %runscript
   sct_check_dependencies "$@"
+
+
+  
+%appenv fmri_pipeline
+  PATH="/opt/fmri_pipeline:/opt/fmri_pipeline/external/afni:${PATH}"
+
+%apprun fmri_pipeline
+  exec \
+  xvfb-run --server-num=$(($$ + 99)) \
+  --server-args='-screen 0 1600x1200x24 -ac +extension GLX' \
+  fmri_pipeline_launch.sh "#@"
+

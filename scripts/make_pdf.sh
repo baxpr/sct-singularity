@@ -28,8 +28,36 @@ let "KMAX_F = $KDIM_F - 1"
 KSQRT_F=$(get_ijk.py s fmri_moco_mean.nii.gz)
 
 
-# TODO
-# Plot fmri mean movement from tsv with fixed axis limits
+# Level labels on t2sag and mffe
+${FSLEYES} render \
+    --scene ortho \
+    --hideCursor --hidex --hidey --zzoom 1000 \
+    --outfile t2sag_levels.png --size 600 800 \
+  t2sag_t2sag.nii.gz \
+  t2sag_cord_labeled.nii.gz \
+    --lut random_big \
+    --overlayType label \
+    --outline --outlineWidth 3
+
+${FSLEYES} render \
+    --scene ortho \
+    --hideCursor --hidey --hidez --xzoom 2000 \
+    --outfile fmri_levels.png --size 300 600 \
+  mffe_moco_mean.nii.gz \
+  ipmffe_cord_labeled.nii.gz \
+    --lut random_big \
+    --overlayType label \
+    --outline --outlineWidth 3
+
+${FSLEYES} render \
+    --scene ortho \
+    --hideCursor --hidey --hidez --xzoom 2000 \
+    --outfile mffe_levels.png --size 300 600 \
+  mffe_mffe.nii.gz \
+  ipmffe_cord_labeled.nii.gz \
+    --lut random_big \
+    --overlayType label \
+    --outline --outlineWidth 3
 
 
 # Check segmentation: Subject segmentation overlaid on subject MFFE

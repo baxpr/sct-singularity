@@ -65,6 +65,7 @@ frfmri_data = numpy.zeros(rfmri_data.shape)
 
 # Binarize and reshape CSF and NOTSPINE masks
 print('Confound masks')
+print('Using %d PCs for confound removal' % numPCs)
 csf_mask = numpy.greater(csf_img.get_data(),0)
 rcsf_mask = numpy.reshape(csf_mask,(dims[0]*dims[1],nslices),order='F')
 ns_mask = numpy.greater(notspine_img.get_data(),0)
@@ -92,7 +93,6 @@ for s in range(nslices):
     numpy.seterr(invalid='warn')
 
     # Get largest eigenvalue components and pct variance explained
-    print('Computing %d PCs for confound removal' % numPCs)
     csf_PCs,csf_S,V = numpy.linalg.svd(csf_data, full_matrices=False)
     csf_var = numpy.square(csf_S)
     csf_var = csf_var / sum(csf_var)

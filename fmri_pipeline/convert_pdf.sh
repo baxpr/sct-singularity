@@ -7,6 +7,24 @@ KSQRT=$(get_ijk.py s mffe1.nii.gz)
 
 DS=$(date)
 
+# ROI signals before and after filtering
+montage -mode concatenate \
+-stroke white -fill white -pointsize 20 \
+roisignal_Lventral_slice1.png \
+roisignal_Lventral_slice4.png \
+roisignal_Lventral_slice7.png \
+roisignal_Lventral_slice10.png \
+-tile x2 -quality 100 -background white -gravity center \
+-border 10 -bordercolor white page_roisignals.png
+
+convert \
+-size 1224x1584 xc:white \
+-gravity center \( page_roisignals.png -resize 1194x1354 \) -geometry +0+0 -composite \
+-gravity SouthEast -pointsize 24 -annotate +15+10 "$DS" \
+-gravity NorthWest -pointsize 24 -annotate +15+20 "${INFO}\nROI signals" \
+page_roisignals.png
+
+
 # Levels
 montage -mode concatenate \
 -stroke white -fill white -pointsize 20 \
@@ -130,5 +148,6 @@ convert \
   page_fmri.png \
   page_template.png \
   page_roi.png \
+  page_roisignals.png \
   page_roi_*.png \
   qcreport.pdf

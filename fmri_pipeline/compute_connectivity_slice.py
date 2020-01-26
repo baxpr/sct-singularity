@@ -6,11 +6,13 @@ import numpy
 import nibabel
 import nilearn
 import pandas
+import matplotlib.pyplot as pyplot
 from nilearn.input_data import NiftiMasker,NiftiLabelsMasker
 from nilearn.masking import intersect_masks,unmask
 from nilearn.regions import img_to_signals_labels
 
-fmri_file = 'fmri_filt.nii.gz'
+moco_file = 'fmri_moco.nii.gz'
+filt_file = 'fmri_filt.nii.gz'
 level_file = 'fmri_cord_labeled.nii.gz'
 gm_file = 'fmri_gmcut.nii.gz'
 gm_csv = 'fmri_gmcut.csv'
@@ -28,38 +30,57 @@ img = nibabel.load(gm_file)
 nslices = img.shape[2]
 slice_img = list()
 for s in range(nslices):
-    slice_data = numpy.zeros(img.get_data().shape)
-    slice_data[:,:,s] = 1
-    slice_img.append( nibabel.Nifti1Image(slice_data,img.affine,img.header) )
+    slice_filt_bp = numpy.zeros(img.get_data().shape)
+    slice_filt_bp[:,:,s] = 1
+    slice_img.append( nibabel.Nifti1Image(slice_filt_bp,img.affine,img.header) )
 
 # Get the ROI label info
 roi_info = pandas.read_csv(gm_csv)
 
 # Compute connectivity within each slice, applying bandpass filter
+print("Connectivity computation")
 for s in range(nslices):
     
     # ROI signals. Labels are the same every time because they come from
     # the full gm_file. The slice_img varies but is only an extra mask
-    roi_data,roi_labels = img_to_signals_labels(fmri_file,gm_file,slice_img[s])
+    roi_filt,roi_labels = img_to_signals_labels(filt_file,gm_file,slice_img[s])
     roi_horns = roi_info["horn"][roi_info["label"]==roi_labels]
-    roi_data = nilearn.signal.clean(roi_data,standardize=True,detrend=True,
+    roi_filt_bp = nilearn.signal.clean(roi_filt,standardize=True,detrend=True,
                                     high_pass=0.01,low_pass=0.10,t_r=t_r)
-    #print('ROI data size %d,%d' % roi_data.shape)
+
+    roi_moco,roi_moco_labels = img_to_signals_labels(moco_file,gm_file,slice_img[s])
+    if not roi_moco_labels==roi_labels:
+        raise Exception('Label mismatch')
+    
+    # Plot before and after filtering for 1 ROI
+    fig,axs = pyplot.subplots(3,1)
+    axs[0].plot(range(roi_moco.shape[0]),roi_moco[:,0])
+    axs[0].set_yticklabels([])
+    axs[0].set_title('%s signal, slice %d' % (roi_horns[0],s))
+    axs[1].plot(range(roi_filt.shape[0]),roi_filt[:,0])
+    axs[1].set_yticklabels([])
+    axs[1].set_title('After confound regression')
+    axs[2].plot(range(roi_filt_bp.shape[0]),roi_filt_bp[:,0])
+    axs[2].set_yticklabels([])
+    axs[2].set_title('After bandpass filter')
+    axs[2].set_xlabel('Volume')
+    fig.tight_layout()
+    fig.savefig('roisignal_%s_slice%d.png' % (roi_horns[0],s))
 
     # Get filtered fmri data for this slice
     slice_masker = NiftiMasker(slice_img[s],standardize=True,detrend=True,
                     high_pass=0.01,low_pass=0.10,t_r=t_r)
-    slice_data = slice_masker.fit_transform(fmri_file)
-    #print('Slice data size %d,%d' % slice_data.shape)
+    slice_filt_bp = slice_masker.fit_transform(filt_file)
+    #print('Slice data size %d,%d' % slice_filt_bp.shape)
 
     # Connectivity matrix computation
-    r_roi_mat = numpy.dot(roi_data.T, roi_data) / roi_data.shape[0]
-    #z_roi_mat = numpy.arctanh(r_roi_mat) * numpy.sqrt(roi_data.shape[0]-3)
+    r_roi_mat = numpy.dot(roi_filt_bp.T, roi_filt_bp) / roi_filt_bp.shape[0]
+    #z_roi_mat = numpy.arctanh(r_roi_mat) * numpy.sqrt(roi_filt_bp.shape[0]-3)
 
     # Flatten the conn matrices to the unique values
-    k1,k2 = numpy.triu_indices(roi_data.shape[1],k=1)
+    k1,k2 = numpy.triu_indices(roi_filt_bp.shape[1],k=1)
     r_roi_vec = r_roi_mat[k1,k2]
-    z_roi_vec = numpy.arctanh(r_roi_vec) * numpy.sqrt(roi_data.shape[0]-3)
+    z_roi_vec = numpy.arctanh(r_roi_vec) * numpy.sqrt(roi_filt_bp.shape[0]-3)
     roi_labelvec = ["{}_{}".format(a,b) for a,b in zip(roi_horns[k1],roi_horns[k2])]
     
     # Get level labels. Hack - list the same image twice because img_to_signals_labels
@@ -88,12 +109,12 @@ for s in range(nslices):
     
     # Connectivity map computation
     # Relies on standardization to mean 0, sd 1 above
-    r_slice_data = numpy.dot(slice_data.T, roi_data) / roi_data.shape[0]
-    z_slice_data = numpy.arctanh(r_slice_data) * numpy.sqrt(roi_data.shape[0]-3)
-    #print( 'R %d,%d ranges %f,%f' % (r_slice_data.shape[0],r_slice_data.shape[1],
-    #                                 r_slice_data.min(),r_slice_data.max()) )
-    r_slice_img = slice_masker.inverse_transform(r_slice_data.T)
-    z_slice_img = slice_masker.inverse_transform(z_slice_data.T)
+    r_slice_filt_bp = numpy.dot(slice_filt_bp.T, roi_filt_bp) / roi_filt_bp.shape[0]
+    z_slice_filt_bp = numpy.arctanh(r_slice_filt_bp) * numpy.sqrt(roi_filt_bp.shape[0]-3)
+    #print( 'R %d,%d ranges %f,%f' % (r_slice_filt_bp.shape[0],r_slice_filt_bp.shape[1],
+    #                                 r_slice_filt_bp.min(),r_slice_filt_bp.max()) )
+    r_slice_img = slice_masker.inverse_transform(r_slice_filt_bp.T)
+    z_slice_img = slice_masker.inverse_transform(z_slice_filt_bp.T)
 
     # Put R back into image space slice by slice. Initialized to zero
     # and slices don't overlap, so we can just add one at a time

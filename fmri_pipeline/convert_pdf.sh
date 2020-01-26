@@ -11,10 +11,12 @@ DS=$(date)
 montage -mode concatenate \
 -stroke white -fill white -pointsize 20 \
 roisignal_Lventral_slice1.png \
-roisignal_Lventral_slice4.png \
+roisignal_Lventral_slice3.png \
+roisignal_Lventral_slice5.png \
 roisignal_Lventral_slice7.png \
-roisignal_Lventral_slice10.png \
--tile x2 -quality 100 -background white -gravity center \
+roisignal_Lventral_slice9.png \
+roisignal_Lventral_slice11.png \
+-tile 2x -quality 100 -background white -gravity center \
 -border 10 -bordercolor white page_roisignals.png
 
 convert \

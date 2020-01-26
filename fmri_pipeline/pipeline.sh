@@ -57,3 +57,6 @@ plot_motion.py
 make_pdf.sh > /dev/null
 convert_pdf.sh
 
+# Re-arrange output files for dax
+organize_outputs.sh
+

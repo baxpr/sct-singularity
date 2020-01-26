@@ -2,6 +2,7 @@
 #
 # Generate confound regressors and remove, slice by slice
 
+import os
 import nibabel
 import nitime
 import numpy
@@ -13,11 +14,11 @@ csf_file = 'fmri_csf.nii.gz'
 notspine_file = 'fmri_notspine.nii.gz'
 mocoX_file = 'fmri_moco_params_X.nii.gz'
 mocoY_file = 'fmri_moco_params_Y.nii.gz'
+numPCs = int(os.getenv('CONFOUND_PCS'))
 
 # Output
 ffmri_file = 'fmri_filt.nii.gz'
 
-numPCs = 5
 
 # Get moco params + derivs and reshape/combine to time x param x slice
 mocoX_data = nibabel.load(mocoX_file).get_data()
@@ -91,6 +92,7 @@ for s in range(nslices):
     numpy.seterr(invalid='warn')
 
     # Get largest eigenvalue components and pct variance explained
+    print('Computing %d PCs for confound removal' % numPCs)
     csf_PCs,csf_S,V = numpy.linalg.svd(csf_data, full_matrices=False)
     csf_var = numpy.square(csf_S)
     csf_var = csf_var / sum(csf_var)

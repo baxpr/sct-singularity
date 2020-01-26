@@ -9,7 +9,9 @@ baxpr-sct-fmri-master-v1.0.0.simg \
 --t2sag_niigz INPUTS/t2sag.nii.gz \
 --fmri_niigz INPUTS/fmri.nii.gz \
 --fmri_dcm INPUTS/fmri.dcm \
+--fmri_voltimesec fromDICOM \
 --physlog INPUTS/SCANPHYSLOG.log \
+--physlog_hz 496 \
 --masksize 30 \
 --project TESTPROJ \
 --subject TESTSUBJ \

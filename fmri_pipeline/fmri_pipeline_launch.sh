@@ -11,9 +11,9 @@ export TDIR=${SCTDIR}/data/PAM50/template
 
 # Default inputs
 export MASKSIZE=30
-export FMRI_VOLTIMESEC="fromDICOM"
+export FMRI_VOLTIMESEC=fromDICOM
 export PHYSLOG_HZ=496
-
+export CONFOUND_PCS=5
 
 # Parse inputs
 while [[ $# -gt 0 ]]
@@ -50,6 +50,10 @@ do
       ;;
     --physlog_hz)
       export PHYSLOG_HZ="$2"
+      shift; shift
+      ;;
+    --confound_pcs)
+      export CONFOUND_PCS="$2"
       shift; shift
       ;;
     --masksize)
@@ -90,6 +94,7 @@ echo FMRI_DCM        = "${FMRI_DCM}"
 echo FMRI_VOLTIMESEC = "${FMRI_VOLTIMESEC}"
 echo PHYSLOG         = "${PHYSLOG}"
 echo PHYSLOG_HZ      = "${PHYSLOG_HZ}"
+echo CONFOUND_PCS    = "${CONFOUND_PCS}"
 echo MASKSIZE        = "${MASKSIZE}"
 
 

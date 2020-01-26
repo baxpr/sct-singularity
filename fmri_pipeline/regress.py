@@ -114,9 +114,10 @@ for s in range(nslices):
     residual = sfmri_data - numpy.matmul(confounds,beta1[0:-1,:])
     frfmri_data[:,s,:] = residual.T
 
-# Reshape filtered fmri and save
+# Reshape filtered fmri and save as float
 ffmri_data = numpy.reshape(frfmri_data,dims,order='F')
 ffmri_img = nibabel.Nifti1Image(ffmri_data,fmri_img.affine,fmri_img.header)
+ffmri_img.set_data_dtype('float32')
 nibabel.save(ffmri_img,ffmri_file)
 
 # Test re-save of re-reshaped original data to verify correct reshaping

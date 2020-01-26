@@ -44,6 +44,9 @@ cleanup_physlog.py
 # Regression-based cleanup of confounds
 regress.py
 
+# Create filtered data image
+make_filtered_fmri.py
+
 # Compute connectivity images
 compute_connectivity_slice.py
 

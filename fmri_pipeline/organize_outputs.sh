@@ -47,6 +47,12 @@ cp \
 fmri_moco.nii.gz \
 "${rsrc}"
 
+rsrc=FMRI_REGBP
+mkdir "${rsrc}"
+cp \
+fmri_regbp.nii.gz \
+"${rsrc}"
+
 rsrc=MOCO_MEAN
 mkdir "${rsrc}"
 cp \

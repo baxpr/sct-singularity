@@ -15,9 +15,8 @@ Contents are
 
     _fmri                 Unprocessed fMRI
     _fmri0                First volume of unprocessed fMRI
-    _fmri_moco            Motion corrected fMRI
-    _fmri_moco_mean       Mean of motion corrected fMRI volumes
-    _filt                 fMRI with confounds projected out (but bandpass not applied)
+    _moco                 Motion corrected fMRI
+    _moco_mean            Mean of motion corrected fMRI volumes
     
     _mffe                 Unprocessed mFFE
     
@@ -31,7 +30,9 @@ Contents are
     
     _gm                   Segmented gray matter found on the mFFE
     _wm                   Segmented white matter found on the mFFE
-    _csf                  Segmented CSF from the PAM50 template
+    _csf                  Atlas CSF compartment from the PAM50 template
+    
+    _notspine             "Not spine" region used to obtain confound signals
     
     _gmcut                Gray matter cut into four horns
     _gmcutlabel           Gray matter cut into four horns and marked by level
@@ -45,14 +46,22 @@ Contents are
 
 Other outputs:
 
-    mffe_csa.csv              Cross-sectional areas
-    R_inslice.csv             ROI-to-ROI connectivity within slice (R)
-    Z_inslice.csv             ROI-to-ROI connectivity within slice (Z)
+    qcreport.pdf                  QC report and view of results
+    mffe_csa.csv                  Cross-sectional areas
+    R_inslice.csv                 ROI-to-ROI connectivity within slice (R)
+    Z_inslice.csv                 ROI-to-ROI connectivity within slice (Z)
     
-    fmri_gmcut.csv            Label info for ROI images of same base filename
+    fmri_gmcut.csv                Label info for ROI images of same base filename
     fmri_gmcutlabel.csv
     
-    physlog_cardiac.csv       Cardiac signal from physlog
-    physlog_respiratory.csv   Respiratory signal from physlog
-    ricor.csv                 Computed respiratory regressors
+    physlog_cardiac.csv           Cardiac signal from physlog
+    physlog_respiratory.csv       Respiratory signal from physlog
+    ricor.slibase.1D              Physlog signals as output from RetroTS
+    ricor.csv                     Computed respiratory regressors
+    
+    fmri_moco_params.tsv          Estimated fMRI motion parameters
+    fmri_moco_params_X.nii.gz
+    fmri_moco_params_Y.nii.gz
+    
+    volume_acquisition_time.txt   Volume acq time used for filtering (sec)
 

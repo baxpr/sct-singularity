@@ -12,6 +12,7 @@ baxpr-sct-fmri-master-v1.0.0.simg \
 --fmri_voltimesec fromDICOM \
 --physlog INPUTS/SCANPHYSLOG.log \
 --physlog_hz 496 \
+--confound_pcs 6 \
 --masksize 30 \
 --project TESTPROJ \
 --subject TESTSUBJ \

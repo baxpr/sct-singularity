@@ -2,6 +2,23 @@
 #
 # Various image transforms between spaces
 
+
+# Warp template t2s to mffe space
+sct_apply_transfo -i ${TDIR}/PAM50_t2s.nii.gz \
+-w warp_PAM502mffe.nii.gz \
+-d mffe_mffe.nii.gz -o mffe_template_t2s.nii.gz
+
+
+# Warp mask to template space and trim template space images to actual FOV
+sct_apply_transfo -i mffe_mask${MASKSIZE}.nii.gz -x nn \
+-w warp_mffe2PAM50.nii.gz \
+-d ${TDIR}/PAM50_t2s.nii.gz -o PAM50_mask${MASKSIZE}.nii.gz
+
+sct_crop_image -i ${TDIR}/PAM50_t2s.nii.gz \
+-m PAM50_mask${MASKSIZE}.nii.gz \
+-o PAM50_template_t2s_cropped.nii.gz
+
+
 # Crop a couple of "extended" PAM50 space images to the cropped space
 sct_crop_image -i PAM50_synt2.nii.gz \
 -ref PAM50_template_t2s_cropped.nii.gz \
@@ -15,20 +32,6 @@ sct_crop_image -i "${TDIR}"/PAM50_levels.nii.gz \
 -ref PAM50_template_t2s_cropped.nii.gz \
 -o PAM50_template_cord_labeled.nii.gz
 
-
-# Warp template t2s to mffe space
-sct_apply_transfo -i ${TDIR}/PAM50_t2s.nii.gz \
--w warp_PAM502mffe.nii.gz \
--d mffe_mffe.nii.gz -o mffe_template_t2s.nii.gz
-
-# Warp mask to template space and trim template space images to actual FOV
-sct_apply_transfo -i mffe_mask${MASKSIZE}.nii.gz -x nn \
--w warp_mffe2PAM50.nii.gz \
--d ${TDIR}/PAM50_t2s.nii.gz -o PAM50_mask${MASKSIZE}.nii.gz
-
-sct_crop_image -i ${TDIR}/PAM50_t2s.nii.gz \
--m PAM50_mask${MASKSIZE}.nii.gz \
--o PAM50_template_t2s_cropped.nii.gz
 
 # Warp mean fmri, mffe, gm, ROIs to template space
 sct_apply_transfo -i fmri_moco_mean.nii.gz \

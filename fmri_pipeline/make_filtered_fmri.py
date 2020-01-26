@@ -1,6 +1,7 @@
 moco_mean_file = 'fmri_moco_mean.nii.gz'
 filtbp_file = 'fmri_filtbp.nii.gz'
 
+# FIXME save confounds in a csv
 
 # Created fully filtered data set (regress + bandpass). Add back the mean
 # so images make sense visually

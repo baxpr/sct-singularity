@@ -2,6 +2,19 @@
 #
 # Various image transforms between spaces
 
+# Crop a couple of "extended" PAM50 space images to the cropped space
+sct_crop_image -i PAM50_synt2.nii.gz \
+-ref PAM50_template_t2s_cropped.nii.gz \
+-o PAM50_synt2.nii.gz
+
+sct_crop_image -i PAM50_cord_labeled.nii.gz \
+-ref PAM50_template_t2s_cropped.nii.gz \
+-o PAM50_cord_labeled.nii.gz
+
+sct_crop_image -i "${TDIR}"/PAM50_levels.nii.gz \
+-ref PAM50_template_t2s_cropped.nii.gz \
+-o PAM50_template_cord_labeled.nii.gz
+
 
 # Warp template t2s to mffe space
 sct_apply_transfo -i ${TDIR}/PAM50_t2s.nii.gz \

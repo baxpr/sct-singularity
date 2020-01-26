@@ -6,9 +6,6 @@
 # Location of fsleyes
 FSLEYES=/opt/sct/python/envs/venv_sct/bin/fsleyes
 
-# Location of template
-TDIR=/opt/sct/data/PAM50/template/
-
 # Get mffe voxel dims
 IDIM=$(get_ijk.py i mffe_mffe.nii.gz)
 let "IMID = $IDIM / 2"
@@ -115,6 +112,21 @@ ${FSLEYES} render \
     --lut harvard-oxford-subcortical \
     --overlayType label \
     --outline --outlineWidth 2
+
+${FSLEYES} render \
+  --scene ortho \
+  --hideCursor --hidex --hidez \
+  --outfile registration_cor_levels.png --size 600 600 \
+  PAM50_mffe.nii.gz \
+    --interpolation linear \
+  PAM50_cord_labeled.nii.gz \
+    --lut random_big \
+    --overlayType label \
+    --outline --outlineWidth 3 \
+  PAM50_template_cord_labeled.nii.gz \
+    --lut random_big \
+    --overlayType label \
+    --outline --outlineWidth 3
 
 
 # Check fmri registration: subject segmentation overlaid on fmri

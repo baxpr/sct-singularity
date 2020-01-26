@@ -51,6 +51,7 @@ montage -mode concatenate \
 \( registration_cor_mffe.png -annotate +10+30 "Subject\nmFFE,\nRed =\n  Subj GM" \) \
 \( registration_cor_fmri.png -annotate +10+30 "Subject\nmean fMRI" \) \
 \( registration_cor_template.png -annotate +10+30 "PAM50\ntemplate" \) \
+\( registration_cor_levels.png -annotate +10+30 "Subject and template \nlevels" \) \
 -tile 2x -quality 100 -background white -gravity center \
 -border 10 -bordercolor white page_cor.png
 

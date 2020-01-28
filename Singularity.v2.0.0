@@ -80,6 +80,8 @@ From: ubuntu:18.04
 
 
 %runscript
+  xvfb-run --server-num=$(($$ + 99)) \
+  --server-args='-screen 0 1600x1200x24 -ac +extension GLX' \
   sct_check_dependencies "$@"
 
 

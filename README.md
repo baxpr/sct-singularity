@@ -17,7 +17,7 @@ Geometries are
     mffe_     Native geometry of the mFFE
     t2sag_    Native geometry of the T2 sagittal.
     ipmffe_   Iso-voxel padded geometry based on the native mFFE. This is used to accurately 
-                  resample the vertebral locations between geometries.
+                  resample vertebral locations and ROIs between geometries.
     warp_     Warp field between two geometries
 
 Output contents from the mffe app are

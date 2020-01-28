@@ -5,26 +5,8 @@
 # Image filenames are <geometry>_<content>.nii.gz
 # Template content always marked as "template". Otherwise it's subject content
 
-# Use first echo of mffe
-cp mffe1.nii.gz mffe_mffe.nii.gz
-
-# T2 sagittal
-cp t2sag.nii.gz t2sag_t2sag.nii.gz
-
-# fMRI
+# fMRI file
 cp fmri.nii.gz fmri_fmri.nii.gz
-
-# MFFE processing
-pipeline_mffe.sh
-
-# T2SAG processing for vertebral labels, markers. Includes registration to mffe
-pipeline_t2sag.sh
-
-# Cord cross-sectional area
-csa_calc.sh
-
-# Registration to template
-pipeline_templatereg.sh
 
 # fMRI processing
 pipeline_fmri.sh

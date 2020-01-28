@@ -8,6 +8,10 @@ mv fmri_fmri0_centerline.csv fmri_centerline.csv
 sct_create_mask -i fmri_fmri0.nii.gz -p centerline,fmri_centerline.nii.gz -size ${MASKSIZE}mm \
 -o fmri_mask${MASKSIZE}.nii.gz
 
+# Matching mffe mask for registration
+sct_create_mask -i mffe_mffe.nii.gz -p centerline,mffe_cord.nii.gz -size ${MASKSIZE}mm \
+-o mffe_mask${MASKSIZE}.nii.gz
+
 # fMRI motion correction
 sct_fmri_moco -m fmri_mask${MASKSIZE}.nii.gz -i fmri_fmri.nii.gz 
 mv fmri_fmri_moco.nii.gz fmri_moco.nii.gz

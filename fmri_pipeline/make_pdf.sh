@@ -27,7 +27,7 @@ KSQRT_F=$(get_ijk.py s fmri_moco_mean.nii.gz)
 
 #xvfb-run --server-num=$(($$ + 99)) --server-args='-screen 0 1600x1200x24 -ac +extension GLX' \
 
-# Level labels on t2sag and mffe
+# Level labels on t2sag and fmri
 ${FSLEYES} render \
     --scene ortho --displaySpace t2sag_t2sag.nii.gz  \
     --hideCursor --hidex --hidey --zzoom 1000 \
@@ -49,48 +49,8 @@ ${FSLEYES} render \
     --overlayType label \
     --outline --outlineWidth 3
 
-${FSLEYES} render \
-    --scene ortho --displaySpace t2sag_t2sag.nii.gz  \
-    --hideCursor --hidex --hidey --zzoom 1000 \
-    --outfile mffe_levels.png --size 600 800 \
-  t2sag_t2sag.nii.gz \
-  mffe_mffe.nii.gz \
-  ipmffe_cord_labeled.nii.gz \
-    --lut random_big \
-    --overlayType label \
-    --outline --outlineWidth 3
 
-
-# Check segmentation: Subject segmentation overlaid on subject MFFE
-# ROIs on each mffe slice
-for K in $(seq -w 0 $KMAX) ; do
-  ${FSLEYES} render \
-    --scene ortho \
-    --hideCursor --hidex --hidey \
-    --zzoom 2300 \
-    --outfile roi_slice${K}.png --size 600 600 \
-    --voxelLoc $IMID $JMID $K \
-  mffe_mffe.nii.gz \
-    --interpolation linear \
-  ipmffe_gmcutlabel.nii.gz \
-    --lut random_big \
-    --overlayType label \
-    --outline --outlineWidth 4
-done
-
-
-# Plot cor sections for fmri, mffe, template alignment
-${FSLEYES} render \
-  --scene ortho \
-  --hideCursor --hidex --hidez \
-  --outfile registration_cor_template.png --size 600 600 \
-  PAM50_template_t2s_cropped.nii.gz \
-    --interpolation linear \
-  PAM50_gm.nii.gz \
-    --lut harvard-oxford-subcortical \
-    --overlayType label \
-    --outline --outlineWidth 2
-
+# Plot cor sections for fmri, mffe alignment
 ${FSLEYES} render \
   --scene ortho \
   --hideCursor --hidex --hidez \
@@ -113,21 +73,6 @@ ${FSLEYES} render \
     --overlayType label \
     --outline --outlineWidth 2
 
-${FSLEYES} render \
-  --scene ortho \
-  --hideCursor --hidex --hidez \
-  --outfile registration_cor_levels.png --size 600 600 \
-  PAM50_mffe.nii.gz \
-    --interpolation linear \
-  PAM50_cord_labeled.nii.gz \
-    --lut random_big \
-    --overlayType label \
-    --outline --outlineWidth 3 \
-  PAM50_template_cord_labeled.nii.gz \
-    --lut random_big \
-    --overlayType label \
-    --outline --outlineWidth 3
-
 
 # Check fmri registration: subject segmentation overlaid on fmri
 for K in $(seq -w 0 $KMAX_F) ; do
@@ -144,50 +89,6 @@ for K in $(seq -w 0 $KMAX_F) ; do
     --overlayType label \
     --outline --outlineWidth 3 \
   fmri_csf.nii.gz \
-    --lut harvard-oxford-subcortical \
-    --overlayType label \
-    --outline --outlineWidth 3
-done
-
-
-# Check template registration: subject segmentation overlaid on PAM50 T2s template
-# GM/cord on template space image in mffe space
-for K in $(seq -w 0 $KMAX) ; do
-  ${FSLEYES} render \
-    --scene ortho \
-    --hideCursor --hidex --hidey \
-    --zzoom 2300 \
-    --outfile templateregistration_slice${K}.png --size 600 600 \
-    --voxelLoc $IMID $JMID $K \
-  mffe_template_t2s.nii.gz \
-    --interpolation linear \
-  mffe_synt2.nii.gz \
-    --lut melodic-classes \
-    --overlayType label \
-    --outline --outlineWidth 3 \
-  mffe_csf.nii.gz \
-    --lut harvard-oxford-subcortical \
-    --overlayType label \
-    --outline --outlineWidth 3
-done
-
-
-# Check segmentation: Subject segmentation overlaid on subject MFFE
-# GM/WM/CSF outlines on each mffe slice
-for K in $(seq -w 0 $KMAX) ; do
-  ${FSLEYES} render \
-    --scene ortho \
-    --hideCursor --hidex --hidey \
-    --zzoom 2300 \
-    --outfile segmentation_slice${K}.png --size 600 600 \
-    --voxelLoc $IMID $JMID $K \
-  mffe_mffe.nii.gz \
-    --interpolation linear \
-  mffe_synt2.nii.gz \
-    --lut melodic-classes \
-    --overlayType label \
-    --outline --outlineWidth 3 \
-  mffe_csf.nii.gz \
     --lut harvard-oxford-subcortical \
     --overlayType label \
     --outline --outlineWidth 3

@@ -34,6 +34,7 @@ rsrc=GM
 mkdir "${rsrc}"
 cp \
 mffe_gm.nii.gz \
+ipmffe_gm.nii.gz \
 PAM50_gm.nii.gz \
 "${rsrc}"
 
@@ -41,6 +42,7 @@ rsrc=WM
 mkdir "${rsrc}"
 cp \
 mffe_wm.nii.gz \
+ipmffe_wm.nii.gz \
 PAM50_wm.nii.gz \
 "${rsrc}"
 
@@ -48,14 +50,15 @@ rsrc=CSF
 mkdir "${rsrc}"
 cp \
 mffe_csf.nii.gz \
+ipmffe_csf.nii.gz \
 PAM50_csf.nii.gz \
 "${rsrc}"
 
 rsrc=MASK
 mkdir "${rsrc}"
 cp \
-mffe_mask30.nii.gz \
-PAM50_mask30.nii.gz \
+mffe_mask??.nii.gz \
+PAM50_mask??.nii.gz \
 "${rsrc}"
 
 rsrc=SYNT2
@@ -80,6 +83,7 @@ mffe_cord_labeled.nii.gz \
 ipmffe_cord_labeled.nii.gz \
 t2sag_cord_labeled.nii.gz \
 PAM50_cord_labeled.nii.gz \
+PAM50_template_cord_labeled.nii.gz \
 "${rsrc}"
 
 rsrc=LABEL_POINTS

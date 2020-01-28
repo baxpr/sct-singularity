@@ -10,7 +10,7 @@ for metric in R Z ; do
 
      sct_apply_transfo -i fmri_${metric}_${roi}_inslice.nii.gz \
 	 -w warp_fmri2mffe.nii.gz warp_mffe2PAM50.nii.gz \
-	 -d PAM50_template_t2s_cropped.nii.gz -o PAM50_${metric}_${roi}_inslice.nii.gz
+	 -d PAM50_mffe.nii.gz -o PAM50_${metric}_${roi}_inslice.nii.gz
 
   done
  done

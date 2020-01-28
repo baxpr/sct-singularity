@@ -92,9 +92,9 @@ fmri_notspine.nii.gz \
 rsrc=MASK
 mkdir "${rsrc}"
 cp \
-fmri_mask30.nii.gz \
-mffe_mask30.nii.gz \
-PAM50_mask30.nii.gz \
+fmri_mask??.nii.gz \
+mffe_mask??.nii.gz \
+PAM50_mask??.nii.gz \
 "${rsrc}"
 
 rsrc=SYNT2

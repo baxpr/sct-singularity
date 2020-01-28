@@ -50,6 +50,24 @@ ${FSLEYES} render \
     --outline --outlineWidth 3
 
 
+# Check segmentation: Subject segmentation overlaid on subject MFFE
+# ROIs on each mffe slice
+for K in $(seq -w 0 $KMAX) ; do
+  ${FSLEYES} render \
+    --scene ortho \
+    --hideCursor --hidex --hidey \
+    --zzoom 2300 \
+    --outfile roi_slice${K}.png --size 600 600 \
+    --voxelLoc $IMID $JMID $K \
+  mffe_mffe.nii.gz \
+    --interpolation linear \
+  ipmffe_gmcutlabel.nii.gz \
+    --lut random_big \
+    --overlayType label \
+    --outline --outlineWidth 4
+done
+
+
 # Plot cor sections for fmri, mffe alignment
 ${FSLEYES} render \
   --scene ortho \

@@ -31,7 +31,6 @@ page_roisignals.png
 montage -mode concatenate \
 -stroke white -fill white -pointsize 20 \
 \( t2sag_levels.png -annotate +10+30 "Levels" \) \
-\( mffe_levels.png -annotate +10+30 "on mFFE" \) \
 \( fmri_levels.png -annotate +10+30 "on mean fMRI" \) \
 \( movement.png \) \
 -tile 2x -quality 100 -background white -gravity center \
@@ -50,8 +49,6 @@ montage -mode concatenate \
 -stroke white -fill white -pointsize 20 \
 \( registration_cor_mffe.png -annotate +10+30 "Subject\nmFFE,\nRed =\n  Subj GM" \) \
 \( registration_cor_fmri.png -annotate +10+30 "Subject\nmean fMRI" \) \
-\( registration_cor_template.png -annotate +10+30 "PAM50\ntemplate" \) \
-\( registration_cor_levels.png -annotate +10+30 "Subject and template \nlevels" \) \
 -tile 2x -quality 100 -background white -gravity center \
 -border 10 -bordercolor white page_cor.png
 
@@ -61,7 +58,6 @@ convert \
 -gravity SouthEast -pointsize 24 -annotate +15+10 "$DS" \
 -gravity NorthWest -pointsize 24 -annotate +15+20 "${INFO}\nCoronal view in template space" \
 page_cor.png
-
 
 
 # ROIs by level
@@ -79,21 +75,6 @@ convert \
 page_roi.png
 
 
-# Segmentation
-montage -mode concatenate \
--stroke white -fill white -pointsize 20 \
--tile ${KSQRT}x -quality 100 -background white -gravity center \
-segmentation_slice*.png \
--border 10 -bordercolor white page_seg.png
-
-convert \
--size 1224x1584 xc:white \
--gravity center \( page_seg.png -resize 1194x1354 \) -geometry +0+60 -composite \
--gravity SouthEast -pointsize 24 -annotate +15+10 "$DS" \
--gravity NorthWest -pointsize 24 -annotate +15+20 "${INFO}\nSegmentation on mFFE" \
-page_seg.png
-
-
 # fMRI registration
 montage -mode concatenate \
 -stroke white -fill white -pointsize 20 \
@@ -107,21 +88,6 @@ convert \
 -gravity SouthEast -pointsize 24 -annotate +15+10 "$DS" \
 -gravity NorthWest -pointsize 24 -annotate +15+20 "${INFO}\nmFFE segmentation on fMRI" \
 page_fmri.png
-
-
-# Template registration
-montage -mode concatenate \
--stroke white -fill white -pointsize 20 \
--tile ${KSQRT}x -quality 100 -background white -gravity center \
-templateregistration_slice*.png \
--border 10 -bordercolor white page_template.png
-
-convert \
--size 1224x1584 xc:white \
--gravity center \( page_template.png -resize 1194x1354 \) -geometry +0+60 -composite \
--gravity SouthEast -pointsize 24 -annotate +15+10 "$DS" \
--gravity NorthWest -pointsize 24 -annotate +15+20 "${INFO}\nmFFE segmentation on template" \
-page_template.png
 
 
 # Connectivity maps, slice
@@ -147,10 +113,8 @@ done
 convert \
   page_levels.png \
   page_cor.png \
-  page_seg.png \
   page_fmri.png \
-  page_template.png \
   page_roi.png \
   page_roisignals.png \
   page_roi_*.png \
-  qcreport.pdf
+  fmri_report.pdf

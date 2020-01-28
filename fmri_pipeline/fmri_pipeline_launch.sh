@@ -1,7 +1,8 @@
 #!/bin/bash
 #
 # Prepare inputs for the pipeline and launch it. For later processing we will assume 
-# the filenames that are created here.
+# the filenames that are created here. We will also assume specific filenames produced
+# by the mffe_pipeline (see below where all inputs are simply copied to the working dir)
 
 # Where is sct installed?
 export SCTDIR=/opt/sct
@@ -22,63 +23,66 @@ do
   case $key in
     --outdir)
       export OUTDIR=$(realpath "$2")
-      shift; shift
-      ;;
-    --mffe_dir)
-      export MFFE_DIR=$(realpath "$2")
-      shift; shift
-      ;;
-    --t2sag_niigz)
-      export T2SAG_NIIGZ=$(realpath "$2")
-      shift; shift
-      ;;
+      shift ; shift ;;
     --fmri_niigz)
       export FMRI_NIIGZ=$(realpath "$2")
-      shift; shift
-      ;;
+      shift ; shift ;;
     --fmri_dcm)
       export FMRI_DCM=$(realpath "$2")
-      shift; shift
-      ;;
+      shift ; shift ;;
     --physlog)
       export PHYSLOG=$(realpath "$2")
-      shift; shift
-      ;;
+      shift ; shift ;;
     --fmri_voltimesec)
       export FMRI_VOLTIMESEC="$2"
-      shift; shift
-      ;;
+      shift ; shift ;;
     --physlog_hz)
       export PHYSLOG_HZ="$2"
-      shift; shift
-      ;;
+      shift ; shift ;;
     --confound_pcs)
       export CONFOUND_PCS="$2"
-      shift; shift
-      ;;
+      shift ; shift ;;
     --masksize)
       export MASKSIZE="$2"
-      shift; shift
-      ;;
+      shift ; shift ;;
+    --mffe_dir)
+      export MFFE_DIR="$2"
+      shift ; shift ;;
+    --t2sag_dir)
+      export T2SAG_DIR="$2"
+      shift ; shift ;;
+    --cord_dir)
+      export CORD_DIR="$2"
+      shift ; shift ;;
+    --gm_dir)
+      export GM_DIR="$2"
+      shift ; shift ;;
+    --wm_dir)
+      export WM_DIR="$2"
+      shift ; shift ;;
+    --csf_dir)
+      export CSF_DIR="$2"
+      shift ; shift ;;
+    --cord_labeled_dir)
+      export CORD_LABELED_DIR="$2"
+      shift ; shift ;;
+    --warps_dir)
+      export WARPS_DIR="$2"
+      shift ; shift ;;
     --project)
       export PROJECT="$2"
-      shift; shift
-      ;;
+      shift ; shift ;;
     --subject)
       export SUBJECT="$2"
-      shift; shift
-      ;;
+      shift ; shift ;;
     --session)
       export SESSION="$2"
-      shift; shift
-      ;;
+      shift ; shift ;;
     --scan)
       export SCAN="$2"
-      shift; shift
-      ;;
+      shift ; shift ;;
     *)
-      shift
-      ;;
+      shift ;;
   esac
 done
 
@@ -87,8 +91,6 @@ echo SUBJECT         = "${SUBJECT}"
 echo SESSION         = "${SESSION}"
 echo SCAN            = "${SCAN}"
 echo OUTDIR          = "${OUTDIR}"
-echo MFFE_DIR        = "${MFFE_DIR}"
-echo T2SAG_NIIGZ     = "${T2SAG_NIIGZ}"
 echo FMRI_NIIGZ      = "${FMRI_NIIGZ}"
 echo FMRI_DCM        = "${FMRI_DCM}"
 echo FMRI_VOLTIMESEC = "${FMRI_VOLTIMESEC}"
@@ -98,32 +100,15 @@ echo CONFOUND_PCS    = "${CONFOUND_PCS}"
 echo MASKSIZE        = "${MASKSIZE}"
 
 
-# Copy most files to working dir OUTDIR
-cp "${T2SAG_NIIGZ}" "${OUTDIR}"/t2sag.nii.gz
+# Copy inputs files to working dir OUTDIR
 cp "${FMRI_NIIGZ}" "${OUTDIR}"/fmri.nii.gz
 cp "${FMRI_DCM}" "${OUTDIR}"/fmri.dcm
 cp "${PHYSLOG}" "${OUTDIR}"/SCANPHYSLOG.log
 
-
-# Find, verify, copy the multiple echoes of the MFFE
-NUM_E1=`ls -d "${MFFE_DIR}"/*_e1.nii.gz | wc -l`
-NUM_E2=`ls -d "${MFFE_DIR}"/*_e2.nii.gz | wc -l`
-NUM_E3=`ls -d "${MFFE_DIR}"/*_e3.nii.gz | wc -l`
-if [ "${NUM_E1}" -ne 1 ] ; then
-	printf '%s\n' "Wrong number of echo 1 files in MFFE" >&2
-	exit 1
-fi
-if [ "${NUM_E2}" -ne 1 ] ; then
-	printf '%s\n' "Wrong number of echo 2 files in MFFE" >&2
-	exit 1
-fi
-if [ "${NUM_E3}" -ne 1 ] ; then
-	printf '%s\n' "Wrong number of echo 3 files in MFFE" >&2
-	exit 1
-fi
-cp "${MFFE_DIR}"/*_e1.nii.gz "${OUTDIR}"/mffe1.nii.gz
-cp "${MFFE_DIR}"/*_e2.nii.gz "${OUTDIR}"/mffe2.nii.gz
-cp "${MFFE_DIR}"/*_e3.nii.gz "${OUTDIR}"/mffe3.nii.gz
+for d in MFFE_DIR T2SAG_DIR CORD_DIR GM_DIR WM_DIR \
+    CSF_DIR CORD_LABELED_DIR WARPS_DIR ; do
+  cp "${d}"/*.nii.gz "${OUTDIR}"
+done
 
 
 # Launch the pipeline

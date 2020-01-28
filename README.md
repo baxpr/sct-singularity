@@ -2,8 +2,8 @@
 
 ## Inputs
 
-See `fmri_pipeline/fmri_pipeline_launch.sh` and `mffe_pipeline/mffe_pipeline_launch.sh` for a list of the inputs for
-each app. Many of the inputs for the fmri app are outputs of the mffe app.
+See `fmri_pipeline/fmri_pipeline_launch.sh`, `mffe_pipeline/mffe_pipeline_launch.sh` for a list of the inputs for
+each app, and `/opt/test_mffe.sh`, `/opt/test_fmri.sh` for example run scripts. Many of the inputs for the fmri app are outputs of the mffe app.
 
 
 ## Output files

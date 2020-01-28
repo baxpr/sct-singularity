@@ -86,18 +86,26 @@ do
   esac
 done
 
-echo PROJECT         = "${PROJECT}"
-echo SUBJECT         = "${SUBJECT}"
-echo SESSION         = "${SESSION}"
-echo SCAN            = "${SCAN}"
-echo OUTDIR          = "${OUTDIR}"
-echo FMRI_NIIGZ      = "${FMRI_NIIGZ}"
-echo FMRI_DCM        = "${FMRI_DCM}"
-echo FMRI_VOLTIMESEC = "${FMRI_VOLTIMESEC}"
-echo PHYSLOG         = "${PHYSLOG}"
-echo PHYSLOG_HZ      = "${PHYSLOG_HZ}"
-echo CONFOUND_PCS    = "${CONFOUND_PCS}"
-echo MASKSIZE        = "${MASKSIZE}"
+echo PROJECT           = "${PROJECT}"
+echo SUBJECT           = "${SUBJECT}"
+echo SESSION           = "${SESSION}"
+echo SCAN              = "${SCAN}"
+echo OUTDIR            = "${OUTDIR}"
+echo MFFE_DIR          = "${MFFE_DIR}"
+echo T2SAG_DIR         = "${T2SAG_DIR}"
+echo CORD_DIR          = "${CORD_DIR}"
+echo GM_DIR            = "${GM_DIR}"
+echo WM_DIR            = "${WM_DIR}"
+echo CSF_DIR           = "${CSF_DIR}"
+echo CORD_LABELED_DIR  = "${CORD_LABELED_DIR}"
+echo WARPS_DIR         = "${WARPS_DIR}"
+echo FMRI_NIIGZ        = "${FMRI_NIIGZ}"
+echo FMRI_DCM          = "${FMRI_DCM}"
+echo FMRI_VOLTIMESEC   = "${FMRI_VOLTIMESEC}"
+echo PHYSLOG           = "${PHYSLOG}"
+echo PHYSLOG_HZ        = "${PHYSLOG_HZ}"
+echo CONFOUND_PCS      = "${CONFOUND_PCS}"
+echo MASKSIZE          = "${MASKSIZE}"
 
 
 # Copy inputs files to working dir OUTDIR

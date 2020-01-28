@@ -105,8 +105,8 @@ cp "${FMRI_NIIGZ}" "${OUTDIR}"/fmri.nii.gz
 cp "${FMRI_DCM}" "${OUTDIR}"/fmri.dcm
 cp "${PHYSLOG}" "${OUTDIR}"/SCANPHYSLOG.log
 
-for d in MFFE_DIR T2SAG_DIR CORD_DIR GM_DIR WM_DIR \
-    CSF_DIR CORD_LABELED_DIR WARPS_DIR ; do
+for d in "${MFFE_DIR}" "${T2SAG_DIR}" "${CORD_DIR}" "${GM_DIR}" "${WM_DIR}" \
+    "${CSF_DIR}" "${CORD_LABELED_DIR}" "${WARPS_DIR}" ; do
   cp "${d}"/*.nii.gz "${OUTDIR}"
 done
 

@@ -42,7 +42,7 @@ sct_apply_transfo -i fmri_gmcutlabel.nii.gz  -x nn \
 
 sct_apply_transfo -i fmri_gmcutlabel.nii.gz  -x nn \
 -w warp_fmri2mffe.nii.gz \
--d ipmffe_mffe.nii.gz -o ipmffe_gmcutlabel.nii.gz
+-d ipmffe_gm.nii.gz -o ipmffe_gmcutlabel.nii.gz
 
 
 # Make "not-spine" ROI in fmri space (combine CSF and seg, dilate, invert)

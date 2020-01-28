@@ -3,7 +3,7 @@
 
 INFO="${PROJECT} ${SUBJECT} ${SESSION} ${SCAN}"
 
-KSQRT=$(get_ijk.py s mffe1.nii.gz)
+KSQRT=$(get_ijk.py s mffe_mffe.nii.gz)
 
 DS=$(date)
 

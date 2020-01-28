@@ -3,7 +3,8 @@
 
 ## Output files
 
-Output images are named as `<geometry>_<contents>.nii.gz`.
+Output images are named as `<geometry>_<contents>.nii.gz`. The tag `_template_` indicates the image was derived from
+the PAM50 template; all others are derived from the subject images.
 
 Geometries are
 
@@ -14,13 +15,8 @@ Geometries are
                   resample the vertebral locations between geometries.
     warp_     Warp field between two geometries
 
-Contents are
+Output contents from the mffe app are
 
-    _fmri                 Unprocessed fMRI
-    _fmri0                First volume of unprocessed fMRI
-    _moco                 Motion corrected fMRI
-    _moco_mean            Mean of motion corrected fMRI volumes
-    
     _mffe                 Unprocessed mFFE
     
     _maskNN               Registration mask, NN mm in size
@@ -29,28 +25,47 @@ Contents are
     _cord_labeled         Vertebral label ROIs found on the t2sag
     _cord_labeled_discs   Disc point labels found on the t2sag
     _cord_labeled_body    Body center points from _cord_labeled
-    _centerline           Cord centerline
     
     _gm                   Segmented gray matter found on the mFFE
     _wm                   Segmented white matter found on the mFFE
-    _csf                  Atlas CSF compartment from the PAM50 template
-    
-    _notspine             "Not spine" region used to obtain confound signals
-    
-    _gmcut                Gray matter cut into four horns
-    _gmcutlabel           Gray matter cut into four horns and marked by level
+    _csf                  Segmented CSF found on the mFFE
+    _template_csf         Atlas CSF compartment from the PAM50 template
     
     _synt2                Synthetic T2 built from the gray and white segmentations
     
-    _R_*_inslice          Connectivity maps for within-slice seeds (R)
-    _Z_*_inslice          Connectivity maps for within-slice seeds (Z)
+    mffe_report.pdf       QC report and view of results
+    mffe_csa.csv          Cross-sectional areas
+
+
+Output contents from the fmri app are
+
+    _fmri                         Unprocessed fMRI
+    _fmri0                        First volume of unprocessed fMRI
+    _moco                         Motion corrected fMRI
+    _moco_mean                    Mean of motion corrected fMRI volumes
+    _regbp                        Filtered fMRI (confound regression and bandpass)
     
-    _template_            Indicates data from template image, not subject image
-
-Other outputs:
-
-    qcreport.pdf                  QC report and view of results
-    mffe_csa.csv                  Cross-sectional areas
+    _mffe                         Resampled mFFE
+    
+    _maskNN                       Registration mask, NN mm in size
+    
+    _cord                         Segmented spinal cord ("seg")
+    _cord_labeled                 Vertebral label ROIs found on the t2sag
+    _centerline                   Cord centerline
+    
+    _gm                           Segmented gray matter found on the mFFE
+    _wm                           Segmented white matter found on the mFFE
+    _csf                          Atlas CSF compartment from the PAM50 template
+    
+    _notspine                     "Not spine" region used to obtain confound signals
+    
+    _gmcut                        Gray matter cut into four horns
+    _gmcutlabel                   Gray matter cut into four horns and marked by level
+        
+    _R_*_inslice                  Connectivity maps for within-slice seeds (R)
+    _Z_*_inslice                  Connectivity maps for within-slice seeds (Z)
+    
+    fmri_report.pdf               QC report and view of results
     R_inslice.csv                 ROI-to-ROI connectivity within slice (R)
     Z_inslice.csv                 ROI-to-ROI connectivity within slice (Z)
     

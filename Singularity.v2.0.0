@@ -86,7 +86,6 @@ From: ubuntu:18.04
 
 %apphelp fmri_pipeline
   Functional MRI analysis pipeline. For more information:
-    /opt/fmri_pipeline/README.md
 
 %appenv fmri_pipeline
   PATH="/opt/fmri_pipeline:/opt/fmri_pipeline/external/afni:${PATH}"
@@ -100,7 +99,6 @@ From: ubuntu:18.04
 
 %apphelp mffe_pipeline
   mFFE analysis pipeline. For more information:
-    /opt/mFFE_pipeline/README.md
 
 %appenv mffe_pipeline
   PATH="/opt/mffe_pipeline:${PATH}"

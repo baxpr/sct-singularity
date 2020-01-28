@@ -3,7 +3,7 @@
 rsrc=PDF
 mkdir "${rsrc}"
 cp \
-qcreport.pdf \
+fmri_report.pdf \
 "${rsrc}"
 
 rsrc=WARPS
@@ -11,26 +11,12 @@ mkdir "${rsrc}"
 cp \
 warp_fmri2mffe.nii.gz \
 warp_mffe2fmri.nii.gz \
-warp_mffe2PAM50.nii.gz \
-warp_PAM502mffe.nii.gz \
-warp_mffe2t2sag.nii.gz \
-warp_t2sag2mffe.nii.gz \
 "${rsrc}"
 
 rsrc=MFFE
 mkdir "${rsrc}"
 cp \
-mffe_mffe.nii.gz \
 fmri_mffe.nii.gz \
-PAM50_mffe.nii.gz \
-t2sag_mffe.nii.gz \
-"${rsrc}"
-
-rsrc=T2SAG
-mkdir "${rsrc}"
-cp \
-t2sag_t2sag.nii.gz \
-mffe_t2sag.nii.gz \
 "${rsrc}"
 
 rsrc=MOTION
@@ -65,22 +51,18 @@ rsrc=GM
 mkdir "${rsrc}"
 cp \
 fmri_gm.nii.gz \
-mffe_gm.nii.gz \
-PAM50_gm.nii.gz \
 "${rsrc}"
 
 rsrc=WM
 mkdir "${rsrc}"
 cp \
 fmri_wm.nii.gz \
-mffe_wm.nii.gz \
 "${rsrc}"
 
 rsrc=CSF
 mkdir "${rsrc}"
 cp \
 fmri_csf.nii.gz \
-mffe_csf.nii.gz \
 "${rsrc}"
 
 rsrc=NOTSPINE
@@ -93,15 +75,6 @@ rsrc=MASK
 mkdir "${rsrc}"
 cp \
 fmri_mask??.nii.gz \
-mffe_mask??.nii.gz \
-PAM50_mask??.nii.gz \
-"${rsrc}"
-
-rsrc=SYNT2
-mkdir "${rsrc}"
-cp \
-mffe_synt2.nii.gz \
-PAM50_synt2.nii.gz \
 "${rsrc}"
 
 rsrc=FMRI_CENTERLINE
@@ -131,25 +104,12 @@ rsrc=CORD
 mkdir "${rsrc}"
 cp \
 fmri_cord.nii.gz \
-mffe_cord.nii.gz \
-t2sag_cord.nii.gz \
 "${rsrc}"
 
 rsrc=CORD_LABELED
 mkdir "${rsrc}"
 cp \
 fmri_cord_labeled.nii.gz \
-mffe_cord_labeled.nii.gz \
-ipmffe_cord_labeled.nii.gz \
-t2sag_cord_labeled.nii.gz \
-PAM50_cord_labeled.nii.gz \
-"${rsrc}"
-
-rsrc=LABEL_POINTS
-mkdir "${rsrc}"
-cp \
-ipmffe_cord_labeled_body.nii.gz \
-t2sag_cord_labeled_discs.nii.gz \
 "${rsrc}"
 
 rsrc=RMAPS_FMRI
@@ -216,12 +176,6 @@ rsrc=ZMATRIX
 mkdir "${rsrc}"
 cp \
 Z_inslice.csv \
-"${rsrc}"
-
-rsrc=CSA
-mkdir "${rsrc}"
-cp \
-mffe_csa.csv \
 "${rsrc}"
 
 rsrc=PHYSLOG

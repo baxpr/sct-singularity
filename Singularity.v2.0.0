@@ -11,6 +11,7 @@ From: ubuntu:18.04
   
 %files
   fmri_pipeline /opt
+  mffe_pipeline /opt
   README.md /opt
 
 
@@ -94,4 +95,18 @@ From: ubuntu:18.04
   xvfb-run --server-num=$(($$ + 99)) \
   --server-args='-screen 0 1600x1200x24 -ac +extension GLX' \
   fmri_pipeline_launch.sh "$@"
+
+
+%apphelp mffe_pipeline
+  mFFE analysis pipeline. For more information:
+    /opt/mFFE_pipeline/README.md
+
+%appenv mffe_pipeline
+  PATH="/opt/mffe_pipeline:${PATH}"
+
+%apprun mffe_pipeline
+  exec \
+  xvfb-run --server-num=$(($$ + 99)) \
+  --server-args='-screen 0 1600x1200x24 -ac +extension GLX' \
+  mffe_pipeline_launch.sh "$@"
 

@@ -7,6 +7,7 @@ From: ubuntu:18.04
     /opt/README.md
     singularity apps <container>
     singularity help --app fmri_pipeline <container>
+    singularity help --app mffe_pipeline <container>
 
   
 %files

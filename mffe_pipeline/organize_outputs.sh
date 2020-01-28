@@ -6,16 +6,11 @@ cp \
 mffe_report.pdf \
 "${rsrc}"
 
-rsrc=WARP_MFFE_PAM50
+rsrc=WARPS
 mkdir "${rsrc}"
 cp \
 warp_mffe2PAM50.nii.gz \
 warp_PAM502mffe.nii.gz \
-"${rsrc}"
-
-rsrc=WARP_MFFE_T2SAG
-mkdir "${rsrc}"
-cp \
 warp_mffe2t2sag.nii.gz \
 warp_t2sag2mffe.nii.gz \
 "${rsrc}"

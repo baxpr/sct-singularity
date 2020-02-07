@@ -36,28 +36,24 @@ sct_apply_transfo -i swi_filtswi.nii.gz \
 -w warp_swi2mffe.nii.gz \
 -d mffe_mffe.nii.gz -o mffe_filtswi.nii.gz
 
-sct_apply_transfo -i PAM50_mip5_filtswi.nii.gz \
--w warp_PAM502mffe.nii.gz \
--d mffe_mffe.nii.gz  -o mffe_mip5_filtswi.nii.gz
-
-sct_apply_transfo -i PAM50_mip9_filtswi.nii.gz \
--w warp_PAM502mffe.nii.gz \
--d mffe_mffe.nii.gz  -o mffe_mip9_filtswi.nii.gz
-
 # Apply warp to get SWI in template space
 sct_apply_transfo -i swi_swimag.nii.gz \
 -w warp_swi2mffe.nii.gz warp_mffe2PAM50.nii.gz \
 -d PAM50_mffe.nii.gz  -o PAM50_swimag.nii.gz
 
 
-
 # Compute minimum intensity projections, 6mm and 12mm ish, or 12-24 vox in PAM50 geom
 compute_mip.py
 
+
 # Warp mip to mffe space
-sct_apply_transfo -i swi_swimag.nii.gz \
--w warp_swi2mffe.nii.gz warp_mffe2PAM50.nii.gz \
--d PAM50_mffe.nii.gz  -o PAM50_swimag.nii.gz
+sct_apply_transfo -i PAM50_mip11_filtswi.nii.gz \
+-w warp_PAM502mffe.nii.gz \
+-d mffe_mffe.nii.gz -o mffe_mip11_filtswi.nii.gz
+
+sct_apply_transfo -i PAM50_mip21_filtswi.nii.gz \
+-w warp_PAM502mffe.nii.gz \
+-d mffe_mffe.nii.gz -o mffe_mip21_filtswi.nii.gz
 
 
 # Make PDF

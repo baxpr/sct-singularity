@@ -12,13 +12,13 @@ DS=$(date)
 montage -mode concatenate \
 -stroke white -fill white -pointsize 20 \
 \( mffe_mffe.png -annotate +10+30 "Subject\nmFFE" \) \
-\( mffe_swimag.png -annotate +10+30 "Subject\nmSWI mag" \) \
+\( mffe_swimag.png -annotate +10+30 "Subject\nSWI mag" \) \
 -tile 2x -quality 100 -background white -gravity center \
 -border 10 -bordercolor white page_mffe.png
 
 convert \
 -size 1224x1584 xc:white \
--gravity center \( page_cor.png -resize 1194x1354 \) -geometry +0+60 -composite \
+-gravity center \( page_mffe.png -resize 1194x1354 \) -geometry +0+60 -composite \
 -gravity SouthEast -pointsize 24 -annotate +15+10 "$DS" \
 -gravity NorthWest -pointsize 24 -annotate +15+20 "${INFO}\nSagittal view in mFFE space" \
 page_mffe.png
@@ -28,7 +28,7 @@ page_mffe.png
 montage -mode concatenate \
 -stroke white -fill white -pointsize 20 \
 \( PAM50_mffe.png -annotate +10+30 "Subject\nmFFE" \) \
-\( PAM50_swimag.png -annotate +10+30 "Subject\nmSWI mag" \) \
+\( PAM50_swimag.png -annotate +10+30 "Subject\nSWI mag" \) \
 -tile 2x -quality 100 -background white -gravity center \
 -border 10 -bordercolor white page_pam50.png
 

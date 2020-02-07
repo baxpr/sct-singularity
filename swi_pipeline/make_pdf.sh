@@ -31,6 +31,7 @@ KSQRT=$(get_ijk.py s mffe_mffe.nii.gz)
 ${FSLEYES} render \
   --scene ortho \
   --hideCursor --hidey --hidez \
+  --xzoom 1200 \
   --outfile mffe_swimag.png --size 600 600 \
   mffe_mffe.nii.gz \
   mffe_swimag.nii.gz
@@ -38,6 +39,7 @@ ${FSLEYES} render \
 ${FSLEYES} render \
   --scene ortho \
   --hideCursor --hidey --hidez \
+  --xzoom 1200 \
   --outfile mffe_mffe.png --size 600 600 \
   mffe_mffe.nii.gz
   
@@ -58,7 +60,6 @@ ${FSLEYES} render \
 
 # PAM50 geom slices of swi before proc with mffe cord overlaid
 for K in $(seq -w 0 $KMAX) ; do
-  xvfb-run --server-num=$(($$ + 99)) --server-args='-screen 0 1600x1200x24 -ac +extension GLX' \
   ${FSLEYES} render \
     --scene ortho \
     --hideCursor --hidex --hidey \
@@ -81,11 +82,7 @@ for K in $(seq -w 0 $KMAX) ; do
     --zzoom 2300 \
     --outfile after_slice${K}.png --size 600 600 \
     --voxelLoc $IMID $JMID $K \
-  mffe_filtswi.nii.gz \
-  mffe_cord.nii.gz \
-    --lut melodic-classes \
-    --overlayType label \
-    --outline --outlineWidth 3
+  mffe_filtswi.nii.gz
 done
 
 
@@ -97,11 +94,7 @@ for K in $(seq -w 0 $KMAX) ; do
     --zzoom 2300 \
     --outfile mip11_slice${K}.png --size 600 600 \
     --voxelLoc $IMID $JMID $K \
-  mffe_mip11_filtswi.nii.gz \
-  mffe_cord.nii.gz \
-    --lut melodic-classes \
-    --overlayType label \
-    --outline --outlineWidth 3
+  mffe_mip11_filtswi.nii.gz
 done
 
 for K in $(seq -w 0 $KMAX) ; do
@@ -111,10 +104,6 @@ for K in $(seq -w 0 $KMAX) ; do
     --zzoom 2300 \
     --outfile mip21_slice${K}.png --size 600 600 \
     --voxelLoc $IMID $JMID $K \
-  mffe_mip21_filtswi.nii.gz \
-  mffe_cord.nii.gz \
-    --lut melodic-classes \
-    --overlayType label \
-    --outline --outlineWidth 3
+  mffe_mip21_filtswi.nii.gz
 done
 

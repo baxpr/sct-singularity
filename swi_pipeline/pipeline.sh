@@ -41,4 +41,8 @@ sct_apply_transfo -i swi_filtswi.nii.gz \
 -w warp_swi2mffe.nii.gz warp_mffe2PAM50.nii.gz \
 -d PAM50_mffe.nii.gz  -o PAM50_filtswi.nii.gz
 
+# Compute minimum intensity projections, 6mm and 12mm ish, or 12-24 vox in PAM50 geom
+
+
+# Organize outputs
 

@@ -15,6 +15,8 @@ export MASKSIZE=30
 export FMRI_VOLTIMESEC=fromDICOM
 export PHYSLOG_HZ=496
 export CONFOUND_PCS=5
+export FMRI_REG_PARAM="step=1,type=seg,algo=slicereg:step=2,type=im,algo=rigid,metric=CC,slicewise=1"
+
 
 # Parse inputs
 while [[ $# -gt 0 ]]
@@ -44,6 +46,9 @@ do
       shift ; shift ;;
     --masksize)
       export MASKSIZE="$2"
+      shift ; shift ;;
+    --fmri_reg_param)
+      export FMRI_REG_PARAM="$2"
       shift ; shift ;;
     --mffe_dir)
       export MFFE_DIR="$2"
@@ -106,6 +111,7 @@ echo PHYSLOG           = "${PHYSLOG}"
 echo PHYSLOG_HZ        = "${PHYSLOG_HZ}"
 echo CONFOUND_PCS      = "${CONFOUND_PCS}"
 echo MASKSIZE          = "${MASKSIZE}"
+echo FMRI_REG_PARAM    = "${FMRI_REG_PARAM}"
 
 
 # Copy inputs files to working dir OUTDIR

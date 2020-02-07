@@ -5,7 +5,7 @@
 singularity run \
 --app fmri_pipeline \
 --bind `pwd`:/wkdir \
-baxpr-sct-singularity-master-v2.1.0.simg \
+baxpr-sct-singularity-master-v3.0.0.simg \
 --outdir OUTPUTS_fmri \
 --fmri_niigz INPUTS_fmri/fmri.nii.gz \
 --fmri_dcm INPUTS_fmri/fmri.dcm \
@@ -22,6 +22,7 @@ baxpr-sct-singularity-master-v2.1.0.simg \
 --cord_labeled_dir OUTPUTS_mffe/CORD_LABELED \
 --warps_dir OUTPUTS_mffe/WARPS \
 --masksize 30 \
+--fmri_reg_param "step=1,type=seg,algo=slicereg:step=2,type=im,algo=rigid,metric=CC,slicewise=1" \
 --project TESTPROJ \
 --subject TESTSUBJ \
 --session TESTSESS \

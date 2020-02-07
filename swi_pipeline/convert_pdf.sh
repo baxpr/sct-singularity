@@ -70,6 +70,21 @@ convert \
 page_after.png
 
 
+# invmaskph
+montage -mode concatenate \
+-stroke white -fill white -pointsize 20 \
+-tile ${KSQRT}x -quality 100 -background white -gravity center \
+invmaskph_slice*.png \
+-border 10 -bordercolor white page_invmaskph.png
+
+convert \
+-size 1224x1584 xc:white \
+-gravity center \( page_invmaskph.png -resize 1194x1354 \) -geometry +0+60 -composite \
+-gravity SouthEast -pointsize 24 -annotate +15+10 "$DS" \
+-gravity NorthWest -pointsize 24 -annotate +15+20 "${INFO}\nInverse phasemask over mFFE" \
+page_invmaskph.png
+
+
 # SWI after filtering, mips
 montage -mode concatenate \
 -stroke white -fill white -pointsize 20 \
@@ -104,6 +119,7 @@ convert \
   page_pam50.png \
   page_before.png \
   page_after.png \
+  page_invmaskph.png \
   page_mip11.png \
   page_mip21.png \
   swi_report.pdf

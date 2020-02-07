@@ -55,7 +55,7 @@ sct_apply_transfo -x linear -i swi_swimag.nii.gz \
 compute_mip.py
 
 
-# Warp mips to mffe space
+# Warp mips to mffe and swi space
 for tag in filtswi maskph invmaskph ; do
   sct_apply_transfo -x linear -i PAM50_mip11_${tag}.nii.gz \
     -w warp_PAM502mffe.nii.gz \
@@ -63,6 +63,12 @@ for tag in filtswi maskph invmaskph ; do
   sct_apply_transfo -x linear -i PAM50_mip21_${tag}.nii.gz \
     -w warp_PAM502mffe.nii.gz \
     -d mffe_mffe.nii.gz -o mffe_mip21_${tag}.nii.gz
+  sct_apply_transfo -x linear -i PAM50_mip11_${tag}.nii.gz \
+    -w warp_PAM502mffe.nii.gz warp_mffe2swi.nii.gz \
+    -d swi_mffe.nii.gz -o swi_mip11_${tag}.nii.gz
+  sct_apply_transfo -x linear -i PAM50_mip21_${tag}.nii.gz \
+    -w warp_PAM502mffe.nii.gz warp_mffe2swi.nii.gz \
+    -d swi_mffe.nii.gz -o swi_mip21_${tag}.nii.gz
 done
 
 

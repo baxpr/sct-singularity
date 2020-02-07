@@ -74,6 +74,25 @@ for K in $(seq -w 0 $KMAX) ; do
 done
 
 
+# PAM50 geom slices of mffe with cord outline and invmaskph
+for K in $(seq -w 0 $KMAX) ; do
+  ${FSLEYES} render \
+    --scene ortho \
+    --hideCursor --hidex --hidey \
+    --zzoom 2300 \
+    --outfile invmaskph_slice${K}.png --size 600 600 \
+    --voxelLoc $IMID $JMID $K \
+  mffe_mffe.nii.gz \
+  mffe_cord.nii.gz \
+    --lut melodic-classes \
+    --overlayType label \
+    --outline --outlineWidth 3 \
+  mffe_invmaskph.nii.gz \
+    --cmap red-yellow \
+    --displayRange 0.5 1.0
+done
+
+
 # Same after proc
 for K in $(seq -w 0 $KMAX) ; do
   ${FSLEYES} render \

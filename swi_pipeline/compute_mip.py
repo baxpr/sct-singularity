@@ -12,7 +12,7 @@ swi_data[swi_data==0] = numpy.NaN
 
 mip_data = numpy.zeros(swi_data.shape)
 
-for halfwidth in (2,4):
+for halfwidth in (5,10):
     for s in range(swi_data.shape[2]):
         chunk = swi_data[:,:,max(s-halfwidth,0):min(s+halfwidth,swi_data.shape[2])]
         mip_data[:,:,s] = numpy.nanmin(chunk,2)

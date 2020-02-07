@@ -21,17 +21,17 @@ do
     --masksize)
       export MASKSIZE="$2"
       shift; shift ;;
-    --template_reg_param)
+    --swi_reg_param)
       export SWI_REG_PARAM="$2"
       shift; shift ;;
     --swi_dir)
       export SWI_DIR="$2"
       shift ; shift ;;
     --mffe_dir)
-      export MFFE_DIR="$2"
+      export MFFE_NIIGZ="$2"
       shift ; shift ;;
     --warps_dir)
-      export WARPS_DIR="$2"
+      export WARP_NIIGZ="$2"
       shift ; shift ;;
     --project)
       export PROJECT="$2"
@@ -55,8 +55,8 @@ echo SUBJECT            = "${SUBJECT}"
 echo SESSION            = "${SESSION}"
 echo SCAN               = "${SCAN}"
 echo SWI_DIR            = "${SWI_DIR}"
-echo MFFE_DIR           = "${MFFE_DIR}"
-echo WARPS_DIR          = "${WARPS_DIR}"
+echo MFFE_NIIGZ         = "${MFFE_NIIGZ}"
+echo WARP_NIIGZ         = "${WARP_NIIGZ}"
 echo OUTDIR             = "${OUTDIR}"
 echo MASKSIZE           = "${MASKSIZE}"
 echo SWI_REG_PARAM      = "${SWI_REG_PARAM}"
@@ -78,9 +78,11 @@ fi
 cp "${mag_niigz}" "${OUTDIR}"/mag.nii.gz
 cp "${ph_niigz}" "${OUTDIR}"/ph.nii.gz
 
-# Copy remaining inputs
-cp "${MFFE_DIR}"/* "${OUTDIR}"
-cp "${WARPS_DIR}"/* "${OUTDIR}"
+
+# Copy remaining inputs. We need the mffe, and the mffe2PAM50 warp -
+# specific files specified in the yaml
+cp "${MFFE_NIIGZ}" "${OUTDIR}"
+cp "${WARP_NIIGZ}" "${OUTDIR}"
 
 
 # Launch the pipeline

@@ -11,6 +11,7 @@ export TDIR=${SCTDIR}/data/PAM50/template
 
 # Default inputs
 export MASKSIZE=30
+export TEMPLATE_REG_PARAM="step=0,type=label,dof=Tx_Ty_Tz_Sz:step=1,type=seg,algo=centermass:step=2,type=im,algo=syn"
 
 # Parse inputs
 while [[ $# -gt 0 ]]
@@ -19,50 +20,45 @@ do
   case $key in
     --outdir)
       export OUTDIR=$(realpath "$2")
-      shift; shift
-      ;;
+      shift; shift ;;
     --mffe_dir)
       export MFFE_DIR=$(realpath "$2")
-      shift; shift
-      ;;
+      shift; shift ;;
     --t2sag_niigz)
       export T2SAG_NIIGZ=$(realpath "$2")
-      shift; shift
-      ;;
+      shift; shift ;;
     --masksize)
       export MASKSIZE="$2"
-      shift; shift
-      ;;
+      shift; shift ;;
+    --template_reg_param)
+      export TEMPLATE_REG_PARAM="$2"
+      shift; shift ;;
     --project)
       export PROJECT="$2"
-      shift; shift
-      ;;
+      shift; shift ;;
     --subject)
       export SUBJECT="$2"
-      shift; shift
-      ;;
+      shift; shift ;;
     --session)
       export SESSION="$2"
-      shift; shift
-      ;;
+      shift; shift ;;
     --scan)
       export SCAN="$2"
-      shift; shift
-      ;;
+      shift; shift ;;
     *)
-      shift
-      ;;
+      shift ;;
   esac
 done
 
-echo PROJECT         = "${PROJECT}"
-echo SUBJECT         = "${SUBJECT}"
-echo SESSION         = "${SESSION}"
-echo SCAN            = "${SCAN}"
-echo OUTDIR          = "${OUTDIR}"
-echo MFFE_DIR        = "${MFFE_DIR}"
-echo T2SAG_NIIGZ     = "${T2SAG_NIIGZ}"
-echo MASKSIZE        = "${MASKSIZE}"
+echo PROJECT            = "${PROJECT}"
+echo SUBJECT            = "${SUBJECT}"
+echo SESSION            = "${SESSION}"
+echo SCAN               = "${SCAN}"
+echo OUTDIR             = "${OUTDIR}"
+echo MFFE_DIR           = "${MFFE_DIR}"
+echo T2SAG_NIIGZ        = "${T2SAG_NIIGZ}"
+echo MASKSIZE           = "${MASKSIZE}"
+echo TEMPLATE_REG_PARAM = "${TEMPLATE_REG_PARAM}"
 
 
 # Copy most files to working dir OUTDIR

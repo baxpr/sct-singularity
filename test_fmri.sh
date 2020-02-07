@@ -5,7 +5,7 @@
 singularity run \
 --app fmri_pipeline \
 --bind `pwd`:/wkdir \
-baxpr-sct-singularity-master-v2.0.1.simg \
+baxpr-sct-singularity-master-v2.1.0.simg \
 --outdir OUTPUTS_fmri \
 --fmri_niigz INPUTS_fmri/fmri.nii.gz \
 --fmri_dcm INPUTS_fmri/fmri.dcm \

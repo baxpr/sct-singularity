@@ -42,7 +42,11 @@ sct_apply_transfo -i swi_filtswi.nii.gz \
 -d PAM50_mffe.nii.gz  -o PAM50_filtswi.nii.gz
 
 # Compute minimum intensity projections, 6mm and 12mm ish, or 12-24 vox in PAM50 geom
+compute_mip.py
+
+# Make PDF
+#  Similar to mffe but add SWI before and after processing
 
 
 # Organize outputs
-
+organize_outputs.sh

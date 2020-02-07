@@ -14,7 +14,7 @@ import argparse
 parser = argparse.ArgumentParser(description='Haacke SWI method')
 parser.add_argument('--mag_niigz',required=True)
 parser.add_argument('--ph_niigz',required=True)
-parser.add_argument('--swi_output_niigz',default='swi.nii.gz')
+parser.add_argument('--output_pfx',default='swi')
 parser.add_argument('--ph_scale',type=float,default=0.001)
 parser.add_argument('--window_alpha',type=float,default=30)
 parser.add_argument('--haacke_factor',type=float,default=5)
@@ -61,4 +61,10 @@ finalim_data = numpy.multiply(maskph_data,numpy.absolute(im_data))
 
 # Write to file
 finalim_img = nibabel.Nifti1Image(finalim_data,mag_img.affine)
-finalim_img.to_filename(args.swi_output_niigz)
+finalim_img.to_filename(args.output_pfx + '_filtswi.nii.gz')
+
+maskph_img = nibabel.Nifti1Image(maskph_data,mag_img.affine)
+maskph_img.to_filename(args.output_pfx + '_maskph.nii.gz')
+
+imvmaskph_img = nibabel.Nifti1Image(1-maskph_data,mag_img.affine)
+imvmaskph_img.to_filename(args.output_pfx + '_invmaskph.nii.gz')

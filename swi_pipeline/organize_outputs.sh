@@ -30,7 +30,24 @@ swi_filtswi.nii.gz \
 rsrc=MIPFILTSWI
 mkdir "${rsrc}"
 cp \
+mffe_mip*_filtswi.nii.gz \
 PAM50_mip*_filtswi.nii.gz \
+"${rsrc}"
+
+rsrc=PHASEMASK
+mkdir "${rsrc}"
+cp \
+swi_maskph.nii.gz \
+mffe_maskph.nii.gz \
+PAM50_maskph.nii.gz \
+"${rsrc}"
+
+rsrc=INVPHASEMASK
+mkdir "${rsrc}"
+cp \
+swi_invmaskph.nii.gz \
+mffe_invmaskph.nii.gz \
+PAM50_invmaskph.nii.gz \
 "${rsrc}"
 
 rsrc=MFFE

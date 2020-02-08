@@ -7,3 +7,4 @@ local*
 .DS_Store
 error.log
 __pycache__
+*.zip

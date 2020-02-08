@@ -51,7 +51,7 @@ convert \
 -size 1224x1584 xc:white \
 -gravity center \( page_before.png -resize 1194x1354 \) -geometry +0+60 -composite \
 -gravity SouthEast -pointsize 24 -annotate +15+10 "$DS" \
--gravity NorthWest -pointsize 24 -annotate +15+20 "${INFO}\nSWI in mFFE space before filtering" \
+-gravity NorthWest -pointsize 24 -annotate +15+20 "${INFO}\nSWI space before filtering" \
 page_before.png
 
 
@@ -66,7 +66,7 @@ convert \
 -size 1224x1584 xc:white \
 -gravity center \( page_after.png -resize 1194x1354 \) -geometry +0+60 -composite \
 -gravity SouthEast -pointsize 24 -annotate +15+10 "$DS" \
--gravity NorthWest -pointsize 24 -annotate +15+20 "${INFO}\nSWI in mFFE space after filtering" \
+-gravity NorthWest -pointsize 24 -annotate +15+20 "${INFO}\nSWI after filtering" \
 page_after.png
 
 
@@ -119,7 +119,7 @@ convert \
   page_pam50.png \
   page_before.png \
   page_after.png \
-  page_invmaskph.png \
   page_mip11.png \
   page_mip21.png \
+  page_invmaskph.png \
   swi_report.pdf

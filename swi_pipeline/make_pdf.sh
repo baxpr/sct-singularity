@@ -13,13 +13,13 @@ FSLEYES=/opt/sct/python/envs/venv_sct/bin/fsleyes
 
 
 # Get voxel dims
-IDIM=$(get_ijk.py i mffe_mffe.nii.gz)
+IDIM=$(get_ijk.py i swi_swimag.nii.gz)
 let "IMID = $IDIM / 2"
-JDIM=$(get_ijk.py j mffe_mffe.nii.gz)
+JDIM=$(get_ijk.py j swi_swimag.nii.gz)
 let "JMID = $JDIM / 2"
-KDIM=$(get_ijk.py k mffe_mffe.nii.gz)
+KDIM=$(get_ijk.py k swi_swimag.nii.gz)
 let "KMAX = $KDIM - 1"
-KSQRT=$(get_ijk.py s mffe_mffe.nii.gz)
+KSQRT=$(get_ijk.py s swi_swimag.nii.gz)
 
 
 
@@ -58,7 +58,7 @@ ${FSLEYES} render \
   PAM50_mffe.nii.gz
 
 
-# PAM50 geom slices of swi before proc with mffe cord overlaid
+# slices of swi before proc with cord overlaid
 for K in $(seq -w 0 $KMAX) ; do
   ${FSLEYES} render \
     --scene ortho \
@@ -66,8 +66,8 @@ for K in $(seq -w 0 $KMAX) ; do
     --zzoom 2300 \
     --outfile before_slice${K}.png --size 600 600 \
     --voxelLoc $IMID $JMID $K \
-  mffe_swimag.nii.gz \
-  mffe_cord.nii.gz \
+  swi_swimag.nii.gz \
+  swi_cord.nii.gz \
     --lut melodic-classes \
     --overlayType label \
     --outline --outlineWidth 3
@@ -82,11 +82,11 @@ for K in $(seq -w 0 $KMAX) ; do
     --zzoom 2300 \
     --outfile invmaskph_slice${K}.png --size 600 600 \
     --voxelLoc $IMID $JMID $K \
-  mffe_mffe.nii.gz \
-  mffe_invmaskph.nii.gz \
+  swi_mffe.nii.gz \
+  swi_invmaskph.nii.gz \
     --cmap red-yellow \
     --displayRange 0.5 1.0 \
-  mffe_cord.nii.gz \
+  swi_cord.nii.gz \
     --lut melodic-classes \
     --overlayType label \
     --outline --outlineWidth 3
@@ -101,7 +101,7 @@ for K in $(seq -w 0 $KMAX) ; do
     --zzoom 2300 \
     --outfile after_slice${K}.png --size 600 600 \
     --voxelLoc $IMID $JMID $K \
-  mffe_filtswi.nii.gz
+  swi_filtswi.nii.gz
 done
 
 
@@ -113,7 +113,7 @@ for K in $(seq -w 0 $KMAX) ; do
     --zzoom 2300 \
     --outfile mip11_slice${K}.png --size 600 600 \
     --voxelLoc $IMID $JMID $K \
-  mffe_mip11_filtswi.nii.gz
+  swi_mip11_filtswi.nii.gz
 done
 
 for K in $(seq -w 0 $KMAX) ; do
@@ -123,6 +123,6 @@ for K in $(seq -w 0 $KMAX) ; do
     --zzoom 2300 \
     --outfile mip21_slice${K}.png --size 600 600 \
     --voxelLoc $IMID $JMID $K \
-  mffe_mip21_filtswi.nii.gz
+  swi_mip21_filtswi.nii.gz
 done
 

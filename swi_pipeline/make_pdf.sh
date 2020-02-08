@@ -83,13 +83,13 @@ for K in $(seq -w 0 $KMAX) ; do
     --outfile invmaskph_slice${K}.png --size 600 600 \
     --voxelLoc $IMID $JMID $K \
   mffe_mffe.nii.gz \
+  mffe_invmaskph.nii.gz \
+    --cmap red-yellow \
+    --displayRange 0.5 1.0 \
   mffe_cord.nii.gz \
     --lut melodic-classes \
     --overlayType label \
-    --outline --outlineWidth 3 \
-  mffe_invmaskph.nii.gz \
-    --cmap red-yellow \
-    --displayRange 0.5 1.0
+    --outline --outlineWidth 3
 done
 
 

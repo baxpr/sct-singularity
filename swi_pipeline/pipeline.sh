@@ -80,4 +80,4 @@ convert_pdf.sh
 
 
 # Organize outputs
-#organize_outputs.sh
+organize_outputs.sh

@@ -13,10 +13,8 @@ FSLEYES=/opt/sct/python/envs/venv_sct/bin/fsleyes
 
 
 # Get voxel dims
-IDIM=$(get_ijk.py i swi_swimag.nii.gz)
-let "IMID = $IDIM / 2"
-JDIM=$(get_ijk.py j swi_swimag.nii.gz)
-let "JMID = $JDIM / 2"
+IMID=$(get_com.py i swi_cord.nii.gz)
+JMID=$(get_com.py j swi_cord.nii.gz)
 KDIM=$(get_ijk.py k swi_swimag.nii.gz)
 let "KMAX = $KDIM - 1"
 KSQRT=$(get_ijk.py s swi_swimag.nii.gz)

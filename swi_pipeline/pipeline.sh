@@ -41,8 +41,12 @@ sct_apply_transfo -x nn -i mffe_cord.nii.gz \
 -d swi_swimag.nii.gz  -o swi_cord.nii.gz
 
 
+# Create filtered mffe
+compute_filtmffe.py
+
+
 # Apply warp to get outputs in mffe and template space
-for tag in filtswi maskph invmaskph ; do
+for tag in filtswi maskph invmaskph filtmffe ; do
   sct_apply_transfo -x linear -i swi_${tag}.nii.gz \
     -w warp_swi2mffe.nii.gz \
     -d mffe_mffe.nii.gz -o mffe_${tag}.nii.gz
@@ -62,7 +66,7 @@ compute_mip.py
 
 
 # Warp mips to mffe and swi space
-for tag in filtswi maskph invmaskph ; do
+for tag in filtswi maskph invmaskph filtmffe ; do
   sct_apply_transfo -x linear -i PAM50_mip11_${tag}.nii.gz \
     -w warp_PAM502mffe.nii.gz \
     -d mffe_mffe.nii.gz -o mffe_mip11_${tag}.nii.gz

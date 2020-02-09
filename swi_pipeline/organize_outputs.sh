@@ -35,6 +35,22 @@ mffe_mip*_filtswi.nii.gz \
 PAM50_mip*_filtswi.nii.gz \
 "${rsrc}"
 
+rsrc=FILTMFFE
+mkdir "${rsrc}"
+cp \
+swi_filtmffe.nii.gz \
+mffe_filtmffe.nii.gz \
+PAM50_filtmffe.nii.gz \
+"${rsrc}"
+
+rsrc=MIPFILTMFFE
+mkdir "${rsrc}"
+cp \
+swi_mip*_filtmffe.nii.gz \
+mffe_mip*_filtmffe.nii.gz \
+PAM50_mip*_filtmffe.nii.gz \
+"${rsrc}"
+
 rsrc=PHASEMASK
 mkdir "${rsrc}"
 cp \

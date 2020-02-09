@@ -5,7 +5,7 @@
 import nibabel
 import numpy
 
-for tag in ['filtswi','maskph','invmaskph']:
+for tag in ['filtswi','maskph','invmaskph','filtmffe']:
 
     img = nibabel.load('PAM50_' + tag + '.nii.gz')
     data = img.get_fdata()

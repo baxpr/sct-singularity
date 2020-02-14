@@ -23,6 +23,9 @@ csa_calc.sh
 # Registration to template
 pipeline_templatereg.sh
 
+# CSF region
+pipeline_csf.sh
+
 # Geom transforms
 pipeline_transforms.sh
 

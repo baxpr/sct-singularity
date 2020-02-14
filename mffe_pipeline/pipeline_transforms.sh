@@ -46,15 +46,7 @@ sct_apply_transfo -i mffe_wm.nii.gz -x nn \
 -w warp_mffe2PAM50.nii.gz \
 -d PAM50_template_t2s_cropped.nii.gz -o PAM50_wm.nii.gz
 
-sct_apply_transfo -i mffe_csf.nii.gz -x nn \
--w warp_mffe2PAM50.nii.gz \
--d PAM50_template_t2s_cropped.nii.gz -o PAM50_csf.nii.gz
-
 sct_apply_transfo -i mffe_cord.nii.gz -x nn \
 -w warp_mffe2PAM50.nii.gz \
 -d PAM50_template_t2s_cropped.nii.gz -o PAM50_cord.nii.gz
-
-sct_apply_transfo -i ${TDIR}/PAM50_csf.nii.gz -x nn \
--w warp_PAM502mffe.nii.gz \
--d mffe_mffe.nii.gz -o mffe_template_csf.nii.gz
 

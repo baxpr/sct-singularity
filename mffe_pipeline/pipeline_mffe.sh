@@ -19,12 +19,6 @@ sct_maths -i mffe_gm.nii.gz -add mffe_cord.nii.gz -o mffe_synt2.nii.gz
 sct_create_mask -i mffe_mffe.nii.gz -p centerline,mffe_cord.nii.gz -size ${MASKSIZE}mm \
 	-o mffe_mask${MASKSIZE}.nii.gz
 
-# Use propseg to get mffe csf. Remove any voxels that were labeled as cord above
-sct_propseg -i mffe_mffe.nii.gz -c t2 -CSF
-sct_maths -i mffe_cord.nii.gz -mul -1 -o tmp.nii.gz
-sct_maths -i tmp.nii.gz -add 1 -o tmp.nii.gz
-sct_maths -i tmp.nii.gz -mul mffe_mffe_CSF_seg.nii.gz -o mffe_csf.nii.gz
-
 # Pad and resample mffe to iso voxel for better label placement. Padding includes
 # enough room to fully capture the levels at top and bottom that probably extend
 # past the mffe FOV but are captured in the t2sag
@@ -37,4 +31,3 @@ sct_resample -i mffe_cord.nii.gz -ref ipmffe_mffe.nii.gz -x nn -o ipmffe_cord.ni
 sct_resample -i mffe_synt2.nii.gz -ref ipmffe_mffe.nii.gz -x nn -o ipmffe_synt2.nii.gz
 sct_resample -i mffe_gm.nii.gz -ref ipmffe_mffe.nii.gz -x nn -o ipmffe_gm.nii.gz
 sct_resample -i mffe_wm.nii.gz -ref ipmffe_mffe.nii.gz -x nn -o ipmffe_wm.nii.gz
-sct_resample -i mffe_csf.nii.gz -ref ipmffe_mffe.nii.gz -x nn -o ipmffe_csf.nii.gz

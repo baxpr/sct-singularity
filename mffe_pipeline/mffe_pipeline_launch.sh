@@ -12,7 +12,7 @@ export TDIR=${SCTDIR}/data/PAM50/template
 # Default inputs
 export MASKSIZE=30
 export TEMPLATE_REG_PARAM="step=0,type=label,dof=Tx_Ty_Tz_Sz:step=1,type=seg,algo=centermass:step=2,type=im,algo=syn"
-export CSF_METHOD="propseg"
+export CSF_METHOD="template"
 
 # Parse inputs
 while [[ $# -gt 0 ]]

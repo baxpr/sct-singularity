@@ -29,13 +29,17 @@ def get_vat_from_dicom(fmri_dcm):
     ds = pydicom.dcmread(fmri_dcm)
 
     # (5200,9230)       PerFrameFunctionalGroupsSequence
+    #   (2005,140f)     Private field
+    #     (2005,10a0)   Private field - frame start time in sec
     #   (0020,9111)     FrameContentSequence
     #     (0018,9074)   FrameAcquisitionDateTime
     #     (0020,9157)   DimensionIndexValues (0=irrelevant,1=slice,2=volume)
-
+    
     # Acquisition time and dim index for each frame
     PerFrameFunctionalGroupsSequence = ds[0x5200,0x9230]
     FrameAcquisitionDateTime = [x[0x0020,0x9111][0][0x0018,0x9074] 
+        for x in PerFrameFunctionalGroupsSequence]
+    FrameStartTimeSec = [x[0x2005,0x140f][0][0x2005,0x10a0] 
         for x in PerFrameFunctionalGroupsSequence]
     DimensionIndexValues1 = [x[0x0020,0x9111][0][0x0020,0x9157][1] 
         for x in PerFrameFunctionalGroupsSequence]
@@ -52,19 +56,32 @@ def get_vat_from_dicom(fmri_dcm):
     minloc = [i for i,xy in enumerate(zip(min1,min2)) if xy[0] and xy[1]][0]
     maxloc = [i for i,xy in enumerate(zip(min1,max2)) if xy[0] and xy[1]][0]
 
-    # Datetime for first and last volumes, converted to datetime
+    # Starttime for first and last volumes, in sec, by private field
+    mindtP = FrameStartTimeSec[ minloc ].value
+    maxdtP = FrameStartTimeSec[ maxloc ].value
+
+    # Datetime for first and last volumes from frametime, converted to datetime
     mindtstr = FrameAcquisitionDateTime[ minloc ]
     maxdtstr = FrameAcquisitionDateTime[ maxloc ]
-    mindt = datetime.datetime.strptime(mindtstr.value,'%Y%m%d%H%M%S.%f')
-    maxdt = datetime.datetime.strptime(maxdtstr.value,'%Y%m%d%H%M%S.%f')
+    mindtD = datetime.datetime.strptime(mindtstr.value,'%Y%m%d%H%M%S.%f')
+    maxdtD = datetime.datetime.strptime(maxdtstr.value,'%Y%m%d%H%M%S.%f')
+    
+    # Compute volume acquisition time both ways. Note, totaltime is from beginning 
+    # of first vol to beginning of last vol
+    totaltimeP = maxdtP - mindtP
+    totaltimeD = (maxdtD-mindtD).total_seconds()
+    nvols = max(DimensionIndexValues2) - min(DimensionIndexValues2)
 
-    # Compute volume acquisition time. Note, totaltime is from beginning of first vol to
-    # beginning of last vol
-    totaltime = (maxdt-mindt).total_seconds()
-    vat = totaltime / (max(DimensionIndexValues2) - min(DimensionIndexValues2))
+    print('VAT from frame timestamps: %f' % (totaltimeD/nvols) )
+    print('VAT from private field:    %f' % (totaltimeP/nvols) )
+    
+    # Use the private field to compute VAT (probably more accurate)
+    vat = totaltimeP / nvols
 
     return vat
 
+
+## Main
 
 if vat_spec == 'fromDICOM':
     vat = get_vat_from_dicom(fmri_dcm)

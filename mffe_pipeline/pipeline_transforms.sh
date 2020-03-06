@@ -19,6 +19,15 @@ sct_crop_image -i ${TDIR}/PAM50_t2s.nii.gz \
 -o PAM50_template_t2s_cropped.nii.gz
 
 
+# Transform subject CSF to PAM50
+sct_apply_transfo -i mffe_csf.nii.gz -x nn \
+-w warp_mffe2PAM50.nii.gz \
+-d PAM50_template_t2s_cropped.nii.gz -o PAM50_csf.nii.gz
+
+# And also to ipmffe
+sct_resample -i mffe_csf.nii.gz -ref ipmffe_mffe.nii.gz -x nn -o ipmffe_csf.nii.gz
+
+
 # Crop a couple of "extended" PAM50 space images to the cropped space
 sct_crop_image -i PAM50_synt2.nii.gz \
 -ref PAM50_template_t2s_cropped.nii.gz \

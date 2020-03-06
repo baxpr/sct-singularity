@@ -35,6 +35,12 @@ mv swi_swimag_reg.nii.gz mffe_swimag.nii.gz
 mv mffe_mffe_reg.nii.gz swi_mffe.nii.gz
 
 
+# Warp reg mask to swi space
+sct_apply_transfo -x nn -i mffe_mask${MASKSIZE}.nii.gz \
+-w warp_mffe2swi.nii.gz \
+-d swi_swimag.nii.gz -o swi_mask${MASKSIZE}.nii.gz
+
+
 # Warp mffe cord to swi geom and overwrite - it's much more accurate
 sct_apply_transfo -x nn -i mffe_cord.nii.gz \
 -w warp_mffe2swi.nii.gz \

@@ -91,7 +91,7 @@ swi_mffe.nii.gz \
 
 rsrc=MASK
 mkdir "${rsrc}"
-for f in mffe_mask{0,1,2,3,4,5,6,7,8,9}*.nii.gz; do
+for f in {mffe,swi}_mask{0,1,2,3,4,5,6,7,8,9}*.nii.gz; do
     cp "${f}" "${rsrc}"
 done
 

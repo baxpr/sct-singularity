@@ -6,6 +6,12 @@ cp \
 swi_report.pdf \
 "${rsrc}"
 
+rsrc=CORD
+mkdir "${rsrc}"
+cp \
+swi_cord.nii.gz \
+"${rsrc}"
+
 rsrc=WARPS
 mkdir "${rsrc}"
 cp \

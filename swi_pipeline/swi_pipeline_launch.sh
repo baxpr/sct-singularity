@@ -8,7 +8,7 @@ export SCTDIR=/opt/sct
 
 # Default inputs
 export MASKSIZE=30
-export SWI_REG_PARAM="step=1,type=seg,algo=slicereg,poly=1:step=2,type=im,algo=slicereg,metric=MI,poly=1"
+export SWI_REG_PARAM="step=1,type=seg,algo=slicereg,poly=1:step=2,type=im,algo=rigid,metric=CC"
 export PH_SCALE=0.001
 export WINDOW_ALPHA=30
 export HAACKE_FACTOR=5
